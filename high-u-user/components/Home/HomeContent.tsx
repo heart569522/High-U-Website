@@ -73,7 +73,7 @@ export default function HomeContent() {
       </Grid>
 
       {/* CARD 3 IMAGE */}
-      <Grid container className='colorBackgroundGold' justifyContent="center" alignItems="center" sx={{ height: '80vh', margin: 0 }}>
+      <Grid container className='colorBackgroundContentGold' justifyContent="center" alignItems="center" sx={{ height: '80vh', margin: 0 }}>
         <Grid item sm={12} md={3} sx={{ margin: 2, marginBottom: 0 }}>
           <Card sx={{ maxWidth: 400, }}>
             <CardActionArea>

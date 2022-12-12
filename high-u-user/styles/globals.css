@@ -44,6 +44,19 @@ a {
   color: transparent;
 }
 
+.colorBackgroundContentGold {
+  background-image: linear-gradient(
+    to right,
+    #e9a21f5d 0,
+    #cb9a515d 10%, 
+    #f6e17a78 25%,
+    #f6f2c0ad 50%,
+    #f6e27a78 75%,
+    #cb9b515d 90%,
+    #e9a31f5d 100%
+    );
+}
+
 .colorBackgroundGold {
   background-image: linear-gradient(
     to right,
@@ -55,5 +68,4 @@ a {
     #cb9b515d 90%,
     #e9a31f5d 100%
     );
-
 }
