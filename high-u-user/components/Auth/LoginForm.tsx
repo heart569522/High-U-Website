@@ -95,7 +95,21 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-const theme = createTheme();
+const theme = createTheme({
+    typography: {
+        fontFamily: [
+            'Prompt, sans-serif'
+        ].join(','),
+    },
+    palette: {
+        primary: {
+            main: "#FFB900",
+        },
+        secondary: {
+            main: "#303030"
+        }
+      },
+});
 
 export default function SignIn() {
 
@@ -133,12 +147,12 @@ export default function SignIn() {
     return (
 
         <ThemeProvider theme={theme}>
-            <Box 
-                className='colorBackgroundGold' 
-                sx={{ 
+            <Box
+                className='colorBackgroundGold'
+                sx={{
                     height: '100%',
                     width: '100%',
-                    position: 'fixed' 
+                    position: 'fixed'
                 }}
             >
                 <Container component="main" maxWidth="sm">
@@ -154,7 +168,7 @@ export default function SignIn() {
                             borderRadius: 1,
                         }}
                     >
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h1" variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
                             Sign in
                         </Typography>
                         <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
@@ -202,13 +216,13 @@ export default function SignIn() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                sx={{ mt: 3, mb: 2, fontWeight: 'bold',}}
                             >
                                 Sign In
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href="#" variant="body2" color="secondary">
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>
