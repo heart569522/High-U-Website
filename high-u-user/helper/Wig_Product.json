@@ -1,0 +1,83 @@
+[
+    {
+        "id": 1,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369",
+        "title": "Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)",
+        "desc": "CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
+        "color": "Blondes",
+        "length": "Long",
+        "brand": "Ellen Wille"
+    },
+    {
+        "id": 2,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0000_ew_purepower_emotion_2.jpg?v=1619618104",
+        "title": "Emotion | Remy Human Hair Lace Front Wig (Hand-Tied)",
+        "desc": "EMOTION by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
+        "color": "Blondes",
+        "length": "Long",
+        "brand": "Ellen Wille"
+    },
+    {
+        "id": 3,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/resize_ew_purepower_wish_1_525x700_70c611e6-d424-4bd9-bbf0-bc2431c55b50.jpg?v=1627385456",
+        "title": "Wish | Human Hair Lace Front Wig (Mono Top)",
+        "desc": "WISH by ELLEN WILLE in SANDY-BLONDE-ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
+        "color": "Blondes",
+        "length": "Short",
+        "brand": "Ellen Wille"
+    },
+    {
+        "id": 4,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/JR707_Angie_02_lg.jpg?v=1629921038",
+        "title": "Angie | Remy Human Hair Lace Front Wig (Hand-Tied)",
+        "desc": "ANGIE by Jon Renau in FS6/30/27 TOFFEE TRUFFLE | Brown, Medium Red-Gold, Medium Red-Gold Blonde Blend with Medium Gold Blonde Bold Highlights",
+        "color": "Brown",
+        "length": "Long",
+        "brand": "Jon Renau"
+    },
+    {
+        "id": 5,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/resized_0001s_0001_ew_pureurope_mondo_2.jpg?v=1557260327",
+        "title": "Mondo | European Remy Human Hair Wig",
+        "desc": "MONDO by ELLEN WILLE in CHOCOLATE MIX | Medium to Dark Brown base with Light Reddish Brown highlights",
+        "color": "Brown",
+        "length": "Short",
+        "brand": "Ellen Wille"
+    },
+    {
+        "id": 6,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/Resized_VivicaFox__0001_LAPIS_NATURAL_M.jpg?v=1609790920",
+        "title": "Lapis | Human Hair Lace Front Wig",
+        "desc": "LAPIS by Vivica Fox in NATURAL | Uncolored Off Black",
+        "color": "Black",
+        "length": "Medium",
+        "brand": "Vivica Fox"
+    },
+    {
+        "id": 7,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/Resized_VivicaFox__0001_WASHINGTON_NATURAL_M.jpg?v=1595945990",
+        "title": "Washington | Human Hair Lace Front Wig",
+        "desc": "WASHINGTON by Vivica Fox in NATURAL | Uncolored Off Black",
+        "color": "Black",
+        "length": "Medium",
+        "brand": "Vivica Fox"
+    },
+    {
+        "id": 8,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/rwapplaus_01_lg_2.jpg?v=1627641587",
+        "title": "Applause | Human Hair Lace Front Wig (Hand-Tied)",
+        "desc": "APPLAUSE by Raquel Welch in R14/88H GOLDEN WHEAT | Dark Blonde Evenly Blended with Pale Blonde Highlights",
+        "color": "Blondes",
+        "length": "Short",
+        "brand": "Raquel Welch"
+    },
+    {
+        "id": 9,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/resized_0006s_0002_Carrie-12FS12-Malibu-alt2_5ace09e5-47bf-4b5d-af49-1aca6f16e577.jpg?v=1613066640",
+        "title": "Carrie | Human Hair Lace Front Wig (Mono Top)",
+        "desc": "CARRIE by Jon Renau in 12FS12 MALIBU BLONDE | Light Gold Brown, Light Natural Gold Blonde & Pale Natural Gold-Blonde Blend, Shaded with Light Gold Brown",
+        "color": "Blondes",
+        "length": "Medium",
+        "brand": "Jon Renau"
+    }
+]
