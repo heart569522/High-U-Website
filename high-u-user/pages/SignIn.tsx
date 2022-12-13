@@ -3,14 +3,14 @@ import { Grid } from '@mui/material';
 
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
-import LoginForm from '../components/Auth/LoginForm';
+import SignInForm from '../components/Auth/SignInForm';
 
-export default function Login() {
+export default function SignIn() {
 
   return (
       <div>
           <Navbar />
-          <LoginForm />
+          <SignInForm />
       </div>
     
   )

@@ -18,7 +18,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
-import NavbarLoginRegisButton from './NavbarLoginRegisButton';
+import NavbarSignInUpButton from './NavbarSignInUpButton';
 
 // Search Input
 const Search = styled('div')(({ theme }) => ({
@@ -291,7 +291,7 @@ function Navbar() {
 
             {/* If Login OR Non-Login */}
             {/* <NavbarLikeProfile /> */}
-            <NavbarLoginRegisButton />
+            <NavbarSignInUpButton />
 
           </Toolbar>
         </Container>

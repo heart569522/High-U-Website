@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-function NavbarLoginRegisButton() {
+function NavbarSignInUpButton() {
     return (
         <Grid>
             {/* Login , Register Button */}
@@ -21,7 +21,7 @@ function NavbarLoginRegisButton() {
                     href='/Login' 
                     variant="outlined"
                 >
-                Login
+                signin
                 </Button>
                 <Button 
                     sx={{ 
@@ -34,11 +34,11 @@ function NavbarLoginRegisButton() {
                     href='#' 
                     variant="contained"
                 >
-                Register
+                signup
                 </Button>
             </Stack>
         </Grid>
     )
 }
 
-export default NavbarLoginRegisButton;
+export default NavbarSignInUpButton;
