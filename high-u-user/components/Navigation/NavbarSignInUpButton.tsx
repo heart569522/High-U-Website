@@ -18,7 +18,7 @@ function NavbarSignInUpButton() {
                           },
                         fontWeight: 'bold'  
                     }} 
-                    href='/Login' 
+                    href='/SignIn' 
                     variant="outlined"
                 >
                 signin
@@ -31,7 +31,7 @@ function NavbarSignInUpButton() {
                           }, 
                         fontWeight: 'bold'
                     }} 
-                    href='#' 
+                    href='/SignUp' 
                     variant="contained"
                 >
                 signup

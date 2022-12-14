@@ -1,20 +1,60 @@
-import React from 'react'
-import { NextPageContext } from 'next'
+import React, { useState } from 'react';
+import { TextField } from "@mui/material";
 
-interface Props {
-  userAgent?: string;
+export default function test() {
+
+const [password, setPassword] = useState<string>("");
+const [confirmPassword, setConfirmPassword] = useState<string>("");
+const [error, setError] = useState<string | null>(null);
+
+const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  setPassword(event.target.value);
+  setError(null); // Clear any previous errors
+};
+
+const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { value } = event.target;
+  setConfirmPassword(value);
+
+  if (value !== password) {
+    setError("The passwords do not match.");
+  } else {
+    setError("The passwords is match.");
+  }
+};
+
+const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  if (event.key === " ") {
+    event.preventDefault();
+  }
+};
+
+  return (
+    <div>
+      <TextField
+        type="password"
+        label="Password"
+        value={password}
+        onChange={handlePasswordChange}
+        required={true}
+        onKeyPress={handleKeyPress}
+      />
+      <TextField
+        type="password"
+        label="Confirm Password"
+        value={confirmPassword}
+        onChange={handleConfirmPasswordChange}
+        error={Boolean(error)}
+        helperText={error}
+        required={true}
+        onKeyPress={handleKeyPress}
+      />
+    </div>
+
+  )
 }
 
-export default class Page extends React.Component<Props> {
-  static async getInitialProps({ req }: NextPageContext) {
-    const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
-    return { userAgent }
-  }
 
-  render() {
-    const { userAgent } = this.props
-    return <main>Your user agent: {userAgent}</main>
-  }
-}
+
 
 

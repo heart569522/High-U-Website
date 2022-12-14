@@ -53,6 +53,12 @@ export default function SignInForm() {
         event.preventDefault();
     };
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === " ") {
+            event.preventDefault();
+        }
+    };
+
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -99,6 +105,7 @@ export default function SignInForm() {
                                 id="username"
                                 name="username"
                                 onChange={handleUsernameChange}
+                                onKeyPress={handleKeyPress}
                                 margin="normal"
                                 required
                                 fullWidth
@@ -114,6 +121,7 @@ export default function SignInForm() {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={handlePasswordChange}
+                                onKeyPress={handleKeyPress}
                                 type={showPassword ? 'text' : 'password'}
                                 variant="outlined"
                                 fullWidth
@@ -143,7 +151,7 @@ export default function SignInForm() {
                             </Button>
                             <Grid container>
                                 <Grid item>
-                                    <Link href="#" variant="body2" color="secondary">
+                                    <Link href="/SignUp" variant="body2" color="secondary">
                                         {"Don't have an account? Register"}
                                     </Link>
                                 </Grid>
