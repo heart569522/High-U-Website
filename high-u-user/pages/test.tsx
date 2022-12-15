@@ -19,7 +19,7 @@ const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>)
   if (value !== password) {
     setError("The passwords do not match.");
   } else {
-    setError("The passwords is match.");
+    setError(null);
   }
 };
 
@@ -50,7 +50,6 @@ const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         onKeyPress={handleKeyPress}
       />
     </div>
-
   )
 }
 
