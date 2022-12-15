@@ -54,7 +54,7 @@ export default function SignInForm() {
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " ") {
+        if (event.key === " " || "  " || "   " || "    " || "     ") {
             event.preventDefault();
         }
     };
@@ -138,10 +138,6 @@ export default function SignInForm() {
                                     ),
                                 }}
                             />
-                            {/* <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        /> */}
                             <Button
                                 type="submit"
                                 fullWidth
