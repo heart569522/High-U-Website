@@ -83,7 +83,7 @@ export default function SignUpForm() {
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " ") {
+        if (event.key === " " ) {
             event.preventDefault();
         }
     };
@@ -140,6 +140,7 @@ export default function SignUpForm() {
                                         id="firstName"
                                         label="First Name"
                                         autoFocus
+                                        onChange={handleFirstnameChange}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>
@@ -152,6 +153,7 @@ export default function SignUpForm() {
                                         label="Last Name"
                                         name="lastName"
                                         autoComplete="family-name"
+                                        onChange={handleLastnameChange}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>
@@ -177,6 +179,7 @@ export default function SignUpForm() {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
+                                        onChange={handleEmailChange}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>

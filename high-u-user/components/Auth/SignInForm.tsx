@@ -54,7 +54,7 @@ export default function SignInForm() {
     };
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " " || "  " || "   " || "    " || "     ") {
+        if (event.key === " " ) {
             event.preventDefault();
         }
     };

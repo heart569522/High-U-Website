@@ -2,7 +2,13 @@ import * as React from 'react';
 import { Typography, Grid, Card, CardMedia, CardActionArea, CardContent, Button, ButtonProps } from '@mui/material';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Prompt, sans-serif'
+    ].join(','),
+  },
+});
 
 const CustomButtom = styled(Button)<ButtonProps>(({ theme }) => ({
   color: theme.palette.getContrastText('#FFCF76'),
@@ -36,10 +42,6 @@ export default function HomeContent() {
             variant="h4"
             color="white"
             textAlign="center"
-            sx={{
-              fontWeight: 'none',
-              fontFamily: 'Prompt, sans-serif',
-            }}
           >
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
           </Typography>
@@ -62,10 +64,6 @@ export default function HomeContent() {
             variant="h4"
             color="white"
             textAlign="center"
-            sx={{
-              fontWeight: 'none',
-              fontFamily: 'Prompt, sans-serif',
-            }}
           >
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
           </Typography>

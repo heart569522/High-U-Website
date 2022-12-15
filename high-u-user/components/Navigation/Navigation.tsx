@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,10 +14,20 @@ import MenuItem from '@mui/material/MenuItem';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { createTheme, ThemeProvider, styled, alpha } from '@mui/material/styles';
 
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
 import NavbarSignInUpButton from './NavbarSignInUpButton';
+
+// Create Theme
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Prompt, sans-serif'
+    ].join(','),
+  },
+});
 
 // Search Input
 const Search = styled('div')(({ theme }) => ({
@@ -103,200 +112,200 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === " " ) {
+        event.preventDefault();
+    }
+  };
+
   return (
-    <HideOnScroll>
-      <AppBar position="sticky" sx={{ backgroundColor: '#303030' }}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters >
-            {/* LOGO */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: '#F0CA83',
-                textDecoration: 'none',
-              }}
-            >
-              HIGH-U
-            </Typography>
-
-            {/* LOGO-MENU RESPONSIVE */}
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
+    <ThemeProvider theme={theme}>
+      <HideOnScroll>
+        <AppBar position="sticky" sx={{ backgroundColor: '#303030' }}>
+          <Container maxWidth="xl">
+            <Toolbar disableGutters >
+              {/* LOGO */}
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/"
                 sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
                   color: '#F0CA83',
+                  textDecoration: 'none',
                 }}
               >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+                HIGH-U
+              </Typography>
+
+              {/* LOGO-MENU RESPONSIVE */}
+              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  sx={{
+                    color: '#F0CA83',
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: 'block', md: 'none', },
+                  }}
+                >
+                  <Link href="/" underline="none">
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography
+                        textAlign="center"
+                        color={'black'}
+                      >
+                        หน้าแรก
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link href="/Wig" underline="none">
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography
+                        textAlign="center"
+                        color={'black'}
+                      >
+                        วิก
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link href="#" underline="none">
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography
+                        textAlign="center"
+                        color={'black'}
+                      >
+                        ทดลอง AR
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                </Menu>
+              </Box>
+
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href=""
                 sx={{
-                  display: { xs: 'block', md: 'none', },
+                  mr: 2,
+                  display: { xs: 'flex', md: 'none' },
+                  flexGrow: 1,
+                  fontFamily: 'monospace',
+                  fontWeight: 600,
+                  letterSpacing: '.3rem',
+                  color: '#F0CA83',
+                  textDecoration: 'none',
                 }}
               >
-                <Link href="/" underline="none">
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography
-                      textAlign="center"
-                      color={'black'}
-                      sx={{
-                        fontFamily: 'Prompt, sans-serif',
-                      }}
-                    >
-                      หน้าแรก
-                    </Typography>
-                  </MenuItem>
+                HIGH-U
+              </Typography>
+
+              {/* MENU */}
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, fontFamily: 'Prompt, sans-serif', }}>
+                {/* {pages.map((page) => ( */}
+                <Link href="/" underline="none"
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    px: 2,
+                    my: 2,
+                    color: '#F0CA83',
+                    display: 'block',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      color: "#ffefd1",
+                    },
+                    transition: '.3s',
+                  }}
+                >
+                  หน้าแรก
                 </Link>
-                <Link href="/Wig" underline="none">
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography
-                      textAlign="center"
-                      color={'black'}
-                      sx={{
-                        fontFamily: 'Prompt, sans-serif',
-                      }}
-                    >
-                      วิก
-                    </Typography>
-                  </MenuItem>
+                <Link href="/Wig" underline="none"
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    px: 2,
+                    my: 2,
+                    color: '#F0CA83',
+                    display: 'block',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      color: "#ffefd1",
+                    },
+                    transition: '.3s',
+                  }}
+                >
+                  วิก
                 </Link>
-                <Link href="#" underline="none">
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography
-                      textAlign="center"
-                      color={'black'}
-                      sx={{
-                        fontFamily: 'Prompt, sans-serif',
-                      }}
-                    >
-                      ทดลอง AR
-                    </Typography>
-                  </MenuItem>
+                <Link href="/test" underline="none"
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    px: 2,
+                    my: 2,
+                    color: '#F0CA83',
+                    display: 'block',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      color: "#ffefd1",
+                    },
+                    transition: '.3s',
+                  }}
+                >
+                  ทดลอง AR
                 </Link>
-              </Menu>
-            </Box>
+                {/* ))} */}
+              </Box>
 
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                display: { xs: 'flex', md: 'none' },
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 600,
-                letterSpacing: '.3rem',
-                color: '#F0CA83',
-                textDecoration: 'none',
-              }}
-            >
-              HIGH-U
-            </Typography>
+              {/* SEARCH MENU */}
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon sx={{ color: '#F0CA83', }} />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ 'aria-label': 'search' }}
+                  onKeyPress={handleKeyPress}
+                  sx={{
+                    color: '#F0CA83',
+                    fontFamily: 'Prompt, sans-serif',
+                  }}
+                />
+              </Search>
 
-            {/* MENU */}
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, fontFamily: 'Prompt, sans-serif', }}>
-              {/* {pages.map((page) => ( */}
-              <Link href="/" underline="none"
-                onClick={handleCloseNavMenu}
-                sx={{
-                  px: 2,
-                  my: 2,
-                  color: '#F0CA83',
-                  display: 'block',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    color: "#ffefd1",
-                  },
-                  transition: '.3s',
-                }}
-              >
-                หน้าแรก
-              </Link>
-              <Link href="/Wig" underline="none"
-                onClick={handleCloseNavMenu}
-                sx={{
-                  px: 2,
-                  my: 2,
-                  color: '#F0CA83',
-                  display: 'block',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    color: "#ffefd1",
-                  },
-                  transition: '.3s',
-                }}
-              >
-                วิก
-              </Link>
-              <Link href="/test" underline="none"
-                onClick={handleCloseNavMenu}
-                sx={{
-                  px: 2,
-                  my: 2,
-                  color: '#F0CA83',
-                  display: 'block',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    color: "#ffefd1",
-                  },
-                  transition: '.3s',
-                }}
-              >
-                ทดลอง AR
-              </Link>
-              {/* ))} */}
-            </Box>
+              {/* If Login OR Non-Login */}
+              {/* <NavbarLikeProfile /> */}
+              <NavbarSignInUpButton />
 
-            {/* SEARCH MENU */}
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon sx={{ color: '#F0CA83', }} />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                sx={{
-                  color: '#F0CA83',
-                  fontFamily: 'Prompt, sans-serif',
-                }}
-              />
-            </Search>
-
-            {/* If Login OR Non-Login */}
-            {/* <NavbarLikeProfile /> */}
-            <NavbarSignInUpButton />
-
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </HideOnScroll>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </HideOnScroll>
+    </ThemeProvider>
   );
 }
 export default Navbar;

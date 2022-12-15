@@ -18,6 +18,11 @@ function WigList() {
                 main: "#F0CA83",
             },
         },
+        typography: {
+            fontFamily: [
+                'Prompt, sans-serif'
+            ].join(','),
+        },
 
     });
 
@@ -40,7 +45,7 @@ function WigList() {
                         <Grid item xs={12} sm={3.5}>
                             <Box sx={{ minWidth: 100 }}>
                                 <FormControl fullWidth >
-                                    <InputLabel color='warning' id="demo-simple-select-label" sx={{ fontFamily: 'Prompt, sans-serif', }}>First Menu</InputLabel>
+                                    <InputLabel color='warning' id="demo-simple-select-label">First Menu</InputLabel>
                                     <Select
                                         color='warning'
                                         labelId="demo-simple-select-label"
@@ -48,14 +53,13 @@ function WigList() {
                                         value={menu1}
                                         label="First Menu"
                                         onChange={handleChange_Menu1}
-                                        sx={{ fontFamily: 'Prompt, sans-serif', }}
                                     >
-                                        <MenuItem value="" sx={{ fontFamily: 'Prompt, sans-serif', }}>
+                                        <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        <MenuItem value={1} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 1</MenuItem>
-                                        <MenuItem value={2} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 2</MenuItem>
-                                        <MenuItem value={3} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 3</MenuItem>
+                                        <MenuItem value={1}>Menu 1</MenuItem>
+                                        <MenuItem value={2}>Menu 2</MenuItem>
+                                        <MenuItem value={3}>Menu 3</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>
@@ -63,7 +67,7 @@ function WigList() {
                         <Grid item xs={12} sm={3.5}>
                             <Box sx={{ minWidth: 100 }}>
                                 <FormControl fullWidth >
-                                    <InputLabel color='warning' id="demo-simple-select-label" sx={{ fontFamily: 'Prompt, sans-serif', }}>Second Menu</InputLabel>
+                                    <InputLabel color='warning' id="demo-simple-select-label">Second Menu</InputLabel>
                                     <Select
                                         color='warning'
                                         labelId="demo-simple-select-label"
@@ -71,14 +75,13 @@ function WigList() {
                                         value={menu2}
                                         label="Second Menu"
                                         onChange={handleChange_Menu2}
-                                        sx={{ fontFamily: 'Prompt, sans-serif', }}
                                     >
-                                        <MenuItem value="" sx={{ fontFamily: 'Prompt, sans-serif', }}>
+                                        <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        <MenuItem value={1} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 1</MenuItem>
-                                        <MenuItem value={2} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 2</MenuItem>
-                                        <MenuItem value={3} sx={{ fontFamily: 'Prompt, sans-serif', }}>Menu 3</MenuItem>
+                                        <MenuItem value={1}>Menu 1</MenuItem>
+                                        <MenuItem value={2}>Menu 2</MenuItem>
+                                        <MenuItem value={3}>Menu 3</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>
