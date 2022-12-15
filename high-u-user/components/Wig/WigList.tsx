@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     Paper, Box, Grid, Container, InputLabel,
     MenuItem, FormControl, Checkbox, FormGroup,
-    FormControlLabel,
+    FormControlLabel, Card
 
 } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -38,10 +38,10 @@ function WigList() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Paper sx={{ backgroundColor: '#fff', }}>
+            <Paper sx={{ backgroundColor: '#faf7f7', }}>
                 <Container maxWidth="xl" >
                     {/* SELECT INPUT */}
-                    <Grid container spacing={7} alignItems="center" justifyContent="center" sx={{ padding: 5, }}>
+                    <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ padding: 5, }}>
                         <Grid item xs={12} sm={3.5}>
                             <Box sx={{ minWidth: 100 }}>
                                 <FormControl fullWidth >
@@ -97,11 +97,14 @@ function WigList() {
                         </Grid>
                     </Grid>
                     {/* WIG PRODUCT */}
-                    <Grid container spacing={3} sx={{ padding: 3, }} display="flow">
-                        {
-                            Wig_Product.map((item, i) => <WigList_Item key={item.id} item={item} />)
-                        }
-                    </Grid>
+                    <Box>
+                        <Grid container spacing={3} sx={{ padding: 3, }} display="flow">
+                            {
+                                Wig_Product.map((item, i) => <WigList_Item key={item.id} item={item} />)
+                            }
+                        </Grid>
+                    </Box>
+                    
                 </Container>
             </Paper>
         </ThemeProvider>

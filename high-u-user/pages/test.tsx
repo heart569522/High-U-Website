@@ -1,56 +1,26 @@
-import React, { useState } from 'react';
-import { TextField } from "@mui/material";
 
-export default function test() {
 
-const [password, setPassword] = useState<string>("");
-const [confirmPassword, setConfirmPassword] = useState<string>("");
-const [error, setError] = useState<string | null>(null);
+import React from 'react';
+import { makeStyles, } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Zoom from "@mui/material/Zoom";
 
-const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  setPassword(event.target.value);
-  setError(null); // Clear any previous errors
-};
-
-const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const { value } = event.target;
-  setConfirmPassword(value);
-
-  if (value !== password) {
-    setError("The passwords do not match.");
-  } else {
-    setError(null);
-  }
-};
-
-const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  if (event.key === " ") {
-    event.preventDefault();
-  }
-};
-
+export default function ImageCard() {
   return (
-    <div>
-      <TextField
-        type="password"
-        label="Password"
-        value={password}
-        onChange={handlePasswordChange}
-        required={true}
-        onKeyPress={handleKeyPress}
-      />
-      <TextField
-        type="password"
-        label="Confirm Password"
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        error={Boolean(error)}
-        helperText={error}
-        required={true}
-        onKeyPress={handleKeyPress}
-      />
-    </div>
-  )
+    <Card style={{ maxWidth: 345 }}>
+      <Zoom in={true}>
+        <CardMedia
+          style={{ height: 140 }}
+          component="img"
+          image="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
+          title="Image title"
+        />
+      </Zoom>
+    </Card>
+  );
 }
 
 
