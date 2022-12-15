@@ -85,6 +85,7 @@ export default function SignInForm() {
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
                     <Box
+                        className='dropShadow'
                         sx={{
                             marginTop: 8,
                             display: 'flex',

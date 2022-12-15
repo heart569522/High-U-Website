@@ -114,6 +114,7 @@ export default function SignUpForm() {
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
                     <Box
+                        className='dropShadow'
                         sx={{
                             marginTop: 8,
                             display: 'flex',
