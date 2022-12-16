@@ -40,7 +40,7 @@ export default function WigProductItem() {
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} md={4}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
                                 style={{
@@ -49,7 +49,7 @@ export default function WigProductItem() {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={8}>
+                        <Grid item xs={12} md={8}>
                             <Typography variant="subtitle1" gutterBottom>
                                 Ellen Wille
                             </Typography>
@@ -64,7 +64,17 @@ export default function WigProductItem() {
                                 sx={{
                                     width: 'auto',
                                     height: 380,
-                                    overflow: 'hidden'
+                                    '@media (max-width: 991px)': {
+                                        height: 280,
+                                    },
+                                    '@media (max-width: 767px)': {
+                                        height: 250,
+                                    },
+                                    '@media (max-width: 575px)': {
+                                        height: 200,
+                                    },
+                                    overflow: 'hidden',
+                                    
                                 }}
                                 cols={5}
                                 rowHeight={0}
@@ -81,6 +91,8 @@ export default function WigProductItem() {
                                     </ImageListItem>
                                 ))}
                             </ImageList>
+
+                            
                         </Grid>
                     </Grid>
                 </Container>
