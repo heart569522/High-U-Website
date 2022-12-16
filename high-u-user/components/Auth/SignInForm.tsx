@@ -78,7 +78,7 @@ export default function SignInForm() {
                 sx={{
                     height: '100%',
                     width: '100%',
-                    position: 'fixed',
+                    position: 'absolute',
                     backgroundSize: 'cover'
                 }}
             >
