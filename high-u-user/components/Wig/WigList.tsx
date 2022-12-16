@@ -103,7 +103,7 @@ function WigList() {
                         <Grid container spacing={3} sx={{ padding: 3, }} display="flow">
                             {
                                 Wig_Product.map((item, i) => 
-                                    <Link href='/WigProduct/{item.id}'>
+                                    <Link href="/WigProduct/[id]" as={{`/WigProduct/${item.id}`}}>
                                         <WigList_Item key={item.id} item={item} />
                                     </Link>
                                     
