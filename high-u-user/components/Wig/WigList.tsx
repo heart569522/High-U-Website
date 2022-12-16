@@ -8,8 +8,6 @@ import {
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
-import Link from 'next/link';
-
 import WigList_Item from './WigList_Item';
 import Wig_Product from '../../helper/Wig_Product.json';
 
@@ -100,13 +98,10 @@ function WigList() {
                     </Grid>
                     {/* WIG PRODUCT */}
                     <Box>
-                        <Grid container spacing={3} sx={{ padding: 3, }} display="flow">
+                        <Grid container spacing={3} sx={{ padding: 3, }}>
                             {
                                 Wig_Product.map((item, i) => 
-                                    <Link href="/WigProduct/[id]" as={{`/WigProduct/${item.id}`}}>
-                                        <WigList_Item key={item.id} item={item} />
-                                    </Link>
-                                    
+                                        <WigList_Item key={item.id} item={item} />  
                                 )
                             }
                         </Grid>

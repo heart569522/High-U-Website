@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { 
-    Card, 
-    CardMedia, 
-    CardContent, 
-    CardActionArea, 
-    Typography, 
+import {
+    Card,
+    CardMedia,
+    CardContent,
+    CardActionArea,
+    Typography,
     Grid,
 } from '@mui/material'
-// import { makeStyles } from '@mui/material/styles';
 
 function WigList_Item({ item }: { item: any }) {
+
     return (
         <Grid item xs={6} sm={6} md={3}>
-            <Card variant="outlined" sx={{ maxWidth: 400,  }}>
+            <Card variant="outlined" sx={{ maxWidth: 400, }} >
                 <CardActionArea>
                     <CardMedia
                         className='imageZoom'
