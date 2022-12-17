@@ -10,7 +10,7 @@ import Zoom from "@mui/material/Zoom";
 
 export default function ImageCard() {
   return (
-    <Card style={{ maxWidth: 345 }}>
+    <Card className="bg-yellow-300 pt-5" style={{ maxWidth: 345 }}>
       <Zoom in={true}>
         <CardMedia
           style={{ height: 140 }}
