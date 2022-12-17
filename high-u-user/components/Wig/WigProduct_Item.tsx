@@ -40,12 +40,12 @@ export default function WigProductItem() {
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={4}>
+                        <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
                                 style={{
                                     maxWidth: 500,
-                                    width: '100%'
+                                    width: '100%',
                                 }}
                             />
                         </Grid>
