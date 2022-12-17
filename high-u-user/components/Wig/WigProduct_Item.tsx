@@ -40,7 +40,7 @@ export default function WigProductItem() {
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
+                        <Grid item xs={12} md={4}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
                                 style={{
@@ -80,7 +80,7 @@ export default function WigProductItem() {
                                 rowHeight={0}
                             >
                                 {itemData.map((item) => (
-                                    <ImageListItem key={item.img} sx={{ padding: 1, }}>
+                                    <ImageListItem key={item.img} className="p-2">
                                         <img
                                             className='imageCircle'
                                             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
