@@ -39,7 +39,7 @@ export default function WigProductItem() {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={5}>
                         <Grid item xs={12} md={4}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
@@ -47,7 +47,7 @@ export default function WigProductItem() {
                             />
                         </Grid>
                         <Grid item xs={12} md={8}>
-                            <Typography variant="subtitle1" gutterBottom>
+                            <Typography variant="subtitle1" gutterBottom className="text-stone-600">
                                 Ellen Wille
                             </Typography>
                             <Typography variant="h4" className="my-3">
@@ -85,8 +85,12 @@ export default function WigProductItem() {
                                     </ImageListItem>
                                 ))}
                             </ImageList>
-
-                            
+                            <Typography variant="h5" className="mt-7">
+                                Details
+                            </Typography>            
+                            <Typography variant="subtitle1" className="text-stone-600 mt-3">
+                                CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots
+                            </Typography> 
                         </Grid>
                     </Grid>
                 </Container>
