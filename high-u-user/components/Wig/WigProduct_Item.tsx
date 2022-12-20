@@ -43,38 +43,32 @@ export default function WigProductItem() {
                         <Grid item xs={12} md={4}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
-                                style={{
-                                    maxWidth: 500,
-                                    width: '100%',
-                                }}
+                                className="max-w-lg w-full"
                             />
                         </Grid>
                         <Grid item xs={12} md={8}>
                             <Typography variant="subtitle1" gutterBottom>
                                 Ellen Wille
                             </Typography>
-                            <Typography variant="h4" >
+                            <Typography variant="h4" className="my-3">
                                 Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)
                             </Typography>
-                            <hr />
-                            <Typography variant="h5" >
+                            <Typography variant="h5" className="my-3">
                                 Color
                             </Typography>
                             <ImageList
+                                className="w-auto overflow-hidden"
                                 sx={{
-                                    width: 'auto',
-                                    height: 380,
+                                    height: 375,
                                     '@media (max-width: 991px)': {
-                                        height: 280,
+                                        height: 320,
                                     },
                                     '@media (max-width: 767px)': {
-                                        height: 250,
+                                        height: 270,
                                     },
                                     '@media (max-width: 575px)': {
                                         height: 200,
-                                    },
-                                    overflow: 'hidden',
-                                    
+                                    }, 
                                 }}
                                 cols={5}
                                 rowHeight={0}

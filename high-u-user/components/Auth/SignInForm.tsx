@@ -73,30 +73,11 @@ export default function SignInForm() {
     return (
 
         <ThemeProvider theme={theme}>
-            <Box
-                className='colorBackgroundGold'
-                sx={{
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    backgroundSize: 'cover'
-                }}
-            >
+            <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
-                    <Box
-                        className='dropShadow'
-                        sx={{
-                            marginTop: 8,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            bgcolor: 'white',
-                            padding: 5,
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Typography component="h1" variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
+                    <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-sm" >
+                        <Typography component="h1" variant="h5" color="primary" className="font-bold">
                             High U - Member
                         </Typography>
                         <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
@@ -142,14 +123,14 @@ export default function SignInForm() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2, fontWeight: 'bold',}}
+                                className="bg-amber-400 mt-3 mb-2 font-bold"
                             >
                                 Sign In
                             </Button>
                             <Grid container>
                                 <Grid item>
                                     <Link href="/SignUp" variant="body2" color="secondary">
-                                        {"Don't have an account? Register"}
+                                        {"Don't have an account? SignUp"}
                                     </Link>
                                 </Grid>
                             </Grid>
