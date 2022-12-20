@@ -5,7 +5,8 @@ import {
     Container,
     Typography,
     ImageList,
-    ImageListItem
+    ImageListItem,
+    Button
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
@@ -40,13 +41,13 @@ export default function WigProductItem() {
                         </Grid>
                     </Grid>
                     <Grid container spacing={5}>
-                        <Grid item xs={12} md={4}>
+                        <Grid item xs={12} md={5}>
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
-                                className="max-w-lg w-full"
+                                className="max-w-xl w-full"
                             />
                         </Grid>
-                        <Grid item xs={12} md={8}>
+                        <Grid item xs={12} md={7}>
                             <Typography variant="subtitle1" gutterBottom className="text-stone-600">
                                 Ellen Wille
                             </Typography>
@@ -68,7 +69,7 @@ export default function WigProductItem() {
                                     },
                                     '@media (max-width: 575px)': {
                                         height: 200,
-                                    }, 
+                                    },
                                 }}
                                 cols={5}
                                 rowHeight={0}
@@ -76,7 +77,7 @@ export default function WigProductItem() {
                                 {itemData.map((item) => (
                                     <ImageListItem key={item.img} className="p-2">
                                         <img
-                                            className='imageCircle'
+                                            className="rounded-full"
                                             src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
                                             srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                                             alt={item.title}
@@ -87,10 +88,14 @@ export default function WigProductItem() {
                             </ImageList>
                             <Typography variant="h5" className="mt-7">
                                 Details
-                            </Typography>            
+                            </Typography>
                             <Typography variant="subtitle1" className="text-stone-600 mt-3">
                                 CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots
-                            </Typography> 
+                            </Typography>
+                            <Grid item className="mt-8">
+                                <Button variant="contained" className="w-1/2 p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-sm:text-lg">Add Your Favorite</Button>
+                                <Button variant="contained" className="w-1/2 p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-sm:text-lg">Try AR</Button>
+                            </Grid>         
                         </Grid>
                     </Grid>
                 </Container>
