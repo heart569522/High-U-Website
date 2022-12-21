@@ -6,9 +6,18 @@ import {
     Typography,
     ImageList,
     ImageListItem,
-    Button
+    Button,
+    Card,
+    CardMedia,
+    CardContent,
+    CardActionArea,
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+
+import Wig_Color from '../../helper/Wig_Color.json';
+import Wig_Product from '../../helper/Wig_Product.json';
+
+import Link from 'next/link'
 
 const theme = createTheme({
     palette: {
@@ -51,18 +60,22 @@ export default function WigProductItem() {
                             <Typography variant="subtitle1" gutterBottom className="text-stone-600">
                                 Ellen Wille
                             </Typography>
-                            <Typography variant="h4" className="my-3">
+                            <Typography variant="h4" className="my-2">
                                 Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)
                             </Typography>
-                            <Typography variant="h5" className="my-3">
+                            <hr className="mx-auto w-full h-[1px] rounded border-0 bg-gray-400"></hr>
+                            <Typography variant="h5" className="mt-4">
                                 Color
                             </Typography>
                             <ImageList
-                                className="w-auto overflow-hidden"
+                                className="w-4/5 overflow-hidden mt-4"
                                 sx={{
-                                    height: 375,
+                                    height: 350,
+                                    '@media (max-width: 1257px)': {
+                                        height: 250,
+                                    },
                                     '@media (max-width: 991px)': {
-                                        height: 320,
+                                        height: 310,
                                     },
                                     '@media (max-width: 767px)': {
                                         height: 270,
@@ -74,30 +87,63 @@ export default function WigProductItem() {
                                 cols={5}
                                 rowHeight={0}
                             >
-                                {itemData.map((item) => (
-                                    <ImageListItem key={item.img} className="p-2">
+                                {Wig_Color.map((item) => (
+                                    <ImageListItem key={item.image} className="p-2">
                                         <img
-                                            className="rounded-full"
-                                            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                            alt={item.title}
+                                            className="rounded hover:opacity-80 transition duration-200 ease-in-out"
+                                            src={item.image}
+                                            alt={item.color}
                                             loading="lazy"
                                         />
                                     </ImageListItem>
                                 ))}
                             </ImageList>
-                            <Typography variant="h5" className="mt-7">
+                            <Typography variant="h5" className="mt-8">
                                 Details
                             </Typography>
                             <Typography variant="subtitle1" className="text-stone-600 mt-3">
                                 CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots
                             </Typography>
-                            <Grid item className="mt-8">
-                                <Button variant="contained" className="w-1/2 p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-sm:text-lg">Add Your Favorite</Button>
-                                <Button variant="contained" className="w-1/2 p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-sm:text-lg">Try AR</Button>
-                            </Grid>         
+                            <Grid item className="mt-8 space-x-4 max-sm:text-center">
+                                <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-sm:text-[16px]">Add Your Favorite</Button>
+                                <Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-sm:text-[16px]">Try AR</Button>
+                            </Grid>
                         </Grid>
                     </Grid>
+                    <hr className="my-10 mx-auto w-full h-[1px] rounded border-0 bg-gray-400"></hr>
+                    <Grid container spacing={3} className="mb-8">
+                        <Grid item xs={12}>
+                            <Typography variant="h5">
+                                Recomended
+                            </Typography>
+                        </Grid>
+                        {
+                            Wig_Product.slice(0, 4).map((item, i) =>
+                                <Grid item xs={6} sm={6} md={3}>
+                                    <Link href="/WigProduct">
+                                        <Card variant="outlined" sx={{ maxWidth: 'auto', }} >
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className='hover:opacity-90 transition duration-200 ease-in-out'
+                                                    component="img"
+                                                    image={item.image}
+                                                />
+                                                <CardContent >
+                                                    <Typography gutterBottom component="div" className="font-bold text-md mb-2">
+                                                        {item.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" className="text-gray-500 text-base">
+                                                        {item.brand}
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Link>
+                                </Grid>
+                            )
+                        }
+                    </Grid>
+
                 </Container>
             </Paper>
 

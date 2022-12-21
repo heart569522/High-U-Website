@@ -1,12 +1,26 @@
 import * as React from 'react';
 import {
-    Paper, Box, Grid, Container, InputLabel,
-    MenuItem, FormControl, Checkbox, FormGroup,
-    FormControlLabel, Card
+    Paper,
+    Box,
+    Grid,
+    Container,
+    InputLabel,
+    MenuItem,
+    FormControl,
+    Checkbox,
+    FormGroup,
+    FormControlLabel,
+    Card,
+    CardMedia,
+    CardContent,
+    CardActionArea,
+    Typography
 
 } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+
+import Link from 'next/link'
 
 import WigList_Item from './WigList_Item';
 import Wig_Product from '../../helper/Wig_Product.json';
@@ -45,7 +59,7 @@ function WigList() {
                         <Grid item xs={12} sm={3.5}>
                             <Box sx={{ minWidth: 100 }}>
                                 <FormControl fullWidth >
-                                    <InputLabel color='warning' id="demo-simple-select-label">First Menu</InputLabel>
+                                    <InputLabel color='warning'>First Menu</InputLabel>
                                     <Select
                                         color='warning'
                                         labelId="demo-simple-select-label"
@@ -98,10 +112,31 @@ function WigList() {
                     </Grid>
                     {/* WIG PRODUCT */}
                     <Box>
-                        <Grid container spacing={3} sx={{ padding: 3, }}>
+                        <Grid container spacing={3} className="m-3 ">
                             {
-                                Wig_Product.map((item, i) => 
-                                        <WigList_Item key={item.id} item={item} />  
+                                Wig_Product.map((item, i) =>
+                                    <Grid item xs={6} sm={6} md={3}>
+                                        <Link href="/WigProduct">
+                                            <Card variant="outlined" sx={{ maxWidth: 400, }} >
+                                                <CardActionArea>
+                                                    <CardMedia
+                                                        className='hover:opacity-90 transition duration-200 ease-in-out'
+                                                        component="img"
+                                                        image={item.image}
+                                                    />
+                                                    <CardContent >
+                                                        <Typography gutterBottom component="div" className="font-bold text-md mb-2">
+                                                            {item.title}
+                                                        </Typography>
+                                                        <Typography variant="body2" className="text-gray-500 text-base">
+                                                            {item.brand}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </CardActionArea>
+                                            </Card>
+                                        </Link>
+                                    </Grid>,
+                                    {/* <WigList_Item key={item.id} item={item} />  */ }
                                 )
                             }
                         </Grid>

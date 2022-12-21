@@ -15,15 +15,15 @@ function WigList_Item({ item }: { item: any }) {
             <Card variant="outlined" sx={{ maxWidth: 400, }} >
                 <CardActionArea>
                     <CardMedia
-                        className='imageZoom'
+                        className='hover:opacity-90 transition duration-200 ease-in-out'
                         component="img"
                         image={item.image}
                     />
                     <CardContent >
-                        <Typography gutterBottom component="div" sx={{ fontWeight: 'bold', }}>
+                        <Typography gutterBottom component="div" className="font-bold text-md mb-2">
                             {item.title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" className="text-gray-500 text-base">
                             {item.brand}
                         </Typography>
                     </CardContent>
