@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, KeyboardEventHandler, } from 'react';
+import React, { useState, useCallback, ChangeEvent, FormEvent, KeyboardEventHandler, } from 'react';
 import {
     IconButton,
     Container,
@@ -29,39 +29,38 @@ const theme = createTheme({
     },
 });
 
-export default function SignInForm() {
-
+const SignInForm = React.memo(() => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleUsernameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
-    };
+    }, []);
 
-    const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
-    };
+    }, []);
 
-    const handleClickShowPassword = () => {
+    const handleClickShowPassword = useCallback(() => {
         setShowPassword(!showPassword);
-    };
+    }, [showPassword]);
 
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleMouseDownPassword = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-    };
+    }, []);
 
-    const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (event) => {
+    const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
         if (event.key === ' ') {
             event.preventDefault();
         }
-    };
+    }, []);
 
-    const handleLogin = (event: FormEvent) => {
+    const handleLogin = useCallback((event: FormEvent) => {
         event.preventDefault();
         alert(username);
         alert(password);
-    };
+    }, [username, password]);
 
     return (
 
@@ -136,3 +135,6 @@ export default function SignInForm() {
 
     );
 }
+)
+
+export default SignInForm;
