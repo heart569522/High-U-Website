@@ -6,8 +6,6 @@ import {
     Box,
     Grid,
     Link,
-    Checkbox,
-    FormControlLabel,
     TextField,
     CssBaseline,
     Button,
@@ -61,7 +59,7 @@ export default function SignInForm() {
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        // const data = new FormData(event.currentTarget);
         // console.log({
         //     email: data.get('email'),
         //     password: data.get('password'),
