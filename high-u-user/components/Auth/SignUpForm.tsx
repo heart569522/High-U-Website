@@ -6,8 +6,6 @@ import {
     Box,
     Grid,
     Link,
-    Checkbox,
-    FormControlLabel,
     TextField,
     CssBaseline,
     Button,
@@ -31,6 +29,8 @@ const theme = createTheme({
     },
 });
 
+
+
 export default function SignUpForm() {
 
     const [firstname, setFirstname] = useState('');
@@ -41,62 +41,47 @@ export default function SignUpForm() {
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-    const handleFirstnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFirstname(event.target.value);
-    };
-
-    const handleLastnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLastname(event.target.value);
-    };
-
-    const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUsername(event.target.value);
-    };
-
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value);
-    };
-
+    
+    const handleChange = (setState: (value: string) => void) => (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => {
+        setState(event.target.value);
+      };
+    
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-        setError(null); // Clear any previous errors
+      setPassword(event.target.value);
+      setError(null); // Clear any previous errors
     };
-
+    
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        setConfirmPassword(value);
-
-        if (value !== password) {
-            setError("The passwords do not match.");
-        } else {
-            setError(null);
-        }
+      const { value } = event.target;
+      setConfirmPassword(value);
+    
+      if (value !== password) {
+        setError("The passwords do not match.");
+      } else {
+        setError(null);
+      }
     };
-
+    
     const handleClickShowConfirmPassword = () => {
-        setShowConfirmPassword(!showConfirmPassword);
+      setShowConfirmPassword(!showConfirmPassword);
     };
-
+    
     const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+      event.preventDefault();
     };
-
+    
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " " ) {
-            event.preventDefault();
-        }
-    };
-
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+      if (event.key === " ") {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        // console.log({
-        //     email: data.get('email'),
-        //     password: data.get('password'),
-        // });
-        alert(username)
-        alert(password)
+      }
+    };
+    
+    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      alert(username)
+      alert(password)
     };
 
     return (
@@ -121,7 +106,7 @@ export default function SignUpForm() {
                                         id="firstName"
                                         label="First Name"
                                         autoFocus
-                                        onChange={handleFirstnameChange}
+                                        onChange={handleChange(setFirstname)}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>
@@ -134,7 +119,7 @@ export default function SignUpForm() {
                                         label="Last Name"
                                         name="lastName"
                                         autoComplete="family-name"
-                                        onChange={handleLastnameChange}
+                                        onChange={handleChange(setLastname)}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>
@@ -144,7 +129,7 @@ export default function SignUpForm() {
                                         value={username}
                                         id="username"
                                         name="username"
-                                        onChange={handleUsernameChange}
+                                        onChange={handleChange(setUsername)}
                                         margin="normal"
                                         required
                                         fullWidth
@@ -160,7 +145,7 @@ export default function SignUpForm() {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
-                                        onChange={handleEmailChange}
+                                        onChange={handleChange(setEmail)}
                                         onKeyPress={handleKeyPress}
                                     />
                                 </Grid>

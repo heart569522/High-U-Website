@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent, KeyboardEventHandler, } from 'react';
 import {
     IconButton,
     Container,
@@ -26,7 +26,7 @@ const theme = createTheme({
         secondary: {
             main: "#303030"
         }
-      },
+    },
 });
 
 export default function SignInForm() {
@@ -35,11 +35,11 @@ export default function SignInForm() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
     };
 
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
 
@@ -51,21 +51,16 @@ export default function SignInForm() {
         event.preventDefault();
     };
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " " ) {
+    const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = (event) => {
+        if (event.key === ' ') {
             event.preventDefault();
         }
     };
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = (event: FormEvent) => {
         event.preventDefault();
-        // const data = new FormData(event.currentTarget);
-        // console.log({
-        //     email: data.get('email'),
-        //     password: data.get('password'),
-        // });
-        alert(username)
-        alert(password)
+        alert(username);
+        alert(password);
     };
 
     return (
