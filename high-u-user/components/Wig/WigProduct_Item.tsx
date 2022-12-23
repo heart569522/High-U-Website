@@ -14,6 +14,8 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
+
+
 import Wig_Color from '../../helper/Wig_Color.json';
 import Wig_Product from '../../helper/Wig_Product.json';
 
@@ -105,8 +107,8 @@ export default function WigProductItem() {
                                 CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots
                             </Typography>
                             <Grid item className="mt-8 space-x-4 max-sm:text-center">
-                                <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-sm:text-[16px]">Add Your Favorite</Button>
-                                <Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-sm:text-[16px]">Try AR</Button>
+                                <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add Your Favorite</Button>
+                                <Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button>
                             </Grid>
                         </Grid>
                     </Grid>
