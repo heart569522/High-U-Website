@@ -263,7 +263,7 @@ function Navbar() {
                 >
                   วิก
                 </Link>
-                <Link href="/test" underline="none"
+                <Link href="/TryAR" underline="none"
                   onClick={handleCloseNavMenu}
                   sx={{
                     px: 2,
@@ -278,6 +278,22 @@ function Navbar() {
                   }}
                 >
                   ทดลอง AR
+                </Link>
+                <Link href="/test" underline="none"
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    px: 2,
+                    my: 2,
+                    color: '#F0CA83',
+                    display: 'block',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      color: "#ffefd1",
+                    },
+                    transition: '.3s',
+                  }}
+                >
+                  Test Page
                 </Link>
                 {/* ))} */}
               </Box>
@@ -299,8 +315,8 @@ function Navbar() {
               </Search>
 
               {/* If Login OR Non-Login */}
-              {/* <NavbarLikeProfile /> */}
-              <NavbarSignInUpButton />
+              <NavbarLikeProfile />
+              {/* <NavbarSignInUpButton /> */}
 
             </Toolbar>
           </Container>

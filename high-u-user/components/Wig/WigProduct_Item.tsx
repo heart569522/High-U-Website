@@ -125,9 +125,9 @@ export default function WigProductItem() {
                                     <Link href="/WigProduct">
                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                             <CardActionArea>
-                                                <CardMedia className='content-overlay' />
+                                                <CardMedia className="content-overlay" />
                                                 <CardMedia
-                                                    className='content-image'
+                                                    className="content-image"
                                                     component="img"
                                                     image={item.image}
                                                 />

@@ -1,28 +1,41 @@
+import React, { useState } from 'react';
+import { Button, Icon, Modal } from '@mui/material';
+import CameraIcon from '@mui/icons-material/Camera';
+import Webcam from 'react-webcam';
 
+const CameraView: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const webcamRef = React.useRef<Webcam>(null);
 
-import React from 'react';
-import { makeStyles, } from '@mui/material/styles';
-import { Card, Chip, Avatar } from '@mui/material';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Zoom from "@mui/material/Zoom";
+  const capture = () => {
+    const image = webcamRef.current?.getScreenshot();
+    setImage(image as string | null);
+    setModalOpen(true);
+  };
 
-export default function ImageCard() {
   return (
-    <div className="content">
-      <div className="content-overlay"></div>
-      <img className="content-image" src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
-      <div className="content-details fadeIn-bottom">
-        <h3 className="content-title">This is a title</h3>
-        <p className="content-text">This is a short description</p>
-      </div>
+    <div className="w-full h-full">
+      <Webcam
+        className="border-2 border-gray-400"
+        height={400}
+        width={600}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+      />
+      <Button onClick={capture}>
+        <Icon>
+          <CameraIcon />
+        </Icon>
+      </Button>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <div className="w-full h-full p-4 rounded-lg shadow-lg">
+          <img src={image as string | undefined} alt="Captured image" />
+          <Button onClick={() => setModalOpen(false)}>Close</Button>
+        </div>
+      </Modal>
     </div>
-
   );
-}
+};
 
-
-
-
-
+export default CameraView;
