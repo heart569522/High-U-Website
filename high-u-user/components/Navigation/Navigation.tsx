@@ -113,8 +113,8 @@ function Navbar() {
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === " " ) {
-        event.preventDefault();
+    if (event.key === " ") {
+      event.preventDefault();
     }
   };
 
@@ -212,7 +212,8 @@ function Navbar() {
                 variant="h5"
                 noWrap
                 component="a"
-                href=""
+                href="/"
+                className="max-sm:text-sm"
                 sx={{
                   mr: 2,
                   display: { xs: 'flex', md: 'none' },

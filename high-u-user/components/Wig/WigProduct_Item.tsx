@@ -123,19 +123,17 @@ export default function WigProductItem() {
                             Wig_Product.slice(0, 4).map((item, i) =>
                                 <Grid item xs={6} sm={6} md={3}>
                                     <Link href="/WigProduct">
-                                        <Card variant="outlined" sx={{ maxWidth: 'auto', }} >
+                                        <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                             <CardActionArea>
+                                                <CardMedia className='content-overlay' />
                                                 <CardMedia
-                                                    className='hover:opacity-90 transition duration-200 ease-in-out'
+                                                    className='content-image'
                                                     component="img"
                                                     image={item.image}
                                                 />
-                                                <CardContent >
-                                                    <Typography gutterBottom component="div" className="font-bold text-md mb-2">
+                                                <CardContent className="content-details fadeIn-bottom">
+                                                    <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
                                                         {item.title}
-                                                    </Typography>
-                                                    <Typography variant="body2" className="text-gray-500 text-base">
-                                                        {item.brand}
                                                     </Typography>
                                                 </CardContent>
                                             </CardActionArea>
