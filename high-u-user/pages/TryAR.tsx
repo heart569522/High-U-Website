@@ -12,6 +12,8 @@ import {
     CardMedia,
     CardContent,
     CardActionArea,
+    ImageList,
+    ImageListItem
 } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Webcam from 'react-webcam';
@@ -96,27 +98,58 @@ export default function TryAR() {
                                 </Modal>
                             </Box>
                         </Grid>
-                        {
-                            Wig_Product.map((item, i) =>
-                                <Grid item sm={1.5} md={2}>
-                                    <Card variant="outlined" className="content" >
-                                        <CardActionArea>
-                                            <CardMedia className="content-overlay" />
-                                            <CardMedia
-                                                className="content-image w-60 h-60 object-top"
-                                                component="img"
-                                                image={item.image}
-                                            />
-                                            <CardContent className="content-details fadeIn-bottom">
-                                                <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
-                                                    {item.title}
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </Grid>
-                            )
-                        }
+                        {/* {Wig_Product.map((item, i) =>
+                            <Grid item xs={4} sm={4} md={2} className="">
+                                <Card variant="outlined" className="content">
+                                    <CardActionArea>
+                                        <CardMedia className="content-overlay" />
+                                        <CardMedia
+                                            className="content-image object-top w-60 h-60 "
+                                            component="img"
+                                            image={item.image}
+                                        />
+                                        <CardContent className="content-details fadeIn-bottom">
+                                            <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
+                                                {item.title}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        )} */}
+                        <Grid item sm={12} md={6} spacing={2}>
+                            <ImageList
+                                className="w-full h-full overflow-hidden object-top"
+                                sx={{
+                                    height: 350,
+                                    '@media (max-width: 1257px)': {
+                                        height: 250,
+                                    },
+                                    '@media (max-width: 991px)': {
+                                        height: 310,
+                                    },
+                                    '@media (max-width: 767px)': {
+                                        height: 270,
+                                    },
+                                    '@media (max-width: 575px)': {
+                                        height: 200,
+                                    },
+                                }}
+                                cols={4}
+                                rowHeight={0}
+                            >
+                                {Wig_Product.map((item) => (
+                                    <ImageListItem key={item.image} className="p-2">
+                                        <img
+                                            className="rounded hover:opacity-80 transition duration-200 ease-in-out"
+                                            src={item.image}
+                                            alt={item.color}
+                                            loading="lazy"
+                                        />
+                                    </ImageListItem>
+                                ))}
+                            </ImageList>
+                        </Grid>
 
                     </Grid>
                 </Container>
