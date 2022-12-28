@@ -13,11 +13,17 @@ import {
     CardContent,
     CardActionArea,
     ImageList,
-    ImageListItem
+    ImageListItem,
+    Backdrop
 } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import Webcam from 'react-webcam';
+import ClearIcon from '@mui/icons-material/Clear';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import DownloadIcon from '@mui/icons-material/Download';
+import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+import Webcam from 'react-webcam';
 
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
@@ -90,10 +96,25 @@ export default function TryAR() {
                                     </IconButton>
                                 </Grid>
                                 {/* Caprture Result */}
-                                <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-                                    <Box className="w-full h-full p-4 rounded-lg shadow-lg">
-                                        <img src={image as string | undefined} alt="Captured image" />
-                                        <Button onClick={() => setModalOpen(false)}>Close</Button>
+                                <Modal
+                                    className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/60 flex justify-center items-center p-4"
+                                    open={modalOpen}
+                                    onClose={() => setModalOpen(false)}
+                                >
+                                    <Box className="text-center">
+                                        <img src={image as string | undefined} alt="Captured image" className="border-[12px] border-[#646464] " />
+                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
+                                            <FavoriteIcon />
+                                        </IconButton>
+                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
+                                            <DownloadIcon />
+                                        </IconButton>
+                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
+                                            <ShareIcon />
+                                        </IconButton>
+                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
+                                            <ClearIcon />
+                                        </IconButton>
                                     </Box>
                                 </Modal>
                             </Box>
