@@ -82,7 +82,7 @@ export default function TryAR() {
                         <Grid item sm={12} md={6} spacing={2}>
                             <Box className="w-full h-full ">
                                 <Webcam
-                                    className="border-2 border-[#F0CA83]"
+                                    className="border-2 border-[#F0CA83] rounded"
                                     width={680}
                                     height={1280}
                                     ref={webcamRef}
@@ -97,12 +97,12 @@ export default function TryAR() {
                                 </Grid>
                                 {/* Caprture Result */}
                                 <Modal
-                                    className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/60 flex justify-center items-center p-4"
+                                    className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
                                     open={modalOpen}
                                     onClose={() => setModalOpen(false)}
                                 >
-                                    <Box className="text-center">
-                                        <img src={image as string | undefined} alt="Captured image" className="border-[12px] border-[#646464] " />
+                                    <Box className="text-right">
+                                        <img src={image as string | undefined} alt="Captured image" className="border-[12px] border-[#646464] rounded" />
                                         <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
                                             <FavoriteIcon />
                                         </IconButton>
