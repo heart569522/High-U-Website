@@ -11,7 +11,10 @@ import {
     Button,
     Paper,
     Tab,
-    Tabs
+    Card,
+    CardMedia,
+    CardContent,
+    CardActionArea,
 } from '@mui/material';
 import {
     TabContext,
@@ -23,6 +26,8 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
+
+import Wig_Product from '../helper/Wig_Product.json';
 
 const theme = createTheme({
     palette: {
@@ -52,7 +57,7 @@ export default function Favorite() {
     return (
         <div>
             <ThemeProvider theme={theme}>
-                <Paper className="bg-[#252525] h-screen">
+                <Paper className="bg-[#252525] h-full">
                     <Navbar />
                     <Container maxWidth="xl" >
                         <UserHeader />
@@ -65,10 +70,34 @@ export default function Favorite() {
                                     </TabList>
                                 </Box>
                                 <TabPanel value="1">
-
+                                <Grid container spacing={3} className="mb-8">
+                        {
+                            Wig_Product.slice(0, 7).map((item, i) =>
+                                <Grid item xs={4} sm={3} md={2}>
+                                    <Link href="/WigProduct">
+                                        <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
+                                            <CardActionArea>
+                                                <CardMedia className="content-overlay" />
+                                                <CardMedia
+                                                    className="content-image"
+                                                    component="img"
+                                                    image={item.image}
+                                                />
+                                                <CardContent className="content-details fadeIn-bottom">
+                                                    <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
+                                                        {item.title}
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Link>
+                                </Grid>
+                            )
+                        }
+                    </Grid>
                                 </TabPanel>
                                 <TabPanel value="2">
-                                    
+
                                 </TabPanel>
                             </TabContext>
                         </Box>
