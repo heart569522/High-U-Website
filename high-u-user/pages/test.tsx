@@ -9,9 +9,6 @@ import {
 } from '@mui/material';
 
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import Webcam from 'react-webcam';
-
-import fs from "fs";
 
 const ProfilePicture: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -38,19 +35,8 @@ const ProfilePicture: React.FC = () => {
       return;
     }
     setIsUploading(true);
-
-    const filePath = `public/images/${image.name}`;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      fs.writeFile(filePath, reader.result as string, err => {
-        if (err) {
-          console.error(err);
-        }
-        console.log(`${image.name} has been saved to ${filePath}`);
-        setIsUploading(false);
-      });
-    };
-    reader.readAsBinaryString(image);
+    // upload image to storage here
+    setIsUploading(false);
   };
 
 
