@@ -1,16 +1,10 @@
 import * as React from 'react';
 import {
-    IconButton,
-    Container,
     Typography,
     Box,
     Grid,
-    Link,
-    TextField,
-    CssBaseline,
-    Button,
-    Paper,
-    Tooltip
+    Tooltip,
+    IconButton
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -49,21 +43,14 @@ export default function UserHeader() {
                             Member
                         </Typography>
                     </Box>
-                    <Box className="">
+                    {/* <Box className="">
                         <Tooltip title="Sign Out">
                             <IconButton className=" my-10 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-500 hover:text-white">
                                 <LogoutIcon fontSize='large' />
                             </IconButton>
                         </Tooltip>
-                    </Box>
+                    </Box> */}
                 </Grid>
-                {/* <Grid item className="pt-8 ">
-                    <Tooltip title="Sign Out">
-                        <IconButton className="my-10 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-500 hover:text-white">
-                            <LogoutIcon fontSize='large' />
-                        </IconButton>
-                    </Tooltip>
-                </Grid> */}
             </Grid>
         </ThemeProvider>
 
