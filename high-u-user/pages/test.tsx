@@ -1,41 +1,107 @@
 import React, { useState } from 'react';
-import { Button, Icon, Modal } from '@mui/material';
-import CameraIcon from '@mui/icons-material/Camera';
+import {
+  Avatar,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  CircularProgress
+} from '@mui/material';
+
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Webcam from 'react-webcam';
 
-const CameraView: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
-  const webcamRef = React.useRef<Webcam>(null);
+import fs from "fs";
 
-  const capture = () => {
-    const image = webcamRef.current?.getScreenshot();
-    setImage(image as string | null);
-    setModalOpen(true);
+const ProfilePicture: React.FC = () => {
+  const [image, setImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setImage(null);
+      setPreviewUrl(null);
+      return;
+    }
+    setImage(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
+  const handleUpdate = () => {
+    if (!image) {
+      return;
+    }
+    setIsUploading(true);
+
+    const filePath = `public/images/${image.name}`;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      fs.writeFile(filePath, reader.result as string, err => {
+        if (err) {
+          console.error(err);
+        }
+        console.log(`${image.name} has been saved to ${filePath}`);
+        setIsUploading(false);
+      });
+    };
+    reader.readAsBinaryString(image);
+  };
+
+
   return (
-    <div className="w-full h-full">
-      <Webcam
-        className="border-2 border-gray-400"
-        height={400}
-        width={600}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-      />
-      <Button onClick={capture}>
-        <Icon>
-          <CameraIcon />
-        </Icon>
-      </Button>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <div className="w-full h-full p-4 rounded-lg shadow-lg">
-          <img src={image as string | undefined} alt="Captured image" />
-          <Button onClick={() => setModalOpen(false)}>Close</Button>
-        </div>
-      </Modal>
-    </div>
+    <Container maxWidth="sm">
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Avatar
+            src={previewUrl || ""}
+            className="w-28 h-28 m-auto rounded-full"
+          />
+          <input
+            accept="image/*"
+            style={{ display: "none", }}
+            id="upload-button"
+            type="file"
+            onChange={handleChange}
+          />
+          <label htmlFor="upload-button">
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              startIcon={<AddAPhotoIcon />}
+            >
+              Upload
+            </Button>
+          </label>
+        </Grid>
+        {image && (
+          <Grid item xs={12}>
+            <Typography>{image.name}</Typography>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={isUploading}
+            onClick={handleUpdate}
+          >
+            {isUploading ? (
+              <CircularProgress size={24} />
+            ) : (
+              "Update profile picture"
+            )}
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
-export default CameraView;
+export default ProfilePicture;

@@ -41,7 +41,6 @@ const theme = createTheme({
       'Prompt, sans-serif'
     ].join(','),
   },
-
 });
 
 export default function Profile() {
@@ -55,7 +54,7 @@ export default function Profile() {
   ) => {
     setState(event.target.value);
   };
-
+  
   const [value, setValue] = React.useState('1');
 
   const handleMenuChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -155,6 +154,8 @@ export default function Profile() {
                         variant='outlined'
                         className="font-bold rounded"
                         focused
+                        onChange={handleChange(setEditFirstname)}
+                        inputProps={{ style: { color: "#F0CA83" } }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -166,7 +167,9 @@ export default function Profile() {
                         name='editLastname'
                         variant='outlined'
                         className="font-bold rounded"
-                        focused 
+                        focused
+                        onChange={handleChange(setEditLastname)}
+                        inputProps={{ style: { color: "#F0CA83" } }} 
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -179,6 +182,8 @@ export default function Profile() {
                         variant='outlined'
                         className="font-bold rounded"
                         focused 
+                        onChange={handleChange(setEditUsername)}
+                        inputProps={{ style: { color: "#F0CA83" } }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -190,9 +195,19 @@ export default function Profile() {
                         name='editEmail'
                         variant='outlined'
                         className="font-bold rounded"
-                        focused 
+                        focused
+                        onChange={handleChange(setEditEmail)}
+                        inputProps={{ style: { color: "#F0CA83" } }}
                       />
                     </Grid>
+                    <Grid item xs={12}>
+                      <hr className="w-full h-[1px] rounded border-0 bg-[#886828] mt-1"></hr>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant='h6' className="text-[#F0CA83] font-bold pb-2">Update Profile Picture</Typography>
+                      
+                    </Grid>
+                    
                   </Grid>
                 </TabPanel>
                 <TabPanel value="3">
