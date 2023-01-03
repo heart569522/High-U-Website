@@ -29,6 +29,7 @@ import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
 import MyDetail_Profile from '../components/Other/MyDetail_Profile';
 import EditProfile_Profile from '../components/Other/EditProfile_Profile';
+import ChangePassword_Profile from '../components/Other/ChangePassword_Profile';
 
 const theme = createTheme({
   palette: {
@@ -78,7 +79,7 @@ export default function Profile() {
                   <EditProfile_Profile />
                 </TabPanel>
                 <TabPanel value="3">
-
+                  <ChangePassword_Profile />
                 </TabPanel>
                 <hr className="w-full h-[1px] rounded border-0 bg-[#886828] mt-3"></hr>
               </TabContext>

@@ -84,6 +84,7 @@ export default function EditProfile_Profile() {
                         focused
                         onChange={handleChange(setEditFirstname)}
                         inputProps={{ style: { color: "#F0CA83" } }}
+                        required
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -98,6 +99,7 @@ export default function EditProfile_Profile() {
                         focused
                         onChange={handleChange(setEditLastname)}
                         inputProps={{ style: { color: "#F0CA83" } }}
+                        required
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -112,6 +114,7 @@ export default function EditProfile_Profile() {
                         focused
                         onChange={handleChange(setEditUsername)}
                         inputProps={{ style: { color: "#F0CA83" } }}
+                        required
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -126,6 +129,7 @@ export default function EditProfile_Profile() {
                         focused
                         onChange={handleChange(setEditEmail)}
                         inputProps={{ style: { color: "#F0CA83" } }}
+                        required
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -158,6 +162,7 @@ export default function EditProfile_Profile() {
                     <Button
                         variant="contained"
                         size="large"
+                        type="submit"
                         className="bg-[#F0CA83] font-bold mb-2 hover:bg-[#f3b94d] max-sm:w-full"
                         disabled={isUploading}
                         onClick={handleUpdate}
