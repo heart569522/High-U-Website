@@ -79,5 +79,33 @@
         "color": "Blondes",
         "length": "Medium",
         "brand": "Jon Renau"
+    },
+    {
+        "id": 10,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/rwupstage_01_lg_1_600x600.jpg?v=1668795994",
+        "title": "Upstage | Synthetic Lace Front Wig (Hand-Tied)",
+        "desc": "UPSTAGE by Raquel Welch in RL29/25 | GOLDEN RUSSET Ginger Blonde Evenly Blended with Medium Golden Blonde",
+        "color": "Blondes",
+        "length": "Short",
+        "brand": "Raquel Welch"
+    },
+    {
+        "id": 11,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/resized__0001_ew_perucci2020_Tab_6_600x600.jpg?v=1648244990",
+        "title": "Tab | Synthetic Lace Front Wig (Mono Crown)",
+        "desc": "TAB by ELLEN WILLE in SILVER MIX | Pure Silver White and Pearl Platinum Blonde Blend",
+        "color": "Silver",
+        "length": "Short",
+        "brand": "Ellen Wille"
+    },
+    {
+        "id": 12,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/0004_Always_-_2_600x600.jpg?v=1619614043",
+        "title": "Always | HF Synthetic Wig (Basic Cap)",
+        "desc": "BEST SELLER | The Always Wig by Raquel Welch can be worn wavy, straight, up or down.",
+        "color": "Blondes",
+        "length": "Long",
+        "brand": "Raquel Welch"
     }
+
 ]

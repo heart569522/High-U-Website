@@ -1,151 +1,154 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
-  Typography,
+  Box,
+  Button,
+  Container,
   Grid,
+  Typography,
   Card,
   CardMedia,
   CardActionArea,
   CardContent,
-  Button,
-  ButtonProps
 } from '@mui/material';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#F0CA83",
+    },
+    secondary: {
+      main: "#F08383",
+    },
+  },
   typography: {
     fontFamily: [
       'Prompt, sans-serif'
     ].join(','),
   },
+
 });
 
-const CustomButtom = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: theme.palette.getContrastText('#FFCF76'),
-  backgroundColor: '#FFCF76',
-  '&:hover': {
-    backgroundColor: '#f7c25e',
-  },
-  fontFamily: 'Prompt, sans-serif',
-  fontWeight: 'bold',
-  fontSize: 22,
-  fontColor: '#303030',
-}));
-
 export default function HomeContent() {
-
   return (
     <ThemeProvider theme={theme}>
-      <Grid container justifyContent="space-around" alignItems="center" sx={{ bgcolor: '#303030', height: '50vh', margin: 0 }}>
-        <Grid item sm={12} md={4.7} sx={{ margin: 2, }}>
-          <Card sx={{ maxWidth: 600, float: 'right', }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                image="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
+      <Box className="bg-[#303030] h-max py-10">
+        <Container maxWidth="xl">
+          <Grid container>
+            <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center">
+              <img
+                className="w-full max-w-lg p-3"
+                src="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
               />
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item sm={12} md={6.7} sx={{ margin: 2, }}>
-          <Typography
-            variant="h4"
-            color="white"
-            textAlign="center"
-          >
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Grid container direction="row-reverse" justifyContent="space-around" alignItems="center" sx={{ bgcolor: '#787878', height: '50vh', margin: 0 }}>
-        <Grid item sm={12} md={4.7} sx={{ margin: 2, }}>
-          <Card sx={{ maxWidth: 600, float: 'left', }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                image="https://t4.ftcdn.net/jpg/04/27/41/49/360_F_427414979_2GhGAcGPFFUwfANjcpurjis6lVrU45Bx.jpg"
+            </Grid>
+            <Grid item xs={12} sm={6} className="flex items-center text-left max-sm:text-center">
+              <Typography
+                className="text-2xl px-3 max-sm:text-lg"
+              >
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+              </Typography>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      <Box className="bg-[#787878] h-max py-10">
+        <Container maxWidth="xl">
+          <Grid container className="max-sm:flex-wrap-reverse">
+            <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center">
+              <Typography
+                className="text-2xl p-3 max-sm:text-lg"
+              >
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center ">
+              <img
+                className="w-full max-w-lg px-3"
+                src="https://t4.ftcdn.net/jpg/04/27/41/49/360_F_427414979_2GhGAcGPFFUwfANjcpurjis6lVrU45Bx.jpg"
               />
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item sm={12} md={6.7} sx={{ margin: 2, }}>
-          <Typography
-            variant="h4"
-            color="white"
-            textAlign="center"
-          >
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          </Typography>
-        </Grid>
-      </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
       {/* CARD 3 IMAGE */}
-      <Grid container className='colorBackgroundContentGold' justifyContent="center" alignItems="center" sx={{ height: '80vh', margin: 0 }}>
-        <Grid item sm={12} md={3} sx={{ margin: 2, marginBottom: 0 }}>
-          <Card sx={{ maxWidth: 400, }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                image="https://cdn.shopify.com/s/files/1/1410/9094/products/rwupstage_01_lg_1_600x600.jpg?v=1668795994"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Bob
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item sm={12} md={3} sx={{ margin: 2, marginBottom: 0 }}>
-          <Card sx={{ maxWidth: 400, }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                image="https://cdn.shopify.com/s/files/1/1410/9094/products/resized__0001_ew_perucci2020_Tab_6_600x600.jpg?v=1648244990"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Bob
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={3} sx={{ margin: 2, marginBottom: 0 }}>
-          <Card sx={{ maxWidth: 400, }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                image="https://cdn.shopify.com/s/files/1/1410/9094/products/0004_Always_-_2_600x600.jpg?v=1619614043"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Bob
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item sm={12} md={12} sx={{ margin: 0, textAlign: 'center', }}>
-          <CustomButtom
-            href="#"
-            variant="contained"
-            size="large"
-          >
-            เพิ่มเติม...
-          </CustomButtom>
-        </Grid>
-      </Grid>
-
+      <Box className="bg-[#ffffff] h-max">
+        <Box className="colorBackgroundContentGold h-max py-10">
+          <Container maxWidth="xl">
+            <Grid container spacing={5}>
+              <Grid item xs={6} sm={3}>
+                <Card>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/rwupstage_01_lg_1_600x600.jpg?v=1668795994"
+                    />
+                    <CardContent>
+                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
+                        Upstage | Synthetic Lace Front Wig (Hand-Tied)
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Card>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/0004_Always_-_2_600x600.jpg?v=1619614043"
+                    />
+                    <CardContent>
+                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
+                        Always | HF Synthetic Wig (Basic Cap)
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Card>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/resized__0001_ew_perucci2020_Tab_6_600x600.jpg?v=1648244990"
+                    />
+                    <CardContent>
+                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
+                        Tab | Synthetic Lace Front Wig (Mono Crown)
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Card>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized_VivicaFox__0001_LAPIS_NATURAL_M.jpg?v=1609790920"
+                    />
+                    <CardContent>
+                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
+                        Lapis | Human Hair Lace Front Wig
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item xs={12}>
+                <center>
+                  <Button className="text-[#303030] ring-2 ring-[#805e00] border-[#303030] font-bold bg-[#FFCF76] hover:bg-[#ffbd44] focus:ring-4 focus:outline-none focus:ring-[#805e00] rounded text-sm px-5 py-2.5 text-center inline-flex items-center">
+                    See More
+                    <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </Button>
+                </center>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </Box>
     </ThemeProvider>
+
   )
 }
