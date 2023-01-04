@@ -43,8 +43,14 @@ export default function ChangePassword_Profile() {
     };
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassword(event.target.value);
-        setError(null); // Clear any previous errors
+        const { value } = event.target;
+        setNewPassword(value);
+
+        if (value !== confirmPassword) {
+            setError("The passwords do not match.");
+        } else {
+            setError(null);
+        }
     };
 
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,9 +70,16 @@ export default function ChangePassword_Profile() {
         }
     };
 
+    const handleReset = () => {
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setError(null);
+    };
+
     const handleUpdate = () => {
-        setIsUpdating(true);
-        setIsUpdating(false);
+        // setIsUpdating(true);
+        alert("currentPass = " + currentPassword);
     };
 
 
@@ -145,9 +158,10 @@ export default function ChangePassword_Profile() {
                         variant="outlined"
                         size="large"
                         type="reset"
+                        onClick={handleReset}
                         className="border-[#F0CA83] font-bold mx-1 mb-2 hover:border-[#f3b94d] max-sm:w-full"
                     >
-                    Reset
+                        Reset
                     </Button>
                 </Grid>
             </Grid>

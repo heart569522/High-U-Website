@@ -39,7 +39,7 @@ export default function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
     const handleChange = (setState: (value: string) => void) => (
@@ -48,9 +48,16 @@ export default function SignUpForm() {
         setState(event.target.value);
       };
     
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
-      setError(null); // Clear any previous errors
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+      const { value } = event.target;
+      setPassword(value);
+
+      if (value !== confirmPassword) {
+        setError("The passwords do not match.");
+      } else {
+        setError(null);
+      }
+
     };
     
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,21 +71,31 @@ export default function SignUpForm() {
       }
     };
     
-    const handleClickShowConfirmPassword = () => {
-      setShowConfirmPassword(!showConfirmPassword);
-    };
+    // const handleClickShowConfirmPassword = () => {
+    //   setShowConfirmPassword(!showConfirmPassword);
+    // };
     
-    const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-    };
+    // const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    //   event.preventDefault();
+    // };
     
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === " ") {
         event.preventDefault();
       }
     };
+
+    const handleReset = () => {
+        setFirstname("");
+        setLastname("");
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setError(null);
+    };
     
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       alert(username)
       alert(password)
@@ -94,7 +111,7 @@ export default function SignUpForm() {
                         <Typography component="h1" variant="h5" color="primary" className="font-bold">
                             High U - Sign Up
                         </Typography>
-                        <Box component="form" onSubmit={handleLogin} sx={{ mt: 3 }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={1}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -170,23 +187,24 @@ export default function SignUpForm() {
                                         value={confirmPassword}
                                         id="confirmPassword"
                                         onChange={handleConfirmPasswordChange}
-                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        // type={showConfirmPassword ? 'text' : 'password'}
+                                        type={password}
                                         variant="outlined"
                                         onKeyPress={handleKeyPress}
                                         fullWidth
                                         error={Boolean(error)}
                                         helperText={error}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton
-                                                    aria-label="toggle confirm password visibility"
-                                                    onClick={handleClickShowConfirmPassword}
-                                                    onMouseDown={handleMouseDownConfirmPassword}
-                                                >
-                                                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            ),
-                                        }}
+                                        // InputProps={{
+                                        //     endAdornment: (
+                                        //         <IconButton
+                                        //             aria-label="toggle confirm password visibility"
+                                        //             onClick={handleClickShowConfirmPassword}
+                                        //             onMouseDown={handleMouseDownConfirmPassword}
+                                        //         >
+                                        //             {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                        //         </IconButton>
+                                        //     ),
+                                        // }}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -197,6 +215,15 @@ export default function SignUpForm() {
                                         className="bg-amber-400 mt-3 mb-2 font-bold"
                                     >
                                         Sign Up
+                                    </Button>
+                                    <Button
+                                        type="reset"
+                                        fullWidth
+                                        variant="outlined"
+                                        onClick={handleReset}
+                                        className="text-red-500 border-red-500 hover:border-red-700 hover:text-red-700 mt-3 mb-2 font-bold"
+                                    >
+                                        Reset
                                     </Button>
                                 </Grid>
                             </Grid>
