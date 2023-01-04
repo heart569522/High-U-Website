@@ -29,6 +29,7 @@ import Webcam from 'react-webcam';
 import Navbar from "../components/Navigation/Navigation"
 
 import Wig_Product from '../helper/Wig_Product.json';
+import { Grid3x3 } from '@mui/icons-material';
 
 const theme = createTheme({
     palette: {
@@ -68,77 +69,78 @@ export default function TryAR() {
     return (
         <ThemeProvider theme={theme}>
             <Navbar />
-            <Paper className="bg-[#252525] h-screen">
+            <Box className="bg-[#252525] h-screen">
                 <Container maxWidth="xl" >
                     <Grid container>
-                        <Grid xs={12} className="pt-4 ">
+                        <Grid item xs={12} className="pt-4 ">
                             <Typography variant='h3' className='text-[#F0CA83] text-center max-sm:text-[36px] font-bold'>TRY AR</Typography>
                         </Grid>
-                        <Grid xs={12} className="pb-2 ">
+                        <Grid item xs={12} className="pb-2 ">
                             <Typography variant='h5' className="text-[#F0CA83] text-center max-sm:text-base">Snap photos and share like never before</Typography>
                         </Grid>
                     </Grid>
                     <Grid container spacing={2} className="pt-3">
-                        <Grid item sm={12} md={6} spacing={2}>
+                        <Grid item sm={12} md={6}>
                             <Box className="w-full h-full ">
-                                <Webcam
-                                    className="border-2 border-[#F0CA83] rounded"
-                                    width={680}
-                                    height={1280}
-                                    ref={webcamRef}
-                                    screenshotFormat="image/jpeg"
-                                    mirrored
-                                    videoConstraints={videoConstraints}
-                                />
-                                <Grid item xs={12} className="pt-5 text-center">
-                                    <IconButton onClick={capture} className="text-gray-800 m-auto bg-[#F0CA83] transition hover:bg-[#ffc14d]" size='large'>
-                                        <CameraAltIcon fontSize='large' />
-                                    </IconButton>
-                                </Grid>
+                                <center>
+                                    <Webcam
+                                        className="border-2 border-[#F0CA83] rounded"
+                                        width={680}
+                                        height={1280}
+                                        ref={webcamRef}
+                                        screenshotFormat="image/jpeg"
+                                        mirrored
+                                        videoConstraints={videoConstraints}
+                                    />
+                                    <Grid item xs={12} className="pt-5 text-center">
+                                        <IconButton onClick={capture} className="text-gray-800 m-auto bg-[#F0CA83] transition hover:bg-[#ffc14d]" size='large'>
+                                            <CameraAltIcon fontSize='large' />
+                                        </IconButton>
+                                    </Grid>
+                                </center>
+
                                 {/* Caprture Result */}
-                                <Modal
-                                    className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
-                                    open={modalOpen}
-                                    onClose={() => setModalOpen(false)}
-                                >
-                                    <Box className="text-right">
-                                        <img src={image as string | undefined} alt="Captured image" className="border-[12px] border-[#646464] rounded" />
-                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
-                                            <FavoriteIcon />
-                                        </IconButton>
-                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
-                                            <DownloadIcon />
-                                        </IconButton>
-                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
-                                            <ShareIcon />
-                                        </IconButton>
-                                        <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
-                                            <ClearIcon />
-                                        </IconButton>
-                                    </Box>
-                                </Modal>
+
                             </Box>
                         </Grid>
-                        {/* {Wig_Product.map((item, i) =>
-                            <Grid item xs={4} sm={4} md={2} className="">
-                                <Card variant="outlined" className="content">
-                                    <CardActionArea>
-                                        <CardMedia className="content-overlay" />
-                                        <CardMedia
-                                            className="content-image object-top w-60 h-60 "
-                                            component="img"
-                                            image={item.image}
-                                        />
-                                        <CardContent className="content-details fadeIn-bottom">
-                                            <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
-                                                {item.title}
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Grid>
-                        )} */}
-                        <Grid item sm={12} md={6} spacing={2}>
+                        <Grid item sm={12} md={6}>
+                            {Wig_Product.slice(0, 9).map((item, i) =>
+                                <Grid item xs={3} sm={3} md={4} className="inline-flex">
+                                    <Card variant="outlined" className="content">
+                                        <CardActionArea>
+                                            <CardMedia className="content-overlay" />
+                                            <CardMedia
+                                                className="content-image object-top h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
+                                                component="img"
+                                                image={item.image}
+                                            />
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            )}
+                        </Grid>
+                        <Modal
+                            className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
+                            open={modalOpen}
+                            onClose={() => setModalOpen(false)}
+                        >
+                            <Box className="text-right">
+                                <img src={image as string | undefined} alt="Captured image" className="border-[12px] border-[#646464] rounded" />
+                                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
+                                    <FavoriteIcon />
+                                </IconButton>
+                                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
+                                    <DownloadIcon />
+                                </IconButton>
+                                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
+                                    <ShareIcon />
+                                </IconButton>
+                                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
+                                    <ClearIcon />
+                                </IconButton>
+                            </Box>
+                        </Modal>
+                        {/* <Grid item sm={12} md={6} spacing={2}>
                             <ImageList
                                 className="w-full h-full overflow-hidden object-top"
                                 sx={{
@@ -160,21 +162,24 @@ export default function TryAR() {
                                 rowHeight={0}
                             >
                                 {Wig_Product.map((item) => (
-                                    <ImageListItem key={item.image} className="p-2">
-                                        <img
-                                            className="rounded hover:opacity-80 transition duration-200 ease-in-out"
-                                            src={item.image}
-                                            alt={item.color}
-                                            loading="lazy"
-                                        />
-                                    </ImageListItem>
+                                    <Box className="bg-white m-2">
+                                        <ImageListItem key={item.image} className="p-2">
+                                            <img
+                                                className="rounded hover:opacity-80 transition duration-200 ease-in-out"
+                                                src={item.image}
+                                                alt={item.color}
+                                                loading="lazy"
+                                            />
+                                        </ImageListItem>
+                                    </Box>
+
                                 ))}
                             </ImageList>
-                        </Grid>
+                        </Grid> */}
 
                     </Grid>
                 </Container>
-            </Paper>
+            </Box>
         </ThemeProvider>
 
     )

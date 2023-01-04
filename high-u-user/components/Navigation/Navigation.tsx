@@ -279,7 +279,7 @@ function Navbar() {
                 >
                   ทดลอง AR
                 </Link>
-                <Link href="/test" underline="none"
+                {/* <Link href="/test" underline="none"
                   onClick={handleCloseNavMenu}
                   sx={{
                     px: 2,
@@ -294,7 +294,7 @@ function Navbar() {
                   }}
                 >
                   Test Page
-                </Link>
+                </Link> */}
                 {/* ))} */}
               </Box>
 
