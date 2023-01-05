@@ -66,7 +66,7 @@ export default function DrawerBar(props: Props) {
       <Toolbar>
         <Typography
           variant="h5"
-          className=""
+          className="items-center justify-center"
           sx={{
             fontFamily: 'monospace',
             fontWeight: 600,
@@ -78,29 +78,23 @@ export default function DrawerBar(props: Props) {
           HIGH - U
         </Typography>
       </Toolbar>
-      <Divider />
+      {/* <Divider /> */}
       <List>
-        <ListItem key="Dashboard">
-          <ListItemButton className="rounded-lg hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/')}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard"/>
+        <ListItem key="Dashboard" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/')}>
+            <DashboardIcon fontSize="large" className="mr-3" />
+            <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Wigs Manage">
-          <ListItemButton onClick={() => handleMenuItemClick('/WigManage')}>
-            <ListItemIcon>
-              <Face3Icon />
-            </ListItemIcon>
+        <ListItem key="Wigs Manage" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/WigManage')}>
+            <Face3Icon fontSize="large" className="mr-3" />
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Member List">
-          <ListItemButton onClick={() => handleMenuItemClick('/MemberList')}>
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
+        <ListItem key="Member List" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/MemberList')}>
+            <GroupsIcon fontSize="large" className="mr-3" />
             <ListItemText primary="Member List" />
           </ListItemButton>
         </ListItem>
