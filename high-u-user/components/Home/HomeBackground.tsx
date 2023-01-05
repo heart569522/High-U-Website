@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper, Typography, } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 const bgHome = 'https://images.squarespace-cdn.com/content/v1/557dc7afe4b0452ec69dc879/1539722002377-ZS55K8YB3D1ZN31RN3NC/hair+models.png?format=2500w';
@@ -31,21 +31,22 @@ export default function HomeBackground() {
           backgroundAttachment: 'scroll',
         }}
       >
-        <Typography
-          variant="h3"
-          className='colorTextGold'
-          sx={{
-            position: 'absolute',
-            width: '555',
-            left: '8vh',
-            top: '400px',
-            fontWeight: 'bold',
-            fontFamily: 'Prompt, sans-serif',
-          }}
-        >
-          a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
-        </Typography>
+        <Box className="flex justify-start" >
+          <Typography
+            variant="h3"
+            className='colorTextGold font-bold'
+            sx={{
+              position: 'absolute',
+              width: '555',
+              left: '8vh',
+              top: '400px',
+              fontFamily: 'Prompt, sans-serif',
+            }}
+          >
+            a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
+          </Typography>
+        </Box>
       </Paper>
-    </ThemeProvider>      
+    </ThemeProvider>
   )
 }

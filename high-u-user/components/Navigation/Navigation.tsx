@@ -195,7 +195,7 @@ function Navbar() {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link href="#" underline="none">
+                  <Link href="/TryAR" underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
