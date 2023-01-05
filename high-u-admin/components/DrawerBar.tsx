@@ -1,22 +1,35 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/router'
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  ListItemButton,
+  AppBar,
+  Box,
+  CssBaseline,
+  Divider,
+  Toolbar,
+  Typography
+} from '@mui/material'
 
-import MailIcon from '@mui/icons-material/Mail';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+interface LayoutProps {
+  children: React.ReactNode
+}
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window?: () => Window;
+}
 
 const theme = createTheme({
   typography: {
@@ -36,15 +49,8 @@ const theme = createTheme({
 
 const drawerWidth = 240;
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
-
 export default function DrawerBar(props: Props) {
+  const router = useRouter()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -52,11 +58,19 @@ export default function DrawerBar(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleMenuItemClick = (path: string) => {
+    router.push(path)
+  }
+
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar>
+        <Typography variant="h6" className="font-bold">
+          HIGH - U
+        </Typography>
+      </Toolbar>
       <Divider />
-      <List>
+      {/* <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
@@ -67,19 +81,32 @@ export default function DrawerBar(props: Props) {
             </ListItemButton>
           </ListItem>
         ))}
-      </List>
-      <Divider />
+      </List> */}
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+          <ListItem key="Dashboard" disablePadding>
+            <ListItemButton onClick={() => handleMenuItemClick('/Dashboard')}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary="Dashboard" />
             </ListItemButton>
           </ListItem>
-        ))}
+          <ListItem key="Wigs Manage" disablePadding>
+            <ListItemButton onClick={() => handleMenuItemClick('/WigManage')}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Wigs Manage" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key="Member List" disablePadding>
+            <ListItemButton onClick={() => handleMenuItemClick('/MemberList')}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Member List" />
+            </ListItemButton>
+          </ListItem>
       </List>
     </div>
   );
