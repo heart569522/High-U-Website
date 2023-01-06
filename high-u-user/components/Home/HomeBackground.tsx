@@ -34,9 +34,8 @@ export default function HomeBackground() {
         <Box className="flex justify-start" >
           <Typography
             variant="h3"
-            className='colorTextGold font-bold'
+            className='colorTextGold font-bold absolute'
             sx={{
-              position: 'absolute',
               width: '555',
               left: '8vh',
               top: '400px',

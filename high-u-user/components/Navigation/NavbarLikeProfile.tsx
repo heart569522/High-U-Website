@@ -9,8 +9,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Link from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import { useRouter } from 'next/router'
 
 function NavbarLikeProfile() {
+    const router = useRouter()
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -21,12 +23,16 @@ function NavbarLikeProfile() {
         setAnchorElUser(null);
     };
 
+    const handleMenuItemClick = (path: string) => {
+        router.push(path)
+    }
+
     return (
         <Grid sx={{ display: 'flex' }}>
             {/* LIKE MENU */}
             <Box sx={{ flexGrow: 0, paddingLeft: 1 }}>
                 <Tooltip title="Favorites">
-                    <IconButton href='/Favorite' size="large" aria-label="" sx={{ color: '#F0CA83', }}>
+                    <IconButton onClick={() => handleMenuItemClick('/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
                         <FavoriteTwoToneIcon />
                     </IconButton>
                 </Tooltip>
@@ -56,7 +62,7 @@ function NavbarLikeProfile() {
                     onClose={handleCloseUserMenu}
                 >
                     <MenuItem onClick={handleCloseUserMenu}>
-                        <Link href="/Profile" underline="none" >
+                        <Link onClick={() => handleMenuItemClick('/Profile')} underline="none" >
                             <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">โปรไฟล์</Typography>
                         </Link>
                     </MenuItem>

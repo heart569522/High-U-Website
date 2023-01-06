@@ -1,4 +1,5 @@
 import React, { useState, useCallback, ChangeEvent, FormEvent, KeyboardEventHandler, } from 'react';
+import { useRouter } from 'next/router'
 import {
     IconButton,
     Container,
@@ -30,6 +31,8 @@ const theme = createTheme({
 });
 
 const SignInForm = React.memo(() => {
+    const router = useRouter()
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +64,10 @@ const SignInForm = React.memo(() => {
         alert(username);
         alert(password);
     }, [username, password]);
+
+    const handleMenuItemClick = (path: string) => {
+        router.push(path)
+    }
 
     return (
 
@@ -97,32 +104,33 @@ const SignInForm = React.memo(() => {
                                     autoComplete="current-password"
                                     onChange={handlePasswordChange}
                                     onKeyPress={handleKeyPress}
-                                    type={showPassword ? 'text' : 'password'}
+                                    // type={showPassword ? 'text' : 'password'}
+                                    type='password'
                                     variant="outlined"
                                     fullWidth
-                                    InputProps={{
-                                        endAdornment: (
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                            >
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        ),
-                                    }}
+                                    // InputProps={{
+                                    //     endAdornment: (
+                                    //         <IconButton
+                                    //             aria-label="toggle password visibility"
+                                    //             onClick={handleClickShowPassword}
+                                    //             onMouseDown={handleMouseDownPassword}
+                                    //         >
+                                    //             {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    //         </IconButton>
+                                    //     ),
+                                    // }}
                                 />
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    className="bg-amber-400 mt-3 mb-2 font-bold"
+                                    className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
                                 >
                                     Sign In
                                 </Button>
                                 <Grid container>
                                     <Grid item>
-                                        <Link href="/SignUp" variant="body2" color="secondary">
+                                        <Link onClick={() => handleMenuItemClick('/SignUp')} className="cursor-pointer" variant="body2" color="secondary">
                                             {"Don't have an account? SignUp"}
                                         </Link>
                                     </Grid>

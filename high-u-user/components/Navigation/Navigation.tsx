@@ -15,6 +15,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { createTheme, ThemeProvider, styled, alpha } from '@mui/material/styles';
+import { useRouter } from 'next/router'
 
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
@@ -92,6 +93,7 @@ HideOnScroll.propTypes = {
 };
 
 function Navbar() {
+  const router = useRouter()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -118,6 +120,10 @@ function Navbar() {
     }
   };
 
+  const handleMenuItemClick = (path: string) => {
+    router.push(path)
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <HideOnScroll>
@@ -129,7 +135,8 @@ function Navbar() {
                 variant="h6"
                 noWrap
                 component="a"
-                href="/"
+                className="cursor-pointer"
+                onClick={() => handleMenuItemClick('/')}
                 sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
@@ -175,7 +182,7 @@ function Navbar() {
                     display: { xs: 'block', md: 'none', },
                   }}
                 >
-                  <Link href="/" underline="none">
+                  <Link onClick={() => handleMenuItemClick('/')} underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
@@ -185,7 +192,7 @@ function Navbar() {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link href="/Wig" underline="none">
+                  <Link onClick={() => handleMenuItemClick('/Wig')} underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
@@ -195,7 +202,7 @@ function Navbar() {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link href="/TryAR" underline="none">
+                  <Link onClick={() => handleMenuItemClick('/TryAR')} underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
@@ -212,8 +219,8 @@ function Navbar() {
                 variant="h5"
                 noWrap
                 component="a"
-                href="/"
-                className="max-sm:text-sm"
+                onClick={() => handleMenuItemClick('/')}
+                className="max-sm:text-sm cursor-pointer"
                 sx={{
                   mr: 2,
                   display: { xs: 'flex', md: 'none' },
@@ -231,53 +238,59 @@ function Navbar() {
               {/* MENU */}
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, fontFamily: 'Prompt, sans-serif', }}>
                 {/* {pages.map((page) => ( */}
-                <Link href="/" underline="none"
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    px: 2,
-                    my: 2,
-                    color: '#F0CA83',
-                    display: 'block',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      color: "#ffefd1",
-                    },
-                    transition: '.3s',
-                  }}
-                >
-                  หน้าแรก
+                <Link onClick={() => handleMenuItemClick('/')} className="cursor-pointer" underline='none'>
+                  <Box
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      px: 2,
+                      my: 2,
+                      color: '#F0CA83',
+                      display: 'block',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        color: "#ffefd1",
+                      },
+                      transition: '.3s',
+                    }}
+                  >
+                    หน้าแรก
+                  </Box>
                 </Link>
-                <Link href="/Wig" underline="none"
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    px: 2,
-                    my: 2,
-                    color: '#F0CA83',
-                    display: 'block',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      color: "#ffefd1",
-                    },
-                    transition: '.3s',
-                  }}
-                >
-                  วิก
+                <Link onClick={() => handleMenuItemClick('/Wig')} className="cursor-pointer" underline='none'>
+                  <Box
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      px: 2,
+                      my: 2,
+                      color: '#F0CA83',
+                      display: 'block',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        color: "#ffefd1",
+                      },
+                      transition: '.3s',
+                    }}
+                  >
+                    วิก
+                  </Box>
                 </Link>
-                <Link href="/TryAR" underline="none"
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    px: 2,
-                    my: 2,
-                    color: '#F0CA83',
-                    display: 'block',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      color: "#ffefd1",
-                    },
-                    transition: '.3s',
-                  }}
-                >
-                  ทดลอง AR
+                <Link onClick={() => handleMenuItemClick('/TryAR')} className="cursor-pointer" underline='none'>
+                  <Box
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      px: 2,
+                      my: 2,
+                      color: '#F0CA83',
+                      display: 'block',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        color: "#ffefd1",
+                      },
+                      transition: '.3s',
+                    }}
+                  >
+                    ทดลอง AR
+                  </Box>
                 </Link>
                 {/* <Link href="/test" underline="none"
                   onClick={handleCloseNavMenu}
@@ -315,8 +328,8 @@ function Navbar() {
               </Search>
 
               {/* If Login OR Non-Login */}
-              <NavbarLikeProfile />
-              {/* <NavbarSignInUpButton /> */}
+              {/* <NavbarLikeProfile /> */}
+              <NavbarSignInUpButton />
 
             </Toolbar>
           </Container>

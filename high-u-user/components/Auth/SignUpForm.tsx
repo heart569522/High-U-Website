@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router'
 import {
     IconButton,
     Container,
@@ -32,6 +33,7 @@ const theme = createTheme({
 
 
 export default function SignUpForm() {
+    const router = useRouter()
 
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
@@ -101,6 +103,10 @@ export default function SignUpForm() {
         alert(password)
     };
 
+    const handleMenuItemClick = (path: string) => {
+        router.push(path)
+    }
+
     return (
 
         <ThemeProvider theme={theme}>
@@ -152,7 +158,6 @@ export default function SignUpForm() {
                                             required
                                             fullWidth
                                             autoComplete="username"
-                                            autoFocus
                                             onKeyPress={handleKeyPress}
                                         />
                                         <TextField
@@ -230,7 +235,7 @@ export default function SignUpForm() {
                                 </Grid>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <Link href="/SignIn" variant="body2" color="secondary">
+                                        <Link onClick={() => handleMenuItemClick('/SignIn')} className="cursor-pointer" variant="body2" color="secondary">
                                             {"Already have an account? Sign in"}
                                         </Link>
                                     </Grid>
