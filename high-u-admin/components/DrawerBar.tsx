@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   ListItemButton,
   AppBar,
   Box,
@@ -82,20 +81,26 @@ export default function DrawerBar(props: Props) {
       <List>
         <ListItem key="Dashboard" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/')}>
-            <DashboardIcon fontSize="large" className="mr-3" />
+            <DashboardIcon className="mr-3" />
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Wigs Manage" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/WigManage')}>
-            <Face3Icon fontSize="large" className="mr-3" />
+            <Face3Icon className="mr-3" />
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Member List" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/MemberList')}>
-            <GroupsIcon fontSize="large" className="mr-3" />
+            <GroupsIcon className="mr-3" />
             <ListItemText primary="Member List" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem key="Test" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/test')}>
+            {/* <GroupsIcon className="mr-3" /> */}
+            <ListItemText primary="Test" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -135,7 +140,6 @@ export default function DrawerBar(props: Props) {
           sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
           aria-label="mailbox folders"
         >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           {/* Responsive */}
           <Drawer
             container={container}

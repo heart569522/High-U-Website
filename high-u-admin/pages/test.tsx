@@ -1,57 +1,53 @@
-import React from 'react'
-import { useRouter } from 'next/router'
-import { Drawer, List, ListItem, ListItemText } from '@mui/material'
+import { useEffect, useRef } from 'react'
+import { Chart, ChartItem, ChartOptions } from 'chart.js'
+import 'chartjs-plugin-datalabels'
 
-interface LayoutProps {
-    children: React.ReactNode
-}
+const Page: React.FC = () => {
+    const chartRef = useRef<HTMLCanvasElement>(null)
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-    //   const classes = useStyles()
-    const router = useRouter()
-    const [isMenuOpen, setMenuOpen] = React.useState(false)
+    useEffect(() => {
+        const data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'My First dataset',
+                    backgroundColor: 'rgba(255,99,132,0.2)',
+                    borderColor: 'rgba(255,99,132,1)',
+                    borderWidth: 1,
+                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+                    hoverBorderColor: 'rgba(255,99,132,1)',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                },
+            ],
+        }
 
-    const handleMenuToggle = () => {
-        setMenuOpen(!isMenuOpen)
-    }
+        const options: ChartOptions = {
+            scales: {
+            //   yAxes: [
+            //     {
+            //       type: 'linear',
+            //       ticks: {
+            //         beginAtZero: true,
+            //       },
+            //     },
+            //   ],
+            },
+          }
 
-    const handleMenuClose = () => {
-        setMenuOpen(false)
-    }
-
-    const handleMenuItemClick = (path: string) => {
-        router.push(path)
-        handleMenuClose()
-    }
+        if (chartRef.current) {
+            new Chart(chartRef.current.getContext('2d') as ChartItem, {
+                type: 'bar',
+                data,
+                options,
+            })
+        }
+    }, [])
 
     return (
-        <div className="flex flex-col h-screen">
-            <Drawer open={isMenuOpen} onClose={handleMenuClose}>
-                <div className="w-52">
-                    <List>
-                        <ListItem button onClick={() => handleMenuItemClick('/Dashboard')}>
-                            <ListItemText primary="Dashboard" />
-                        </ListItem>
-                        <ListItem button onClick={() => handleMenuItemClick('/ManageWig')}>
-                            <ListItemText primary="Wigs Manage" />
-                        </ListItem>
-                        <ListItem button onClick={() => handleMenuItemClick('/MemberList')}>
-                            <ListItemText primary="Member List" />
-                        </ListItem>
-                    </List>
-                </div>
-            </Drawer>
-            <div className="flex-1 overflow-y-scroll p-4">
-                <button
-                    className="p-2 rounded-full text-gray-800 hover:bg-gray-200"
-                    onClick={handleMenuToggle}
-                >
-                    Toggle Menu
-                </button>
-                {children}
-            </div>
+        <div className="container mx-auto">
+            <canvas ref={chartRef} />
         </div>
     )
 }
 
-export default Layout
+export default Page
