@@ -23,14 +23,14 @@ const Page: React.FC = () => {
 
         const options: ChartOptions = {
             scales: {
-            //   yAxes: [
-            //     {
-            //       type: 'linear',
-            //       ticks: {
-            //         beginAtZero: true,
-            //       },
-            //     },
-            //   ],
+              yAxes: [
+                {
+                  type: 'linear',
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
             },
           }
 

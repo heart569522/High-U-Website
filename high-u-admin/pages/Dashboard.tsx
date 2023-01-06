@@ -22,6 +22,31 @@ function Dashboard() {
             <Typography className="text-[#303030] font-bold text-xl">
               Website Views
             </Typography>
+
+          </Box>
+        </Grid>
+        <Grid xs={12} md={6}>
+          <Box className="bg-white w-full h-full rounded-xl p-5">
+            <Typography className="text-[#303030] font-bold text-xl">
+              Top 5 Wigs View
+            </Typography>
+
+          </Box>
+        </Grid>
+        <Grid xs={12} md={6}>
+          <Box className="bg-white w-full h-full rounded-xl p-5">
+            <Typography className="text-[#303030] font-bold text-xl">
+              Top Week WigsAR
+            </Typography>
+
+          </Box>
+        </Grid>
+        <Grid xs={12} md={6}>
+          <Box className="bg-white w-full h-full rounded-xl p-5">
+            <Typography className="text-[#303030] font-bold text-xl">
+              Member Active
+            </Typography>
+
           </Box>
         </Grid>
       </Grid>
