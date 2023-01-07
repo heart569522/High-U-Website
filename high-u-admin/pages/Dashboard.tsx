@@ -36,7 +36,7 @@ function Dashboard() {
         <Grid xs={12} md={6}>
           <Box className="bg-white w-full h-full rounded-xl p-5">
             <Typography className="text-[#303030] font-bold text-xl">
-              Top Week WigsAR
+              Top Week AR Wig
             </Typography>
 
           </Box>

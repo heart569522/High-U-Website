@@ -1,53 +1,96 @@
-import { useEffect, useRef } from 'react'
-import { Chart, ChartItem, ChartOptions } from 'chart.js'
-import 'chartjs-plugin-datalabels'
+import React from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Box,
+  Typography,
+  Toolbar,
+  Grid
+} from "@mui/material";
+import DrawerBar from "../components/DrawerBar"
 
-const Page: React.FC = () => {
-    const chartRef = useRef<HTMLCanvasElement>(null)
+const drawerWidth = 240;
 
-    useEffect(() => {
-        const data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    backgroundColor: 'rgba(255,99,132,0.2)',
-                    borderColor: 'rgba(255,99,132,1)',
-                    borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                    hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                },
-            ],
-        }
+function ResponsiveTable() {
+  return (
+    <div>
+      <DrawerBar />
+      <Box
+        component="main"
+        className="bg-slate-200 h-screen p-5 ml-[240px] max-[899px]:ml-0"
+        sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+      >
+        <Toolbar />
+        <Grid container>
+          <Grid xs={12} md={12}>
+            <Box className="bg-white w-full h-full rounded-xl p-5">
+              <Typography className="text-[#303030] font-bold text-xl mb-4">
+                Test Table
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Column 1
+                      </TableCell>
+                      <TableCell className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Column 2
+                      </TableCell>
+                      <TableCell className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Column 3
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow className="odd:bg-white">
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                        Cell 1
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 2
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 3
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="odd:bg-gray-50">
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                        Cell 4
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 5
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 6
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="odd:bg-white">
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                        Cell 7
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 8
+                      </TableCell>
+                      <TableCell className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                        Cell 9
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </div>
 
-        const options: ChartOptions = {
-            scales: {
-              yAxes: [
-                {
-                  type: 'linear',
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                },
-              ],
-            },
-          }
 
-        if (chartRef.current) {
-            new Chart(chartRef.current.getContext('2d') as ChartItem, {
-                type: 'bar',
-                data,
-                options,
-            })
-        }
-    }, [])
-
-    return (
-        <div className="container mx-auto">
-            <canvas ref={chartRef} />
-        </div>
-    )
+  );
 }
 
-export default Page
+export default ResponsiveTable
