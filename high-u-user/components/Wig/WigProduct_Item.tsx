@@ -14,8 +14,6 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
-
-
 import Wig_Color from '../../helper/Wig_Color.json';
 import Wig_Product from '../../helper/Wig_Product.json';
 

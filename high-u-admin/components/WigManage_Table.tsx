@@ -1,32 +1,131 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Link from 'next/link';
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TablePagination,
+    TableHead,
+    TableRow,
     Box,
     Typography,
     Toolbar,
-    Grid
-} from '@mui/material'
+    Grid,
+    Hidden,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    ButtonGroup,
+    Button
+} from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import Wig_Product from '../helper/Wig_Product.json';
 
 const drawerWidth = 240;
+const theme = createTheme({
+    typography: {
+        fontFamily: [
+            'Prompt, sans-serif'
+        ].join(','),
+    },
+    palette: {
+        primary: {
+            main: "#F0CA83",
+        },
+        secondary: {
+            main: "#303030"
+        }
+    },
+});
 
 function WigManage_Table() {
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     return (
-        <Box
-            component="main"
-            className="bg-slate-200 h-screen p-5 ml-[240px] max-[899px]:ml-0"
-            sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
-        >
-            <Toolbar />
-            <Grid container>
-                <Grid xs={12} md={12}>
-                    <Box className="bg-white w-full h-full rounded-xl p-5">
-                        <Typography className="text-[#303030] font-bold text-xl">
-                            Wigs Manage
-                        </Typography>
-                        
-                    </Box>
+        <ThemeProvider theme={theme}>
+            <Box
+                component="main"
+                className="h-full p-5 ml-[240px] max-[899px]:ml-0"
+                sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+            >
+                <Toolbar />
+                <Grid container>
+                    <Grid xs={12} md={12}>
+                        <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
+                            <Typography className="text-[#303030] font-bold text-xl">
+                                Wigs Manage
+                            </Typography>
+                            <Hidden mdDown >
+                                <TableContainer className="mt-3 rounded-md">
+                                    <Table className="">
+                                        <TableHead>
+                                            <TableRow className=" bg-[#ffe6b8]">
+                                                <TableCell className="w-[5%] text-lg text-center font-bold">No.</TableCell>
+                                                <TableCell className="w-auto text-lg font-bold">Title</TableCell>
+                                                <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
+                                                <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
+                                                <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
+                                                <TableRow key={item.id} className="hover:bg-gray-50">
+                                                    <TableCell className="w-[5%] text-center">{item.id}</TableCell>
+                                                    <TableCell className="w-auto"><Link href={`/test?${item.id}`}>{item.title}</Link></TableCell>
+                                                    <TableCell className="w-[15%]">{item.color}</TableCell>
+                                                    <TableCell className="w-[15%]">{item.size}</TableCell>
+                                                    <TableCell className="w-[15%] text-center ">
+                                                        <ButtonGroup variant="text" aria-label="text button group" color="secondary">
+                                                            <Button className="hover:text-blue-500 font-bold">Edit</Button>
+                                                            <Button className="hover:text-red-500 font-bold">Delete</Button>
+                                                        </ButtonGroup>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                <TablePagination
+                                    rowsPerPageOptions={[10, 25, 50, 100]}
+                                    component="div"
+                                    count={Wig_Product.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </Hidden>
+                            <Hidden mdUp>
+                                {Wig_Product.map((item, i) => (
+                                    <Accordion key={item.id}>
+                                        <AccordionSummary>
+                                            {item.title}
+                                        </AccordionSummary>
+                                        <AccordionDetails>
+                                            Color: {item.color}<br />
+                                            Size: {item.size}
+                                        </AccordionDetails>
+                                    </Accordion>
+                                ))}
+                            </Hidden>
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Box>
+            </Box>
+        </ThemeProvider>
     )
 }
 
