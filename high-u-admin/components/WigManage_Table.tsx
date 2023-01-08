@@ -14,6 +14,7 @@ import {
     Grid,
     Hidden,
     Accordion,
+    AccordionActions,
     AccordionSummary,
     AccordionDetails,
     ButtonGroup,
@@ -84,13 +85,13 @@ function WigManage_Table() {
                                             {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                                 <TableRow key={item.id} className="hover:bg-gray-50">
                                                     <TableCell className="w-[5%] text-center">{item.id}</TableCell>
-                                                    <TableCell className="w-auto"><Link href={`/test?${item.id}`}>{item.title}</Link></TableCell>
+                                                    <TableCell className="w-auto"><Link href={`/test?id=${item.id}`}>{item.title}</Link></TableCell>
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
-                                                        <ButtonGroup variant="text" aria-label="text button group" color="secondary">
-                                                            <Button className="hover:text-blue-500 font-bold">Edit</Button>
-                                                            <Button className="hover:text-red-500 font-bold">Delete</Button>
+                                                        <ButtonGroup variant="contained" aria-label="contained button group">
+                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                         </ButtonGroup>
                                                     </TableCell>
                                                 </TableRow>
@@ -110,14 +111,24 @@ function WigManage_Table() {
                             </Hidden>
                             <Hidden mdUp>
                                 {Wig_Product.map((item, i) => (
-                                    <Accordion key={item.id}>
+                                    <Accordion key={item.id} className="shadow-md">
                                         <AccordionSummary>
-                                            {item.title}
+                                            <Typography className="font-semibold">{item.title}</Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails>
-                                            Color: {item.color}<br />
-                                            Size: {item.size}
+                                        <AccordionDetails className="w-52 h-auto">
+                                            <img src={item.image} alt={item.title} />
                                         </AccordionDetails>
+                                        <AccordionDetails className="bg-gray-50">
+                                            <Typography>Color: {item.color}</Typography><br />
+                                            <Typography>Size: {item.size}</Typography>
+                                        </AccordionDetails>
+                                        <AccordionActions>
+                                            <ButtonGroup variant="contained" aria-label="contained button group">
+                                                <Button className="bg-[#303030] text-white hover:bg-blue-500">Detail</Button>
+                                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                            </ButtonGroup>
+                                        </AccordionActions>
                                     </Accordion>
                                 ))}
                             </Hidden>

@@ -8,7 +8,7 @@ import {
 
 const drawerWidth = 240;
 
-function MemberList_table() {
+function MemberList_Table() {
     return (
         <Box
             component="main"
@@ -30,4 +30,4 @@ function MemberList_table() {
     )
 }
 
-export default MemberList_table
+export default MemberList_Table
