@@ -18,7 +18,9 @@ import {
     AccordionSummary,
     AccordionDetails,
     ButtonGroup,
-    Button
+    Button,
+    Modal,
+    Divider
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -42,6 +44,10 @@ const theme = createTheme({
 });
 
 function WigManage_Table() {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState(0);
+
+    // const item = String;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -53,6 +59,10 @@ function WigManage_Table() {
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const handleModalClose = () => {
+        setModalOpen(false);
     };
 
     return (
@@ -85,7 +95,14 @@ function WigManage_Table() {
                                             {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                                 <TableRow key={item.id} className="hover:bg-gray-50">
                                                     <TableCell className="w-[5%] text-center">{item.id}</TableCell>
-                                                    <TableCell className="w-auto"><Link href={`/test?id=${item.id}`}>{item.title}</Link></TableCell>
+                                                    <TableCell
+                                                        className="w-auto cursor-pointer hover:underline"
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            // setSelectedId(item.id);
+                                                        }}>
+                                                        {item.title}
+                                                    </TableCell>
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
@@ -115,16 +132,23 @@ function WigManage_Table() {
                                         <AccordionSummary>
                                             <Typography className="font-semibold">{item.title}</Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails className="w-52 h-auto">
+                                        {/* <AccordionDetails className="w-52 h-auto">
                                             <img src={item.image} alt={item.title} />
-                                        </AccordionDetails>
+                                        </AccordionDetails> */}
                                         <AccordionDetails className="bg-gray-50">
                                             <Typography>Color: {item.color}</Typography><br />
                                             <Typography>Size: {item.size}</Typography>
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <ButtonGroup variant="contained" aria-label="contained button group">
-                                                <Button className="bg-[#303030] text-white hover:bg-blue-500">Detail</Button>
+                                                <Button
+                                                    className="bg-[#303030] text-white hover:bg-blue-500"
+                                                    onClick={() => {
+                                                        setModalOpen(true);
+                                                        // setSelectedId(item.id);
+                                                    }}>
+                                                    Detail
+                                                </Button>
                                                 <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                             </ButtonGroup>
@@ -132,6 +156,45 @@ function WigManage_Table() {
                                     </Accordion>
                                 ))}
                             </Hidden>
+                            <Modal
+                                open={modalOpen}
+                                onClose={handleModalClose}
+                                className="flex justify-center items-center max-lg:overflow-scroll"
+                            >
+                                <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={12} md={6}>
+                                            <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
+                                                <img className="rounded-lg" src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
+                                            </Box>
+                                        </Grid>
+                                        <Grid item sm={12} md={6} className="text-[#303030]">
+                                            <Typography className="text-4xl font-bold max-lg:text-xl">Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)</Typography>
+                                            <Divider className="my-2 border-[#303030]" />
+                                            <Typography className="text-lg italic text-[#696969] max-lg:text-sm">CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots</Typography>
+                                            <Hidden mdDown>
+                                                <br />
+                                            </Hidden>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">BRAND : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Ellen Wille</div>
+                                            </div>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">COLOR : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Blondes</div>
+                                            </div>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
+                                            </div>
+                                            <Hidden mdUp>
+                                                <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
+                                                    <Button className=" text-white bg-amber-500">Edit</Button>
+                                                    <Button className=" text-white bg-red-500">Delete</Button>
+                                                </ButtonGroup>
+                                            </Hidden>
+
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </Modal>
                         </Box>
                     </Grid>
                 </Grid>
