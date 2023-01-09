@@ -18,7 +18,8 @@ import {
     AccordionSummary,
     AccordionDetails,
     ButtonGroup,
-    Button
+    Button,
+    Modal
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -42,6 +43,10 @@ const theme = createTheme({
 });
 
 function WigManage_Table() {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState(0);
+
+    // const item = String;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -54,6 +59,11 @@ function WigManage_Table() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const handleModalClose = () => {
+        setModalOpen(false);
+    };
+    const selectedRow = Wig_Product.find((item) => item.id === selectedId);
 
     return (
         <ThemeProvider theme={theme}>
@@ -85,7 +95,14 @@ function WigManage_Table() {
                                             {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                                 <TableRow key={item.id} className="hover:bg-gray-50">
                                                     <TableCell className="w-[5%] text-center">{item.id}</TableCell>
-                                                    <TableCell className="w-auto">{item.title}</TableCell>
+                                                    <TableCell
+                                                        className="w-auto cursor-pointer hover:underline"
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            // setSelectedId(item.id);
+                                                        }}>
+                                                        {item.title}
+                                                    </TableCell>
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
@@ -115,16 +132,23 @@ function WigManage_Table() {
                                         <AccordionSummary>
                                             <Typography className="font-semibold">{item.title}</Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails className="w-52 h-auto">
+                                        {/* <AccordionDetails className="w-52 h-auto">
                                             <img src={item.image} alt={item.title} />
-                                        </AccordionDetails>
+                                        </AccordionDetails> */}
                                         <AccordionDetails className="bg-gray-50">
                                             <Typography>Color: {item.color}</Typography><br />
                                             <Typography>Size: {item.size}</Typography>
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <ButtonGroup variant="contained" aria-label="contained button group">
-                                                <Button className="bg-[#303030] text-white hover:bg-blue-500">Detail</Button>
+                                                <Button
+                                                    className="bg-[#303030] text-white hover:bg-blue-500"
+                                                    onClick={() => {
+                                                        setModalOpen(true);
+                                                        // setSelectedId(item.id);
+                                                    }}>
+                                                    Detail
+                                                </Button>
                                                 <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                             </ButtonGroup>
@@ -132,6 +156,22 @@ function WigManage_Table() {
                                     </Accordion>
                                 ))}
                             </Hidden>
+                            <Modal
+                                open={modalOpen}
+                                onClose={handleModalClose}
+                                className="flex justify-center items-center"
+                            >
+                                <Box className="w-5/6 h-5/6 bg-gray-100 rounded-lg p-5">
+                                    <Grid container>
+                                        <Grid item sm={12} md={6}>
+                                            <Box>
+                                                <img src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
+                                            </Box>
+
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </Modal>
                         </Box>
                     </Grid>
                 </Grid>
