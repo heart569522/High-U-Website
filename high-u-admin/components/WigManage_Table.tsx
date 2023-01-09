@@ -85,7 +85,7 @@ function WigManage_Table() {
                                             {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                                 <TableRow key={item.id} className="hover:bg-gray-50">
                                                     <TableCell className="w-[5%] text-center">{item.id}</TableCell>
-                                                    <TableCell className="w-auto"><Link href={`/test?id=${item.id}`}>{item.title}</Link></TableCell>
+                                                    <TableCell className="w-auto">{item.title}</TableCell>
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
