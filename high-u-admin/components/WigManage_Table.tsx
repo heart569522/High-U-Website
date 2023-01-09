@@ -19,7 +19,8 @@ import {
     AccordionDetails,
     ButtonGroup,
     Button,
-    Modal
+    Modal,
+    Divider
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -63,7 +64,6 @@ function WigManage_Table() {
     const handleModalClose = () => {
         setModalOpen(false);
     };
-    const selectedRow = Wig_Product.find((item) => item.id === selectedId);
 
     return (
         <ThemeProvider theme={theme}>
@@ -159,14 +159,37 @@ function WigManage_Table() {
                             <Modal
                                 open={modalOpen}
                                 onClose={handleModalClose}
-                                className="flex justify-center items-center"
+                                className="flex justify-center items-center max-lg:overflow-scroll"
                             >
-                                <Box className="w-5/6 h-5/6 bg-gray-100 rounded-lg p-5">
-                                    <Grid container>
+                                <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
+                                    <Grid container spacing={2}>
                                         <Grid item sm={12} md={6}>
-                                            <Box>
-                                                <img src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
+                                            <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
+                                                <img className="rounded-lg" src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
                                             </Box>
+                                        </Grid>
+                                        <Grid item sm={12} md={6} className="text-[#303030]">
+                                            <Typography className="text-4xl font-bold max-lg:text-xl">Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)</Typography>
+                                            <Divider className="my-2 border-[#303030]" />
+                                            <Typography className="text-lg italic text-[#696969] max-lg:text-sm">CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots</Typography>
+                                            <Hidden mdDown>
+                                                <br />
+                                            </Hidden>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">BRAND : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Ellen Wille</div>
+                                            </div>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">COLOR : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Blondes</div>
+                                            </div>
+                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
+                                            </div>
+                                            <Hidden mdUp>
+                                                <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
+                                                    <Button className=" text-white bg-amber-500">Edit</Button>
+                                                    <Button className=" text-white bg-red-500">Delete</Button>
+                                                </ButtonGroup>
+                                            </Hidden>
 
                                         </Grid>
                                     </Grid>
