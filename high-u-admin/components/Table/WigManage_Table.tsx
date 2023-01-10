@@ -107,12 +107,15 @@ function WigManage_Table() {
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
-                                                        <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
-                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500 mx-1">Edit</Button>
-                                                        </Link>
-                                                        {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                            <Button className="bg-[#303030] text-white hover:bg-red-500 mx-1">Delete</Button>
-                                                        {/* </Link> */}
+                                                        <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                            <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                            </Link>
+                                                            {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
+                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                            {/* </Link> */}
+                                                        </ButtonGroup>
+
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -143,7 +146,7 @@ function WigManage_Table() {
                                             <Typography>Size: {item.size}</Typography>
                                         </AccordionDetails>
                                         <AccordionActions>
-                                            <ButtonGroup variant="contained" aria-label="contained button group">
+                                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
                                                 <Button
                                                     className="bg-[#303030] text-white hover:bg-blue-500"
                                                     onClick={() => {
@@ -152,7 +155,9 @@ function WigManage_Table() {
                                                     }}>
                                                     Detail
                                                 </Button>
-                                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                    <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                </Link>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                             </ButtonGroup>
                                         </AccordionActions>
@@ -189,8 +194,8 @@ function WigManage_Table() {
                                             </div>
                                             <Hidden mdUp>
                                                 <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
-                                                    <Button className=" text-white bg-amber-500">Edit</Button>
-                                                    <Button className=" text-white bg-red-500">Delete</Button>
+                                                    <Button className="text-white bg-amber-500">Edit</Button>
+                                                    <Button className="text-white bg-red-500">Delete</Button>
                                                 </ButtonGroup>
                                             </Hidden>
 
