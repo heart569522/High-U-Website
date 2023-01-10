@@ -20,11 +20,12 @@ import {
     ButtonGroup,
     Button,
     Modal,
-    Divider
+    Divider,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Wig_Product from '../helper/Wig_Product.json';
+import Wig_Product from '../../helper/Wig_Product.json';
+import { Close } from '@mui/icons-material';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -106,10 +107,12 @@ function WigManage_Table() {
                                                     <TableCell className="w-[15%]">{item.color}</TableCell>
                                                     <TableCell className="w-[15%]">{item.size}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
-                                                        <ButtonGroup variant="contained" aria-label="contained button group">
-                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                        </ButtonGroup>
+                                                        <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500 mx-1">Edit</Button>
+                                                        </Link>
+                                                        {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
+                                                            <Button className="bg-[#303030] text-white hover:bg-red-500 mx-1">Delete</Button>
+                                                        {/* </Link> */}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
