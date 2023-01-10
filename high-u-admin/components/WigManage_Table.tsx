@@ -20,11 +20,13 @@ import {
     ButtonGroup,
     Button,
     Modal,
-    Divider
+    Divider,
+    IconButton
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Wig_Product from '../helper/Wig_Product.json';
+import { Close } from '@mui/icons-material';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -162,6 +164,9 @@ function WigManage_Table() {
                                 className="flex justify-center items-center max-lg:overflow-scroll"
                             >
                                 <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
+                                    <IconButton aria-label="close" className="absolute right-0 top-0" onClick={() => setModalOpen(false)}>
+                                        <Close />
+                                    </IconButton>
                                     <Grid container spacing={2}>
                                         <Grid item sm={12} md={6}>
                                             <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
