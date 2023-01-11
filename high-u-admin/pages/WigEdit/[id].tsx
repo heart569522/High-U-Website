@@ -31,10 +31,10 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#F0CA83",
+      main: "#303030",
     },
     secondary: {
-      main: "#303030"
+      main: "#F0CA83"
     }
   },
 });
@@ -69,6 +69,7 @@ const WigEdit = () => {
   const [editColor, setEditColor] = useState('');
   const [editSize, setEditSize] = useState('');
   const [editBrand, setEditBrand] = useState('');
+
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // const [isUploading, setIsUploading] = useState(false);
@@ -104,14 +105,44 @@ const WigEdit = () => {
 
   }, []);
 
+  useEffect(() => {
+    if (!previewUrl) {
+      return;
+    }
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const image = e.target.files?.[0];
+    if (!image) {
+      setImage(null);
+      setPreviewUrl(null);
+      return;
+    }
+    setImage(e.target.files ? e.target.files[0] : null);
+    setPreviewUrl(URL.createObjectURL(image));
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await updateWig(wig);
-      router.push('/wigs');
-    } catch (err) {
-      setError(err as Error);
-    }
+    // try {
+    //   const formData = new FormData();
+    //   formData.append("image", image as Blob);
+    //   formData.append("id", wig.id.toString());
+    //   formData.append("title", editTitle || wig.title);
+    //   formData.append("desc", editDesc || wig.desc);
+    //   formData.append("color", editColor || wig.color);
+    //   formData.append("size", editSize || wig.size);
+    //   formData.append("brand", editBrand || wig.brand);
+    //   await updateWig(wig.id, formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data"
+    //     }
+    //   });
+    //   router.push('/wigs');
+    // } catch (err) {
+    //   setError(err as Error);
+    // }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,23 +158,6 @@ const WigEdit = () => {
     return <p>{error.message}</p>;
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) {
-      setImage(null);
-      setPreviewUrl(null);
-      return;
-    }
-    setImage(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  }
-
-  const handleChange = (setState: (value: string) => void) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setState(event.target.value);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <DrawerBar />
@@ -155,49 +169,50 @@ const WigEdit = () => {
         <Toolbar />
         <Grid container>
           {/* <Grid xs={12} md={12}> */}
-          <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
+          <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
             <Grid item>
               <Typography className="text-[#303030] font-bold text-xl">
                 Wigs Manage
               </Typography>
             </Grid>
             <form onSubmit={handleSubmit} className="pt-3">
-              <Grid item md={4} xs={12}>
-                <center>
-                  <input
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    onChange={handleImageChange}
-                  />
-                  <img
-                    src={previewUrl || wig.image}
-                    className="w-full h-full max-w-[400px] rounded-lg"
-                  />
-                  <label htmlFor="upload-button">
-                    <Button
-                      variant='contained'
-                      className="bg-[#F0CA83] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
-                      component="span"
-                      startIcon={<AddAPhotoIcon />}
-                    >
-                      Edit Image
-                    </Button>
-                  </label>
-                </center>
+              <Grid item xs={12} md={4}>
+                {/* <center> */}
+                <input
+                  accept="image/*"
+                  style={{ display: "none", }}
+                  id="upload-button"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+                <img
+                  src={previewUrl || wig.image}
+                  className="w-full h-full max-w-[400px] rounded-lg"
+                />
+                <label htmlFor="upload-button">
+                  <Button
+                    variant='contained'
+                    className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
+                    component="span"
+                    startIcon={<AddAPhotoIcon />}
+                  >
+                    Edit Image
+                  </Button>
+                </label>
+                {/* </center> */}
               </Grid>
-              <Grid item md={8} xs={12}>
-                <Typography className="text-[#F0CA83] font-bold pb-2">Title</Typography>
+              <Grid item xs={12} md={8}>
+                <Typography className="text-[#303030] font-bold pb-2">Title</Typography>
                 <TextField
                   type='text'
-                  defaultValue={editTitle && wig.title}
+                  value={wig.title}
                   fullWidth
-                  name='editTitle'
+                  name='title'
                   variant='outlined'
                   className="font-bold rounded"
-                  onChange={handleChange(setEditTitle)}
-                  inputProps={{ style: { color: "#F0CA83" } }}
+                  onChange={handleInputChange}
+                  inputProps={{ style: { color: "#303030" } }}
+                  sx={{ color: '#303030' }}
                   required
                   focused
                 />
