@@ -83,7 +83,7 @@ export default function EditProfile_Profile() {
                         className="font-bold rounded"
                         focused
                         onChange={handleChange(setEditFirstname)}
-                        inputProps={{ style: { color: "#F0CA83" } }}
+                        inputProps={{ style: { color: "#303030" } }}
                         required
                     />
                 </Grid>
