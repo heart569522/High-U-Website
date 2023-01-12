@@ -170,12 +170,12 @@ const WigEdit = () => {
         <Grid container>
           {/* <Grid xs={12} md={12}> */}
           <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
-            <Grid item>
+            <Grid item xs={12}>
               <Typography className="text-[#303030] font-bold text-xl">
                 Wigs Manage
               </Typography>
             </Grid>
-            <form onSubmit={handleSubmit} className="pt-3">
+            {/* <form onSubmit={handleSubmit} className="pt-3"> */}
               <Grid item xs={12} md={4}>
                 {/* <center> */}
                 <input
@@ -217,7 +217,7 @@ const WigEdit = () => {
                   focused
                 />
               </Grid>
-            </form>
+            {/* </form> */}
           </Box>
         </Grid>
         {/* </Grid> */}

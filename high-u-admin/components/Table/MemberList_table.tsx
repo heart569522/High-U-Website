@@ -17,7 +17,7 @@ function MemberList_Table() {
         >
             <Toolbar />
             <Grid container>
-                <Grid xs={12} md={12}>
+                <Grid item xs={12} md={12}>
                     <Box className="bg-white w-full h-full rounded-xl p-5">
                         <Typography className="text-[#303030] font-bold text-xl">
                             Member List
