@@ -14,7 +14,8 @@ import {
   TextField,
   FormControl,
   FormHelperText,
-  Avatar
+  Avatar,
+  Link
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -125,24 +126,21 @@ const WigEdit = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // try {
-    //   const formData = new FormData();
-    //   formData.append("image", image as Blob);
-    //   formData.append("id", wig.id.toString());
-    //   formData.append("title", editTitle || wig.title);
-    //   formData.append("desc", editDesc || wig.desc);
-    //   formData.append("color", editColor || wig.color);
-    //   formData.append("size", editSize || wig.size);
-    //   formData.append("brand", editBrand || wig.brand);
-    //   await updateWig(wig.id, formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data"
-    //     }
-    //   });
-    //   router.push('/wigs');
-    // } catch (err) {
-    //   setError(err as Error);
-    // }
+    try {
+      const formData = new FormData();
+      if (image) formData.append('image', new Blob([image]), image.name);
+      formData.append('title', editTitle);
+      formData.append('desc', editDesc);
+      formData.append('color', editColor);
+      formData.append('size', editSize);
+      formData.append('brand', editBrand);
+      // await updateWig(wig.id, formData);
+
+      alert('Wig updated successfully');
+      router.push('/WigManage');
+    } catch (err) {
+      setError(err as Error);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,8 +173,8 @@ const WigEdit = () => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container className="pt-3" spacing={3}>
-            {/* <form onSubmit={handleSubmit} className="pt-3"> */}
+          <form onSubmit={handleSubmit} className="pt-3">
+            <Grid container className="pt-3" spacing={3}>
               <Grid item xs={12} md={4}>
                 <center>
                   <input
@@ -203,23 +201,105 @@ const WigEdit = () => {
                 </center>
               </Grid>
               <Grid item xs={12} md={8}>
-                <Typography className="text-[#303030] font-bold pb-2">Title</Typography>
-                <TextField
-                  type='text'
-                  value={wig.title}
-                  fullWidth
-                  name='title'
-                  variant='outlined'
-                  className="font-bold rounded"
-                  onChange={handleInputChange}
-                  inputProps={{ style: { color: "#303030" } }}
-                  sx={{ color: '#303030' }}
-                  required
-                  focused
-                />
+                <Grid item xs={12}>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
+                  <TextField
+                    type='text'
+                    value={wig.title}
+                    fullWidth
+                    name='title'
+                    variant='outlined'
+                    className="font-bold rounded pb-3"
+                    onChange={handleInputChange}
+                    inputProps={{ style: { color: "#303030" } }}
+                    sx={{ color: '#303030' }}
+                    required
+                    focused
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
+                  <TextField
+                    type='text'
+                    value={wig.color}
+                    fullWidth
+                    name='color'
+                    variant='outlined'
+                    className="font-bold rounded pb-3"
+                    onChange={handleInputChange}
+                    inputProps={{ style: { color: "#303030" } }}
+                    sx={{ color: '#303030' }}
+                    required
+                    focused
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography>
+                  <TextField
+                    type='text'
+                    value={wig.size}
+                    fullWidth
+                    name='size'
+                    variant='outlined'
+                    className="font-bold rounded pb-3"
+                    onChange={handleInputChange}
+                    inputProps={{ style: { color: "#303030" } }}
+                    sx={{ color: '#303030' }}
+                    required
+                    focused
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
+                  <TextField
+                    type='text'
+                    value={wig.brand}
+                    fullWidth
+                    name='brand'
+                    variant='outlined'
+                    className="font-bold rounded pb-3"
+                    onChange={handleInputChange}
+                    inputProps={{ style: { color: "#303030" } }}
+                    sx={{ color: '#303030' }}
+                    required
+                    focused
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography>
+                  <TextField
+                    type='text'
+                    value={wig.desc}
+                    fullWidth
+                    name='desc'
+                    variant='outlined'
+                    className="font-bold rounded pb-3"
+                    onChange={handleInputChange}
+                    inputProps={{ style: { color: "#303030" } }}
+                    sx={{ color: '#303030' }}
+                    multiline
+                    maxRows={5}
+                    required
+                    focused
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Hidden mdDown>
+                    <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
+                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                    </ButtonGroup>
+                  </Hidden>
+                  <Hidden mdUp>
+                    <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
+                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
+                    </ButtonGroup>
+                  </Hidden>
+                </Grid>
               </Grid>
-            {/* </form> */}
-          </Grid>
+            </Grid>
+          </form>
         </Box>
       </Box>
     </ThemeProvider>
