@@ -74,64 +74,69 @@ function WigManage_Table() {
                 sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Grid container>
-                    <Grid item xs={12} md={12}>
-                        <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
+                <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
+                    <Grid container>
+                        <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
                             <Typography className="text-[#303030] font-bold text-xl">
                                 Wigs Manage
                             </Typography>
-                            <Hidden mdDown >
-                                <TableContainer className="mt-3 rounded-md">
-                                    <Table className="">
-                                        <TableHead>
-                                            <TableRow className=" bg-[#ffe6b8]">
-                                                <TableCell className="w-[5%] text-lg text-center font-bold">No.</TableCell>
-                                                <TableCell className="w-auto text-lg font-bold">Title</TableCell>
-                                                <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
-                                                <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
-                                                <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
-                                                <TableRow key={item.id} className="hover:bg-gray-50">
-                                                    <TableCell className="w-[5%] text-center">{item.id}</TableCell>
-                                                    <TableCell
-                                                        className="w-auto cursor-pointer hover:underline"
-                                                        onClick={() => {
-                                                            setModalOpen(true);
-                                                            // setSelectedId(item.id);
-                                                        }}>
-                                                        {item.title}
-                                                    </TableCell>
-                                                    <TableCell className="w-[15%]">{item.color}</TableCell>
-                                                    <TableCell className="w-[15%]">{item.size}</TableCell>
-                                                    <TableCell className="w-[15%] text-center ">
-                                                        <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                            <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
-                                                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                            </Link>
-                                                            {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                            {/* </Link> */}
-                                                        </ButtonGroup>
+                            <Link href="/AddWig">
+                                <Button className="text-white font-bold bg-blue-600 hover:bg-blue-700">Add Wig</Button>
+                            </Link>
+                        </Grid>
+                        <Hidden mdDown >
+                            <TableContainer className="mt-3 rounded-md">
+                                <Table className="">
+                                    <TableHead>
+                                        <TableRow className="colorBackgroundGold">
+                                            <TableCell className="w-[5%] text-lg text-center font-bold">No.</TableCell>
+                                            <TableCell className="w-auto text-lg font-bold">Title</TableCell>
+                                            <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
+                                            <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
+                                            <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
+                                            <TableRow key={item.id} className="hover:bg-gray-50">
+                                                <TableCell className="w-[5%] text-center">{item.id}</TableCell>
+                                                <TableCell
+                                                    className="w-auto cursor-pointer hover:underline"
+                                                    onClick={() => {
+                                                        setModalOpen(true);
+                                                        // setSelectedId(item.id);
+                                                    }}>
+                                                    {item.title}
+                                                </TableCell>
+                                                <TableCell className="w-[15%]">{item.color}</TableCell>
+                                                <TableCell className="w-[15%]">{item.size}</TableCell>
+                                                <TableCell className="w-[15%] text-center ">
+                                                    <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                        <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                        </Link>
+                                                        {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
+                                                        <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                        {/* </Link> */}
+                                                    </ButtonGroup>
 
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                <TablePagination
-                                    rowsPerPageOptions={[10, 25, 50, 100]}
-                                    component="div"
-                                    count={Wig_Product.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </Hidden>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <TablePagination
+                                rowsPerPageOptions={[10, 25, 50, 100]}
+                                component="div"
+                                count={Wig_Product.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </Hidden>
+                        <Grid item xs={12}>
                             <Hidden mdUp>
                                 {Wig_Product.map((item, i) => (
                                     <Accordion key={item.id} className="shadow-md">
@@ -164,48 +169,49 @@ function WigManage_Table() {
                                     </Accordion>
                                 ))}
                             </Hidden>
-                            <Modal
-                                open={modalOpen}
-                                onClose={handleModalClose}
-                                className="flex justify-center items-center max-lg:overflow-scroll"
-                            >
-                                <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
-                                    <Grid container spacing={2}>
-                                        <Grid item sm={12} md={6}>
-                                            <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
-                                                <img className="rounded-lg" src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
-                                            </Box>
-                                        </Grid>
-                                        <Grid item sm={12} md={6} className="text-[#303030]">
-                                            <Typography className="text-4xl font-bold max-lg:text-xl">Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)</Typography>
-                                            <Divider className="my-2 border-[#303030]" />
-                                            <Typography className="text-lg italic text-[#696969] max-lg:text-sm">CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots</Typography>
-                                            <Hidden mdDown>
-                                                <br />
-                                            </Hidden>
-                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">BRAND : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Ellen Wille</div>
-                                            </div>
-                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">COLOR : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Blondes</div>
-                                            </div>
-                                            <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                                <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
-                                            </div>
-                                            <Hidden mdUp>
-                                                <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
-                                                    <Button className="text-white bg-amber-500">Edit</Button>
-                                                    <Button className="text-white bg-red-500">Delete</Button>
-                                                </ButtonGroup>
-                                            </Hidden>
+                        </Grid>
 
-                                        </Grid>
+                        <Modal
+                            open={modalOpen}
+                            onClose={handleModalClose}
+                            className="flex justify-center items-center max-lg:overflow-scroll"
+                        >
+                            <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
+                                <Grid container spacing={2}>
+                                    <Grid item sm={12} md={6}>
+                                        <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
+                                            <img className="rounded-lg" src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369" />
+                                        </Box>
                                     </Grid>
-                                </Box>
-                            </Modal>
-                        </Box>
+                                    <Grid item sm={12} md={6} className="text-[#303030]">
+                                        <Typography className="text-4xl font-bold max-lg:text-xl">Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)</Typography>
+                                        <Divider className="my-2 border-[#303030]" />
+                                        <Typography className="text-lg italic text-[#696969] max-lg:text-sm">CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots</Typography>
+                                        <Hidden mdDown>
+                                            <br />
+                                        </Hidden>
+                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                            <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">BRAND : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Ellen Wille</div>
+                                        </div>
+                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                            <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">COLOR : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Blondes</div>
+                                        </div>
+                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                            <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
+                                        </div>
+                                        <Hidden mdUp>
+                                            <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
+                                                <Button className="text-white bg-amber-500">Edit</Button>
+                                                <Button className="text-white bg-red-500">Delete</Button>
+                                            </ButtonGroup>
+                                        </Hidden>
+
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Modal>
                     </Grid>
-                </Grid>
+                </Box>
             </Box>
         </ThemeProvider>
     )

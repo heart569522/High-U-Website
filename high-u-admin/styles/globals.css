@@ -89,6 +89,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Prompt, sans-serif;
   height: 100%;
 }
+
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(226 232 240);
@@ -103,6 +104,19 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.colorBackgroundGold {
+  background-image: linear-gradient(
+      to right,
+      #e9a21fc0 0,
+      #cb9b51c0 10%,
+      #f6e27ac0 25%,
+      #f6f2c0c0 50%,
+      #f6e27ac0 75%,
+      #cb9b51c0 90%,
+      #e9a31fc0 100%);
+
 }
 
 
