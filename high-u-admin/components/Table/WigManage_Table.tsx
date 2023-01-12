@@ -75,7 +75,7 @@ function WigManage_Table() {
             >
                 <Toolbar />
                 <Grid container>
-                    <Grid xs={12} md={12}>
+                    <Grid item xs={12} md={12}>
                         <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
                             <Typography className="text-[#303030] font-bold text-xl">
                                 Wigs Manage
