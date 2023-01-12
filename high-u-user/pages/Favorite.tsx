@@ -71,11 +71,11 @@ export default function Favorite() {
                                     <Grid container spacing={3} className="mb-8">
                                         {
                                             Wig_Product.slice(0, 7).map((item, i) =>
-                                                <Grid item xs={4} sm={3} md={2}>
+                                                <Grid key={i} item xs={4} sm={3} md={2}>
                                                     <Link href="/WigProduct">
                                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                                             <CardActionArea>
-                                                                <CardMedia className="content-overlay" />
+                                                                <div className="content-overlay" />
                                                                 <CardMedia
                                                                     className="content-image"
                                                                     component="img"

@@ -167,39 +167,40 @@ const WigEdit = () => {
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <Grid container>
-          {/* <Grid xs={12} md={12}> */}
-          <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
+        <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
+          <Grid container>
             <Grid item xs={12}>
               <Typography className="text-[#303030] font-bold text-xl">
                 Wigs Manage
               </Typography>
             </Grid>
+          </Grid>
+          <Grid container className="pt-3" spacing={3}>
             {/* <form onSubmit={handleSubmit} className="pt-3"> */}
               <Grid item xs={12} md={4}>
-                {/* <center> */}
-                <input
-                  accept="image/*"
-                  style={{ display: "none", }}
-                  id="upload-button"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-                <img
-                  src={previewUrl || wig.image}
-                  className="w-full h-full max-w-[400px] rounded-lg"
-                />
-                <label htmlFor="upload-button">
-                  <Button
-                    variant='contained'
-                    className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
-                    component="span"
-                    startIcon={<AddAPhotoIcon />}
-                  >
-                    Edit Image
-                  </Button>
-                </label>
-                {/* </center> */}
+                <center>
+                  <input
+                    accept="image/*"
+                    style={{ display: "none", }}
+                    id="upload-button"
+                    type="file"
+                    onChange={handleImageChange}
+                  />
+                  <img
+                    src={previewUrl || wig.image}
+                    className="w-full h-full max-w-[400px] rounded-lg"
+                  />
+                  <label htmlFor="upload-button">
+                    <Button
+                      variant='contained'
+                      className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
+                      component="span"
+                      startIcon={<AddAPhotoIcon />}
+                    >
+                      Edit Image
+                    </Button>
+                  </label>
+                </center>
               </Grid>
               <Grid item xs={12} md={8}>
                 <Typography className="text-[#303030] font-bold pb-2">Title</Typography>
@@ -218,9 +219,8 @@ const WigEdit = () => {
                 />
               </Grid>
             {/* </form> */}
-          </Box>
-        </Grid>
-        {/* </Grid> */}
+          </Grid>
+        </Box>
       </Box>
     </ThemeProvider>
 

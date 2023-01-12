@@ -105,10 +105,10 @@ export default function TryAR() {
                         </Grid>
                         <Grid item sm={12} md={6}>
                             {Wig_Product.slice(0, 9).map((item, i) =>
-                                <Grid item xs={3} sm={3} md={4} className="inline-flex">
+                                <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                                     <Card variant="outlined" className="content">
                                         <CardActionArea>
-                                            <CardMedia className="content-overlay" />
+                                            <div className="content-overlay" />
                                             <CardMedia
                                                 className="content-image object-top h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
                                                 component="img"

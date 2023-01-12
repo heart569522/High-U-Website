@@ -42,8 +42,8 @@ export default function WigProductItem() {
         <ThemeProvider theme={theme}>
             <Paper sx={{ backgroundColor: '#faf7f7', paddingTop: 8, paddingBottom: 2 }}>
                 <Container maxWidth="xl" >
-                    <Grid container>
-                        <Grid item xs={12} spacing={2}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
                             <Typography variant="subtitle1" gutterBottom>
                                 หน้าแรก / วิก / ....
                             </Typography>
@@ -106,7 +106,7 @@ export default function WigProductItem() {
                             </Typography>
                             <Grid item className="mt-8 space-x-4 max-sm:text-center">
                                 <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add Your Favorite</Button>
-                                <Button href="/TryAR" variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button>
+                                <Link href="/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button></Link>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -119,11 +119,11 @@ export default function WigProductItem() {
                         </Grid>
                         {
                             Wig_Product.slice(0, 4).map((item, i) =>
-                                <Grid item xs={6} sm={6} md={3}>
+                                <Grid key={i} item xs={6} sm={6} md={3}>
                                     <Link href="/WigProduct">
                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                             <CardActionArea>
-                                                <CardMedia className="content-overlay" />
+                                                <div className="content-overlay" />
                                                 <CardMedia
                                                     className="content-image"
                                                     component="img"
