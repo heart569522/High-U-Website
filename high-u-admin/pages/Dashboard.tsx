@@ -17,7 +17,7 @@ function Dashboard() {
     >
       <Toolbar />
       <Grid container>
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Box className="bg-white w-full h-full rounded-xl p-5">
             <Typography className="text-[#303030] font-bold text-xl">
               Website Views
@@ -25,7 +25,7 @@ function Dashboard() {
 
           </Box>
         </Grid>
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Box className="bg-white w-full h-full rounded-xl p-5">
             <Typography className="text-[#303030] font-bold text-xl">
               Top 5 Wigs View
@@ -33,7 +33,7 @@ function Dashboard() {
 
           </Box>
         </Grid>
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Box className="bg-white w-full h-full rounded-xl p-5">
             <Typography className="text-[#303030] font-bold text-xl">
               Top Week AR Wig
@@ -41,7 +41,7 @@ function Dashboard() {
 
           </Box>
         </Grid>
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Box className="bg-white w-full h-full rounded-xl p-5">
             <Typography className="text-[#303030] font-bold text-xl">
               Members Active
