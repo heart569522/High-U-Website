@@ -95,7 +95,7 @@ const AddWig_Form = () => {
           <Grid container>
             <Grid item xs={12}>
               <Typography className="text-[#303030] font-bold text-xl">
-                Wigs Manage
+                Create Wig
               </Typography>
             </Grid>
           </Grid>
@@ -112,7 +112,7 @@ const AddWig_Form = () => {
                   />
                   <img
                     src={previewUrl || ''}
-                    className="w-full h-full max-w-[400px] rounded-lg"
+                    className="rounded-lg object-top object-cover h-auto w-96"
                   />
                   <label htmlFor="upload-button">
                     <Button
@@ -121,7 +121,7 @@ const AddWig_Form = () => {
                       component="span"
                       startIcon={<AddAPhotoIcon />}
                     >
-                      Edit Image
+                      Add Image
                     </Button>
                   </label>
                 </center>

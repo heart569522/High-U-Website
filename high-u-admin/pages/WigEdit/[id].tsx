@@ -186,7 +186,7 @@ const WigEdit = () => {
                   />
                   <img
                     src={previewUrl || wig.image}
-                    className="w-full h-full max-w-[400px] rounded-lg"
+                    className="rounded-lg object-top object-cover h-auto w-96"
                   />
                   <label htmlFor="upload-button">
                     <Button
