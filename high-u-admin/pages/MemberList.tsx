@@ -2,7 +2,7 @@ import React from 'react'
 
 // IMPORT COMPONENT
 import DrawerBar from '../components/DrawerBar'
-import MemberList_Table from '../components/Table/MemberList_table'
+import MemberList_Table from '../components/Table/MemberList_Table'
 
 // IMPORT PAGE
 

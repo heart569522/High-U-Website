@@ -81,7 +81,7 @@ function WigManage_Table() {
                                 Wigs Manage
                             </Typography>
                             <Link href="/AddWig">
-                                <Button className="text-white font-bold bg-blue-600 hover:bg-blue-700">Add Wig</Button>
+                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Wig</Button>
                             </Link>
                         </Grid>
                         <Hidden mdDown >
@@ -100,18 +100,18 @@ function WigManage_Table() {
                                         {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                             <TableRow key={item.id} className="hover:bg-gray-50">
                                                 <TableCell className="w-auto">
-                                                    <img src={item.image} className="object-top object-cover h-44 w-44 max-xl:h-36 max-[1075px]:h-32 max-[1000px]:h-24"/>
+                                                    <img src={item.image} className="object-top object-cover h-40 w-40 max-xl:h-36 max-[1075px]:h-32 max-[1000px]:h-24" />
                                                 </TableCell>
                                                 <TableCell
-                                                    className="w-auto cursor-pointer hover:underline"
+                                                    className="w-auto text-lg cursor-pointer hover:underline"
                                                     onClick={() => {
                                                         setModalOpen(true);
                                                         // setSelectedId(item.id);
                                                     }}>
                                                     {item.title}
                                                 </TableCell>
-                                                <TableCell className="w-[15%]">{item.color}</TableCell>
-                                                <TableCell className="w-[15%]">{item.size}</TableCell>
+                                                <TableCell className="w-[15%] text-base">{item.color}</TableCell>
+                                                <TableCell className="w-[15%] text-base">{item.size}</TableCell>
                                                 <TableCell className="w-[15%] text-center ">
                                                     <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
                                                         <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
