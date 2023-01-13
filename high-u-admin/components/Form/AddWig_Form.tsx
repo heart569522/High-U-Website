@@ -40,16 +40,6 @@ const theme = createTheme({
   },
 });
 
-interface Wig {
-  id: number;
-  image: string;
-  title: string;
-  desc: string;
-  color: string;
-  size: string;
-  brand: string;
-}
-
 const AddWig_Form = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -63,6 +53,7 @@ const AddWig_Form = () => {
 
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const defaultImageUrl = 'https://i.pinimg.com/736x/85/6c/0c/856c0c237eec555ec901c7fd4a275ae3.jpg';
 
   useEffect(() => {
     if (!previewUrl) {
@@ -82,6 +73,37 @@ const AddWig_Form = () => {
     setPreviewUrl(URL.createObjectURL(image));
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    try {
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('desc', desc)
+      formData.append('color', color)
+      formData.append('size', size)
+      formData.append('brand', brand)
+      if (image !== null) {
+        formData.append('image', image)
+      }
+      alert('Wig created successfully');
+      const response = await fetch('/api/wigs', {
+        method: 'POST',
+        body: formData,
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      // router.push('/WigManage');
+      // navigate to wig listing page
+    } catch (err) {
+      setError(err as Error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <DrawerBar />
@@ -99,7 +121,7 @@ const AddWig_Form = () => {
               </Typography>
             </Grid>
           </Grid>
-          <form className="pt-3">
+          <form onSubmit={handleSubmit} className="pt-3">
             <Grid container className="pt-3" spacing={3}>
               <Grid item xs={12} md={4}>
                 <center>
@@ -111,7 +133,7 @@ const AddWig_Form = () => {
                     onChange={handleImageChange}
                   />
                   <img
-                    src={previewUrl || ''}
+                    src={previewUrl || defaultImageUrl}
                     className="rounded-lg object-top object-cover h-auto w-96"
                   />
                   <label htmlFor="upload-button">
@@ -136,7 +158,7 @@ const AddWig_Form = () => {
                     name='title'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    // onChange={handleInputChange}
+                    onChange={(e) => setTitle(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -152,7 +174,7 @@ const AddWig_Form = () => {
                     name='color'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    // onChange={handleInputChange}
+                    onChange={(e) => setColor(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -168,7 +190,7 @@ const AddWig_Form = () => {
                     name='size'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    // onChange={handleInputChange}
+                    onChange={(e) => setSize(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -184,7 +206,7 @@ const AddWig_Form = () => {
                     name='brand'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    // onChange={handleInputChange}
+                    onChange={(e) => setBrand(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -200,7 +222,7 @@ const AddWig_Form = () => {
                     name='desc'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    // onChange={handleInputChange}
+                    onChange={(e) => setDesc(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     multiline

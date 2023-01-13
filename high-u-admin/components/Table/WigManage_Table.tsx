@@ -88,7 +88,7 @@ function WigManage_Table() {
                             <TableContainer className="mt-3 rounded-md">
                                 <Table className="">
                                     <TableHead>
-                                        <TableRow className="colorBackgroundGold">
+                                        <TableRow className=" bg-[#F0CA83]">
                                             <TableCell className="w-auto text-lg text-center font-bold">Image</TableCell>
                                             <TableCell className="w-auto text-lg font-bold">Title</TableCell>
                                             <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
@@ -99,11 +99,11 @@ function WigManage_Table() {
                                     <TableBody>
                                         {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                             <TableRow key={item.id} className="hover:bg-gray-50">
-                                                <TableCell className="w-auto">
-                                                    <img src={item.image} className="object-top object-cover h-40 w-40 max-xl:h-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                                                <TableCell className="flex justify-center">
+                                                    <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24"/>
                                                 </TableCell>
                                                 <TableCell
-                                                    className="w-auto text-lg cursor-pointer hover:underline"
+                                                    className="w-auto text-lg cursor-pointer hover:underline max-[1000px]:text-base"
                                                     onClick={() => {
                                                         setModalOpen(true);
                                                         // setSelectedId(item.id);
