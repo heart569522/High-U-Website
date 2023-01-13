@@ -51,7 +51,7 @@ function WigManage_Table() {
     // const item = String;
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -77,7 +77,7 @@ function WigManage_Table() {
                 <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
                     <Grid container>
                         <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
-                            <Typography className="text-[#303030] font-bold text-xl">
+                            <Typography className="text-[#303030] font-bold text-2xl">
                                 Wigs Manage
                             </Typography>
                             <Link href="/AddWig">
@@ -89,7 +89,7 @@ function WigManage_Table() {
                                 <Table className="">
                                     <TableHead>
                                         <TableRow className="colorBackgroundGold">
-                                            <TableCell className="w-[5%] text-lg text-center font-bold">No.</TableCell>
+                                            <TableCell className="w-auto text-lg text-center font-bold">Image</TableCell>
                                             <TableCell className="w-auto text-lg font-bold">Title</TableCell>
                                             <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
                                             <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
@@ -99,7 +99,9 @@ function WigManage_Table() {
                                     <TableBody>
                                         {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                             <TableRow key={item.id} className="hover:bg-gray-50">
-                                                <TableCell className="w-[5%] text-center">{item.id}</TableCell>
+                                                <TableCell className="w-auto">
+                                                    <img src={item.image} className="object-top object-cover h-44 w-44 max-xl:h-36 max-[1075px]:h-32 max-[1000px]:h-24"/>
+                                                </TableCell>
                                                 <TableCell
                                                     className="w-auto cursor-pointer hover:underline"
                                                     onClick={() => {
@@ -127,7 +129,7 @@ function WigManage_Table() {
                                 </Table>
                             </TableContainer>
                             <TablePagination
-                                rowsPerPageOptions={[10, 25, 50, 100]}
+                                rowsPerPageOptions={[5, 10, 25, 50]}
                                 component="div"
                                 count={Wig_Product.length}
                                 rowsPerPage={rowsPerPage}
