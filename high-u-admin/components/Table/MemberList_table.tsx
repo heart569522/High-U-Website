@@ -19,7 +19,7 @@ function MemberList_Table() {
             <Grid container>
                 <Grid item xs={12} md={12}>
                     <Box className="bg-white w-full h-full rounded-xl p-5">
-                        <Typography className="text-[#303030] font-bold text-xl">
+                        <Typography className="text-[#303030] font-bold text-2xl">
                             Member List
                         </Typography>
 

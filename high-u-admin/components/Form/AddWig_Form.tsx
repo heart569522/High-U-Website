@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getWig, updateWig } from '../api/wigApi'
+// import { getWig, updateWig } from '../api/wigApi'
 import {
   Box,
   Typography,
@@ -40,71 +40,20 @@ const theme = createTheme({
   },
 });
 
-interface Wig {
-  id: number;
-  image: string;
-  title: string;
-  desc: string;
-  color: string;
-  size: string;
-  brand: string;
-}
-
-const WigEdit = () => {
-  const [wig, setWig] = useState<Wig>({
-    id: 0,
-    image: '',
-    title: '',
-    desc: '',
-    color: '',
-    size: '',
-    brand: '',
-  });
-
+const AddWig_Form = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const router = useRouter()
 
-  const [editTitle, setEditTitle] = useState('');
-  const [editDesc, setEditDesc] = useState('');
-  const [editColor, setEditColor] = useState('');
-  const [editSize, setEditSize] = useState('');
-  const [editBrand, setEditBrand] = useState('');
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [color, setColor] = useState('');
+  const [size, setSize] = useState('');
+  const [brand, setBrand] = useState('');
 
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  // const [isUploading, setIsUploading] = useState(false);
-
-  useEffect(() => {
-    const fetchWig = async () => {
-      setLoading(true);
-      try {
-        const id = typeof router.query.id === 'string' ? Number(router.query.id) : undefined;
-        if (!id) {
-          window.location.href = '/WigManage'
-          return;
-        }
-        const wig = await getWig(id as number);
-        setWig(wig as Wig);
-        setLoading(false);
-      } catch (err) {
-        setError(err as Error);
-        setLoading(false);
-      }
-    };
-    fetchWig();
-
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      const choice = window.confirm("Are you sure you want to leave the page? Your changes will not be saved.");
-      if (!choice) event.returnValue = false;
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-
-  }, []);
+  const defaultImageUrl = 'https://i.pinimg.com/736x/85/6c/0c/856c0c237eec555ec901c7fd4a275ae3.jpg';
 
   useEffect(() => {
     if (!previewUrl) {
@@ -124,36 +73,35 @@ const WigEdit = () => {
     setPreviewUrl(URL.createObjectURL(image));
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
     try {
-      const formData = new FormData();
-      if (image) formData.append('image', new Blob([image]), image.name);
-      formData.append('title', editTitle);
-      formData.append('desc', editDesc);
-      formData.append('color', editColor);
-      formData.append('size', editSize);
-      formData.append('brand', editBrand);
-      // await updateWig(wig.id, formData);
-
-      alert('Wig updated successfully');
-      router.push('/WigManage');
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('desc', desc)
+      formData.append('color', color)
+      formData.append('size', size)
+      formData.append('brand', brand)
+      if (image !== null) {
+        formData.append('image', image)
+      }
+      alert('Wig created successfully');
+      const response = await fetch('/api/wigs', {
+        method: 'POST',
+        body: formData,
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      // router.push('/WigManage');
+      // navigate to wig listing page
     } catch (err) {
-      setError(err as Error);
+      setError(err as Error)
+    } finally {
+      setLoading(false)
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setWig({ ...wig, [name]: value });
-  };
-
-  if (loading) {
-    return <div><Loading /></div>;
-  }
-
-  if (error) {
-    return <p>{error.message}</p>;
   }
 
   return (
@@ -169,7 +117,7 @@ const WigEdit = () => {
           <Grid container>
             <Grid item xs={12}>
               <Typography className="text-[#303030] font-bold text-xl">
-                Wigs Manage
+                Create Wig
               </Typography>
             </Grid>
           </Grid>
@@ -185,7 +133,7 @@ const WigEdit = () => {
                     onChange={handleImageChange}
                   />
                   <img
-                    src={previewUrl || wig.image}
+                    src={previewUrl || defaultImageUrl}
                     className="rounded-lg object-top object-cover h-auto w-96"
                   />
                   <label htmlFor="upload-button">
@@ -195,7 +143,7 @@ const WigEdit = () => {
                       component="span"
                       startIcon={<AddAPhotoIcon />}
                     >
-                      Edit Image
+                      Add Image
                     </Button>
                   </label>
                 </center>
@@ -205,12 +153,12 @@ const WigEdit = () => {
                   <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
                   <TextField
                     type='text'
-                    value={wig.title}
+                    value={title}
                     fullWidth
                     name='title'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
+                    onChange={(e) => setTitle(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -221,12 +169,12 @@ const WigEdit = () => {
                   <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
                   <TextField
                     type='text'
-                    value={wig.color}
+                    value={color}
                     fullWidth
                     name='color'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
+                    onChange={(e) => setColor(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -237,12 +185,12 @@ const WigEdit = () => {
                   <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography>
                   <TextField
                     type='text'
-                    value={wig.size}
+                    value={size}
                     fullWidth
                     name='size'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
+                    onChange={(e) => setSize(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -253,12 +201,12 @@ const WigEdit = () => {
                   <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
                   <TextField
                     type='text'
-                    value={wig.brand}
+                    value={brand}
                     fullWidth
                     name='brand'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
+                    onChange={(e) => setBrand(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -269,12 +217,12 @@ const WigEdit = () => {
                   <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography>
                   <TextField
                     type='text'
-                    value={wig.desc}
+                    value={desc}
                     fullWidth
                     name='desc'
                     variant='outlined'
                     className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
+                    onChange={(e) => setDesc(e.target.value)}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     multiline
@@ -286,13 +234,13 @@ const WigEdit = () => {
                 <Grid item xs={12}>
                   <Hidden mdDown>
                     <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
                       <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                     </ButtonGroup>
                   </Hidden>
                   <Hidden mdUp>
                     <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
                       <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
                     </ButtonGroup>
                   </Hidden>
@@ -307,4 +255,4 @@ const WigEdit = () => {
   )
 }
 
-export default WigEdit
+export default AddWig_Form

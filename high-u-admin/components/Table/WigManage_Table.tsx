@@ -51,7 +51,7 @@ function WigManage_Table() {
     // const item = String;
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -77,19 +77,19 @@ function WigManage_Table() {
                 <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
                     <Grid container>
                         <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
-                            <Typography className="text-[#303030] font-bold text-xl">
+                            <Typography className="text-[#303030] font-bold text-2xl">
                                 Wigs Manage
                             </Typography>
                             <Link href="/AddWig">
-                                <Button className="text-white font-bold bg-blue-600 hover:bg-blue-700">Add Wig</Button>
+                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Wig</Button>
                             </Link>
                         </Grid>
                         <Hidden mdDown >
                             <TableContainer className="mt-3 rounded-md">
                                 <Table className="">
                                     <TableHead>
-                                        <TableRow className="colorBackgroundGold">
-                                            <TableCell className="w-[5%] text-lg text-center font-bold">No.</TableCell>
+                                        <TableRow className=" bg-[#F0CA83]">
+                                            <TableCell className="w-auto text-lg text-center font-bold">Image</TableCell>
                                             <TableCell className="w-auto text-lg font-bold">Title</TableCell>
                                             <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
                                             <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
@@ -99,17 +99,19 @@ function WigManage_Table() {
                                     <TableBody>
                                         {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                             <TableRow key={item.id} className="hover:bg-gray-50">
-                                                <TableCell className="w-[5%] text-center">{item.id}</TableCell>
+                                                <TableCell className="flex justify-center">
+                                                    <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24"/>
+                                                </TableCell>
                                                 <TableCell
-                                                    className="w-auto cursor-pointer hover:underline"
+                                                    className="w-auto text-lg cursor-pointer hover:underline max-[1000px]:text-base"
                                                     onClick={() => {
                                                         setModalOpen(true);
                                                         // setSelectedId(item.id);
                                                     }}>
                                                     {item.title}
                                                 </TableCell>
-                                                <TableCell className="w-[15%]">{item.color}</TableCell>
-                                                <TableCell className="w-[15%]">{item.size}</TableCell>
+                                                <TableCell className="w-[15%] text-base">{item.color}</TableCell>
+                                                <TableCell className="w-[15%] text-base">{item.size}</TableCell>
                                                 <TableCell className="w-[15%] text-center ">
                                                     <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
                                                         <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
@@ -127,7 +129,7 @@ function WigManage_Table() {
                                 </Table>
                             </TableContainer>
                             <TablePagination
-                                rowsPerPageOptions={[10, 25, 50, 100]}
+                                rowsPerPageOptions={[5, 10, 25, 50]}
                                 component="div"
                                 count={Wig_Product.length}
                                 rowsPerPage={rowsPerPage}

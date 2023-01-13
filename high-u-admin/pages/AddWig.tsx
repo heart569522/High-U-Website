@@ -1,8 +1,17 @@
 import React from 'react'
 
+// IMPORT COMPONENT
+import DrawerBar from '../components/DrawerBar'
+import AddWig_Form from '../components/Form/AddWig_Form'
+
+// IMPORT PAGE
+
 function AddWig() {
   return (
-    <div>AddWig</div>
+    <div>
+      <DrawerBar />
+      <AddWig_Form />
+    </div>
   )
 }
 

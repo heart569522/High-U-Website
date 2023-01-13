@@ -29,7 +29,6 @@ import Webcam from 'react-webcam';
 import Navbar from "../components/Navigation/Navigation"
 
 import Wig_Product from '../helper/Wig_Product.json';
-import { Grid3x3 } from '@mui/icons-material';
 
 const theme = createTheme({
     palette: {
@@ -98,9 +97,7 @@ export default function TryAR() {
                                         </IconButton>
                                     </Grid>
                                 </center>
-
                                 {/* Caprture Result */}
-
                             </Box>
                         </Grid>
                         <Grid item sm={12} md={6}>
