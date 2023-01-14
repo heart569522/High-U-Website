@@ -22,6 +22,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../components/DrawerBar';
 import Loading from '../../components/Loading';
+import { title } from 'process';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -142,6 +143,17 @@ const WigEdit = () => {
       setError(err as Error);
     }
   };
+
+  // const handleReset = () => {
+  //   setEditTitle('');
+  //   setEditDesc('');
+  //   setEditColor('');
+  //   setEditBrand('');
+  //   setEditSize('');
+  //   setImage(null);
+  //   setPreviewUrl(wig.image);
+  //   setError(null);
+  // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -287,13 +299,13 @@ const WigEdit = () => {
                   <Hidden mdDown>
                     <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
                       <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
-                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                      {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
                     </ButtonGroup>
                   </Hidden>
                   <Hidden mdUp>
                     <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
                       <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
-                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
+                      {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
                     </ButtonGroup>
                   </Hidden>
                 </Grid>
