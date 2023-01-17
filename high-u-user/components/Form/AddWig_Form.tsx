@@ -20,8 +20,8 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../../components/DrawerBar';
-import Loading from '../../components/Loading';
+import DrawerBar from '../Navigation/DrawerBar';
+import Loading from '../Other/Loading';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -126,7 +126,7 @@ const AddWig_Form = () => {
       <DrawerBar />
       <Box
         component="main"
-        className="h-full p-5 ml-[240px] max-[899px]:ml-0"
+        className="p-5 ml-[240px] max-[899px]:ml-0"
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />

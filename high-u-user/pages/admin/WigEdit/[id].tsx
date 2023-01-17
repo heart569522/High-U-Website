@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getWig, updateWig } from '../api/wigApi'
+import { getWig, updateWig } from '../../api/wigApi'
 import {
   Box,
   Typography,
@@ -20,8 +20,8 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../../components/DrawerBar';
-import Loading from '../../components/Loading';
+import DrawerBar from '../../../components/Navigation/DrawerBar';
+import Loading from '../../../components/Other/Loading';
 import { title } from 'process';
 
 const drawerWidth = 240;
@@ -82,7 +82,7 @@ const WigEdit = () => {
       try {
         const id = typeof router.query.id === 'string' ? Number(router.query.id) : undefined;
         if (!id) {
-          window.location.href = '/WigManage'
+          window.location.href = '/admin/WigManage'
           return;
         }
         const wig = await getWig(id as number);
@@ -138,7 +138,7 @@ const WigEdit = () => {
       // await updateWig(wig.id, formData);
 
       alert('Wig updated successfully');
-      router.push('/WigManage');
+      router.push('/admin/WigManage');
     } catch (err) {
       setError(err as Error);
     }

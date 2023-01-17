@@ -118,7 +118,7 @@ function WigList() {
                         {
                             Wig_Product.map((item, i) => (
                                 <Grid item xs={6} sm={6} md={3} key={i}>
-                                    <Link href="/WigProduct">
+                                    <Link href="/user/WigProduct">
                                         <Card variant="outlined" sx={{ maxWidth: 400 }}>
                                             <CardActionArea>
                                                 <CardMedia

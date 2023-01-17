@@ -25,11 +25,11 @@ import {
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
-import UserHeader from '../components/Auth/UserHeader';
-import MyDetail_Profile from '../components/Other/MyDetail_Profile';
-import EditProfile_Profile from '../components/Other/EditProfile_Profile';
-import ChangePassword_Profile from '../components/Other/ChangePassword_Profile';
+import Navbar from "../../components/Navigation/Navigation"
+import UserHeader from '../../components/Auth/UserHeader';
+import MyDetail_Profile from '../../components/Other/MyDetail_Profile';
+import EditProfile_Profile from '../../components/Other/EditProfile_Profile';
+import ChangePassword_Profile from '../../components/Other/ChangePassword_Profile';
 
 const theme = createTheme({
   palette: {

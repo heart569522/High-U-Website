@@ -24,7 +24,7 @@ function NavbarSignInUpButton() {
                         },
                         fontWeight: 'bold'
                     }}
-                    onClick={() => handleMenuItemClick('/SignIn')}
+                    onClick={() => handleMenuItemClick('/user/SignIn')}
                     variant="outlined"
                 >
                     signin
@@ -38,7 +38,7 @@ function NavbarSignInUpButton() {
                     //     fontWeight: 'bold'
                     // }}
                     className="font-bold bg-[#F0CA83] hover:bg-[#cf9d40]"
-                    onClick={() => handleMenuItemClick('/SignUp')}
+                    onClick={() => handleMenuItemClick('/user/SignUp')}
                     variant="contained"
                 >
                     signup

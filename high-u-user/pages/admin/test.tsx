@@ -11,7 +11,7 @@ import {
     Divider,
 } from "@mui/material";
 
-function Loading() {
+function test() {
     return (
         <Box className='background-load'>
             <div id="wifi-loader">
@@ -36,4 +36,4 @@ function Loading() {
     )
 }
 
-export default Loading
+export default test

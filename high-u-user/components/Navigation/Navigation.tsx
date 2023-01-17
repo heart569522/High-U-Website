@@ -192,7 +192,7 @@ function Navbar() {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link onClick={() => handleMenuItemClick('/Wig')} underline="none">
+                  <Link onClick={() => handleMenuItemClick('/user/Wig')} underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
@@ -202,7 +202,7 @@ function Navbar() {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link onClick={() => handleMenuItemClick('/TryAR')} underline="none">
+                  <Link onClick={() => handleMenuItemClick('/user/TryAR')} underline="none">
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography
                         textAlign="center"
@@ -256,7 +256,7 @@ function Navbar() {
                     หน้าแรก
                   </Box>
                 </Link>
-                <Link onClick={() => handleMenuItemClick('/Wig')} className="cursor-pointer" underline='none'>
+                <Link onClick={() => handleMenuItemClick('/user/Wig')} className="cursor-pointer" underline='none'>
                   <Box
                     onClick={handleCloseNavMenu}
                     sx={{
@@ -274,7 +274,7 @@ function Navbar() {
                     วิก
                   </Box>
                 </Link>
-                <Link onClick={() => handleMenuItemClick('/TryAR')} className="cursor-pointer" underline='none'>
+                <Link onClick={() => handleMenuItemClick('/user/TryAR')} className="cursor-pointer" underline='none'>
                   <Box
                     onClick={handleCloseNavMenu}
                     sx={{

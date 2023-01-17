@@ -5,7 +5,7 @@ import Navbar from "../components/Navigation/Navigation"
 import Footer from "../components/Footer/Footer"
 
 // IMPORT PAGE
-import Home from "./Home"
+import Home from "./user/Home"
 
 export default function index() {
 
@@ -14,7 +14,6 @@ export default function index() {
         <Navbar />
         <Home />
         <Footer />
-
     </div>
 
   )

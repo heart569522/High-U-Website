@@ -80,25 +80,25 @@ export default function DrawerBar(props: Props) {
       {/* <Divider /> */}
       <List>
         <ListItem key="Dashboard" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin')}>
             <DashboardIcon className="mr-3" />
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Wigs Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/WigManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/WigManage')}>
             <Face3Icon className="mr-3" />
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Member List" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/MemberList')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberList')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Member List" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Test" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/test')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/test')}>
             {/* <GroupsIcon className="mr-3" /> */}
             <ListItemText primary="Test" />
           </ListItemButton>

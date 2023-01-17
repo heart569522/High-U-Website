@@ -1,7 +1,7 @@
 import React from 'react'
 
 // IMPORT COMPONENT
-import DrawerBar from '../components/DrawerBar'
+import DrawerBar from '../../components/Navigation/DrawerBar'
 import WigEdit from './WigEdit/[id]'
 
 // IMPORT PAGE

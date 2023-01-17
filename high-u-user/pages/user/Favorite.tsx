@@ -21,11 +21,11 @@ import {
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
-import UserHeader from '../components/Auth/UserHeader';
-import EmptyARImage from '../components/Other/EmptyARImage';
+import Navbar from "../../components/Navigation/Navigation"
+import UserHeader from '../../components/Auth/UserHeader';
+import EmptyARImage from '../../components/Other/EmptyARImage';
 
-import Wig_Product from '../helper/Wig_Product.json';
+import Wig_Product from '../../helper/Wig_Product.json';
 
 const theme = createTheme({
     palette: {
@@ -72,7 +72,7 @@ export default function Favorite() {
                                         {
                                             Wig_Product.slice(0, 7).map((item, i) =>
                                                 <Grid key={i} item xs={4} sm={3} md={2}>
-                                                    <Link href="/WigProduct">
+                                                    <Link href="/user/WigProduct">
                                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                                             <CardActionArea>
                                                                 <div className="content-overlay" />

@@ -32,7 +32,7 @@ function NavbarLikeProfile() {
             {/* LIKE MENU */}
             <Box sx={{ flexGrow: 0, paddingLeft: 1 }}>
                 <Tooltip title="Favorites">
-                    <IconButton onClick={() => handleMenuItemClick('/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
+                    <IconButton onClick={() => handleMenuItemClick('/user/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
                         <FavoriteTwoToneIcon />
                     </IconButton>
                 </Tooltip>
@@ -62,7 +62,7 @@ function NavbarLikeProfile() {
                     onClose={handleCloseUserMenu}
                 >
                     <MenuItem onClick={handleCloseUserMenu}>
-                        <Link onClick={() => handleMenuItemClick('/Profile')} underline="none" >
+                        <Link onClick={() => handleMenuItemClick('/user/Profile')} underline="none" >
                             <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">โปรไฟล์</Typography>
                         </Link>
                     </MenuItem>

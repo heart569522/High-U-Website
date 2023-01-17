@@ -26,9 +26,9 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Webcam from 'react-webcam';
 
 // IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
+import Navbar from "../../components/Navigation/Navigation"
 
-import Wig_Product from '../helper/Wig_Product.json';
+import Wig_Product from '../../helper/Wig_Product.json';
 
 const theme = createTheme({
     palette: {
