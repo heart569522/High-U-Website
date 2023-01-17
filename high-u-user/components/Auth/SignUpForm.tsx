@@ -235,7 +235,7 @@ export default function SignUpForm() {
                                 </Grid>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <Link onClick={() => handleMenuItemClick('/SignIn')} className="cursor-pointer" variant="body2" color="secondary">
+                                        <Link onClick={() => handleMenuItemClick('/user/SignIn')} className="cursor-pointer" variant="body2" color="secondary">
                                             {"Already have an account? Sign in"}
                                         </Link>
                                     </Grid>

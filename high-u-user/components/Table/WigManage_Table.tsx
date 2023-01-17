@@ -78,7 +78,7 @@ function WigManage_Table() {
                             <Typography className="text-[#303030] font-bold text-2xl">
                                 Wigs Manage
                             </Typography>
-                            <Link href="/AddWig">
+                            <Link href="/admin/AddWig">
                                 <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Wig</Button>
                             </Link>
                         </Grid>
@@ -112,7 +112,7 @@ function WigManage_Table() {
                                                 <TableCell className="w-[15%] text-base">{item.size}</TableCell>
                                                 <TableCell className="w-[15%] text-center ">
                                                     <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                        <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                        <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
                                                             <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                         </Link>
                                                         {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
@@ -160,7 +160,7 @@ function WigManage_Table() {
                                                     }}>
                                                     Detail
                                                 </Button>
-                                                <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}>
+                                                <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
                                                     <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                 </Link>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>

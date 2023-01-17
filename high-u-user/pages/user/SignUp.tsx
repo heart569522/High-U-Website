@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 // IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
-import SignUpForm from '../components/Auth/SignUpForm';
+import Navbar from "../../components/Navigation/Navigation"
+import SignUpForm from '../../components/Auth/SignUpForm';
 
 export default function SignUp() {
 

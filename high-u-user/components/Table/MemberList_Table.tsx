@@ -73,7 +73,7 @@ function MemberList_Table() {
                             <Typography className="text-[#303030] font-bold text-2xl">
                                 Member Manage
                             </Typography>
-                            <Link href="/Add">
+                            <Link href="/admin/AddMember_Form">
                                 <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Member</Button>
                             </Link>
                         </Grid>
@@ -104,7 +104,7 @@ function MemberList_Table() {
                                                 <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                                                 <TableCell className="w-[15%] text-center ">
                                                     <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                        <Link href="/MemberEdit/[id]" as={`/MemberEdit/${item.id}`}>
+                                                        <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item.id}`}>
                                                             <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                         </Link>
                                                         {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
@@ -146,7 +146,7 @@ function MemberList_Table() {
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                <Link href="/MemberEdit/[id]" as={`/MemberEdit/${item.id}`}>
+                                                <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item.id}`}>
                                                     <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                 </Link>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>

@@ -33,7 +33,7 @@ export default function UserHeader() {
             <Grid container>
                 <Grid item className="pt-8 inline-flex">
                     <Box>
-                        <img className="w-36 h-36 rounded-full object-cover" src="./test.png" alt="" />
+                        <img className="w-36 h-36 rounded-full object-cover" src="../test.png" alt="" />
                     </Box>
                     <Box>
                         <Typography variant='h4' className="text-[#F0CA83] font-bold px-6 pt-8 max-sm:text-[28px]">

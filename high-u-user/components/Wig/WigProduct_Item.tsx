@@ -120,7 +120,7 @@ export default function WigProductItem() {
                         {
                             Wig_Product.slice(0, 4).map((item, i) =>
                                 <Grid key={i} item xs={6} sm={6} md={3}>
-                                    <Link href="/WigProduct">
+                                    <Link href="/user/WigProduct">
                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                             <CardActionArea>
                                                 <div className="content-overlay" />

@@ -146,7 +146,7 @@ export default function HomeContent() {
               </Grid>
               <Grid item xs={12}>
                 <center>
-                  <Link href="/Wig">
+                  <Link href="/user/Wig">
                     <Button className="text-[#303030] shadow border-[#303030] font-bold bg-[#FFCF76] hover:bg-[#ffbd44] focus:ring-4 focus:outline-none focus:ring-[#805e00] rounded text-sm px-5 py-2.5 text-center inline-flex items-center">
                       See More
                       <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>

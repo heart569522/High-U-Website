@@ -130,7 +130,7 @@ const SignInForm = React.memo(() => {
                                 </Button>
                                 <Grid container>
                                     <Grid item>
-                                        <Link onClick={() => handleMenuItemClick('/SignUp')} className="cursor-pointer" variant="body2" color="secondary">
+                                        <Link onClick={() => handleMenuItemClick('/user/SignUp')} className="cursor-pointer" variant="body2" color="secondary">
                                             {"Don't have an account? SignUp"}
                                         </Link>
                                     </Grid>

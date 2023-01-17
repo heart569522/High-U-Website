@@ -1,8 +1,8 @@
 import React from 'react'
 
 // IMPORT COMPONENT
-import DrawerBar from '../components/DrawerBar'
-import WigEdit from './WigEdit/[id]'
+import DrawerBar from '../../components/Navigation/DrawerBar'
+import WigManage_Table from '../../components/Table/WigManage_Table'
 
 // IMPORT PAGE
 
@@ -10,7 +10,7 @@ function WigManage() {
   return (
     <div>
       <DrawerBar />
-      <WigEdit />
+      <WigManage_Table />
     </div>
   )
 }

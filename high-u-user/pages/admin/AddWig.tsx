@@ -1,8 +1,8 @@
 import React from 'react'
 
 // IMPORT COMPONENT
-import DrawerBar from '../components/DrawerBar'
-import AddWig_Form from '../components/Form/AddWig_Form'
+import DrawerBar from '../../components/Navigation/DrawerBar'
+import AddWig_Form from '../../components/Form/AddWig_Form'
 
 // IMPORT PAGE
 
