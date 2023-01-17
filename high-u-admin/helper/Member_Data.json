@@ -1,0 +1,40 @@
+[
+    {
+        "id": 1,
+        "image": "https://1gr.cz/fotky/lidovky/19/083/cl8h/JTO7dabba_XVyNjg2NjQwMDQ._V1_SY1000_SX1500_AL_.jpg",
+        "firstname": "JO",
+        "lastname": "KER",
+        "email": "joker@dc.com",
+        "username": "jokerdc",
+        "password": "joke1234"
+        
+    },
+    {
+        "id": 2,
+        "image": "https://gestion.pe/resizer/sO2u0vCvkqnDlU5nhySaP3higjI=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/BL4RPV6K45AC3APNGINMOFMA4M.jpeg",
+        "firstname": "THOR",
+        "lastname": "Asguard",
+        "email": "thor@marvel.com",
+        "username": "thormv",
+        "password": "thor4321"
+    },
+    {
+        "id": 3,
+        "image": "https://s.yimg.com/os/creatr-uploaded-images/2022-07/252a64c0-0abf-11ed-9ffd-42605aae0059",
+        "firstname": "Iam",
+        "lastname": "Groot",
+        "email": "groot@marvel.com",
+        "username": "iamgroot",
+        "password": "groot1234"
+    },
+    {
+        "id": 4,
+        "image": "https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg",
+        "firstname": "UUU",
+        "lastname": "SER",
+        "email": "user@hu.com",
+        "username": "user",
+        "password": "1234"
+    }
+
+]

@@ -48,8 +48,6 @@ function WigManage_Table() {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedId, setSelectedId] = useState(0);
 
-    // const item = String;
-
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 

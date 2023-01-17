@@ -73,6 +73,12 @@ const AddWig_Form = () => {
     setPreviewUrl(URL.createObjectURL(image));
   }
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -104,6 +110,17 @@ const AddWig_Form = () => {
     }
   }
 
+  const handleReset = () => {
+    setTitle("");
+    setDesc("");
+    setColor("");
+    setBrand("");
+    setSize("");
+    setImage(null);
+    setPreviewUrl(null);
+    setError(null);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <DrawerBar />
@@ -121,7 +138,7 @@ const AddWig_Form = () => {
               </Typography>
             </Grid>
           </Grid>
-          <form onSubmit={handleSubmit} className="pt-3">
+          <form onSubmit={handleSubmit} onReset={handleReset} className="pt-3">
             <Grid container className="pt-3" spacing={3}>
               <Grid item xs={12} md={4}>
                 <center>
@@ -159,6 +176,7 @@ const AddWig_Form = () => {
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={(e) => setTitle(e.target.value)}
+                    onKeyDown={handleKeyPress}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -175,6 +193,7 @@ const AddWig_Form = () => {
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={(e) => setColor(e.target.value)}
+                    onKeyDown={handleKeyPress}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -191,6 +210,7 @@ const AddWig_Form = () => {
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={(e) => setSize(e.target.value)}
+                    onKeyDown={handleKeyPress}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -207,6 +227,7 @@ const AddWig_Form = () => {
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={(e) => setBrand(e.target.value)}
+                    onKeyDown={handleKeyPress}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     required
@@ -223,6 +244,7 @@ const AddWig_Form = () => {
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={(e) => setDesc(e.target.value)}
+                    onKeyDown={handleKeyPress}
                     inputProps={{ style: { color: "#303030" } }}
                     sx={{ color: '#303030' }}
                     multiline
@@ -235,7 +257,7 @@ const AddWig_Form = () => {
                   <Hidden mdDown>
                     <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
                       <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
-                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
                     </ButtonGroup>
                   </Hidden>
                   <Hidden mdUp>
