@@ -31,7 +31,7 @@ export default function HomeBackground() {
           backgroundAttachment: 'scroll',
         }}
       >
-        <Box className="flex justify-start" >
+        <Box className="flex justify-start">
           <Typography
             variant="h3"
             className='colorTextGold font-bold absolute'
@@ -41,6 +41,7 @@ export default function HomeBackground() {
               top: '400px',
               fontFamily: 'Prompt, sans-serif',
             }}
+            data-aos="fade-up" 
           >
             a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
           </Typography>
