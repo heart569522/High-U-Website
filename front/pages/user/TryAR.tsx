@@ -68,7 +68,7 @@ export default function TryAR() {
     return (
         <ThemeProvider theme={theme}>
             <Navbar />
-            <Box className="bg-[#252525] h-screen">
+            <Box className="bg-[#252525] h-screen max-[899px]:h-full">
                 <Container maxWidth="xl" >
                     <Grid container>
                         <Grid item xs={12} className="pt-4 ">

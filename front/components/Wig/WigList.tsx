@@ -117,7 +117,7 @@ function WigList() {
                     <Grid container spacing={3} className="p-3">
                         {
                             Wig_Product.map((item, i) => (
-                                <Grid item xs={6} sm={6} md={3} key={i}>
+                                <Grid item xs={6} sm={6} md={3} key={i} data-aos="fade-up">
                                     <Link href="/user/WigProduct">
                                         <Card variant="outlined" sx={{ maxWidth: 400 }}>
                                             <CardActionArea>

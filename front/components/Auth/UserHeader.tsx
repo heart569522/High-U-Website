@@ -31,7 +31,7 @@ export default function UserHeader() {
     return (
         <ThemeProvider theme={theme}>
             <Grid container>
-                <Grid item className="pt-8 inline-flex">
+                <Grid item className="pt-8 inline-flex" data-aos="fade-up">
                     <Box>
                         <img className="w-36 h-36 rounded-full object-cover" src="../test.png" alt="" />
                     </Box>
