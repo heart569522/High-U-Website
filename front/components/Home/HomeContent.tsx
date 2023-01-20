@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 import {
@@ -13,6 +13,8 @@ import {
   CardContent,
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+
+import Wig_Product from '../../helper/Wig_Product.json';
 
 const theme = createTheme({
   palette: {
@@ -83,77 +85,30 @@ export default function HomeContent() {
       <Box className="bg-[#c0b7a7] h-max">
         <Box className="colorBackgroundContentGold h-max py-10">
           <Container maxWidth="xl">
-            <Grid container spacing={5}>
-              <Grid item xs={6} sm={3}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/rwupstage_01_lg_1_600x600.jpg?v=1668795994"
-                    />
-                    <CardContent>
-                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
-                        Upstage | Synthetic Lace Front Wig (Hand-Tied)
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/0004_Always_-_2_600x600.jpg?v=1619614043"
-                    />
-                    <CardContent>
-                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
-                        Always | HF Synthetic Wig (Basic Cap)
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/resized__0001_ew_perucci2020_Tab_6_600x600.jpg?v=1648244990"
-                    />
-                    <CardContent>
-                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
-                        Tab | Synthetic Lace Front Wig (Mono Crown)
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized_VivicaFox__0001_LAPIS_NATURAL_M.jpg?v=1609790920"
-                    />
-                    <CardContent>
-                      <Typography className="text-lg font-bold max-lg:text-base max-md:text-sm max-sm:text-base">
-                        Lapis | Human Hair Lace Front Wig
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-              <Grid item xs={12}>
-                <center>
-                  <Link href="/user/Wig">
-                    <Button className="text-[#303030] shadow border-[#303030] font-bold bg-[#FFCF76] hover:bg-[#ffbd44] focus:ring-4 focus:outline-none focus:ring-[#805e00] rounded text-sm px-5 py-2.5 text-center inline-flex items-center">
-                      See More
-                      <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                    </Button>
-                  </Link>
-                </center>
-              </Grid>
+            <Grid container spacing={3} className="mb-8">
+              {
+                Wig_Product.slice(0, 4).map((item, i) =>
+                  <Grid key={i} item xs={6} sm={6} md={3}>
+                    <Link href="/user/WigProduct">
+                      <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-up">
+                        <CardActionArea>
+                          <div className="content-overlay" />
+                          <CardMedia
+                            className="content-image"
+                            component="img"
+                            image={item.image}
+                          />
+                          <CardContent className="content-details fadeIn-bottom">
+                            <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
+                              {item.title}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Link>
+                  </Grid>
+                )
+              }
             </Grid>
           </Container>
         </Box>
