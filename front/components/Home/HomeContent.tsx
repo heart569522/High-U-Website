@@ -81,7 +81,7 @@ export default function HomeContent() {
         </Container>
       </Box>
 
-      {/* CARD 3 IMAGE */}
+      {/* CARD 4 IMAGE */}
       <Box className="bg-[#c0b7a7] h-max">
         <Box className="colorBackgroundContentGold h-max py-10">
           <Container maxWidth="xl">

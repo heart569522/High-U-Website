@@ -61,7 +61,7 @@ export default function Favorite() {
                         <UserHeader />
                         <Box className="w-full py-6" sx={{ typography: 'body1' }}>
                             <TabContext value={value}>
-                                <Box className="border-b border-[#886828]">
+                                <Box className="border-b border-[#886828]" data-aos="fade-up">
                                     <TabList onChange={handleChange} aria-label="Favorite Menu">
                                         <Tab label="My Favorite Wigs" className="text-[#F0CA83] font-bold" value="1" />
                                         <Tab label="My AR Images" className="text-[#F0CA83] font-bold" value="2" />
@@ -71,7 +71,7 @@ export default function Favorite() {
                                     <Grid container spacing={3} className="mb-8">
                                         {
                                             Wig_Product.slice(0, 7).map((item, i) =>
-                                                <Grid key={i} item xs={4} sm={3} md={2}>
+                                                <Grid key={i} item xs={4} sm={3} md={2} data-aos="fade-up">
                                                     <Link href="/user/WigProduct">
                                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                                             <CardActionArea>

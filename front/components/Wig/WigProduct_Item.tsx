@@ -40,34 +40,35 @@ export default function WigProductItem() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Paper sx={{ backgroundColor: '#faf7f7', paddingTop: 8, paddingBottom: 2 }}>
+            <Paper sx={{ backgroundColor: '#faf7f7', paddingTop: 4, paddingBottom: 2 }}>
                 <Container maxWidth="xl" >
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12}  data-aos="fade-up">
                             <Typography variant="subtitle1" gutterBottom>
                                 หน้าแรก / วิก / ....
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12} md={5}>
+                    <Grid container spacing={5}  data-aos="fade-up">
+                        <Grid item xs={12} md={5} data-aos="fade-up">
                             <img
                                 src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
                                 className="max-w-xl w-full"
                             />
                         </Grid>
                         <Grid item xs={12} md={7}>
-                            <Typography variant="subtitle1" gutterBottom className="text-stone-600">
+                            <Typography variant="subtitle1" gutterBottom className="text-stone-600" data-aos="fade-up">
                                 Ellen Wille
                             </Typography>
-                            <Typography variant="h4" className="my-2">
+                            <Typography variant="h4" className="my-2" data-aos="fade-up">
                                 Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)
                             </Typography>
                             <hr className="mx-auto w-full h-[1px] rounded border-0 bg-gray-400"></hr>
-                            <Typography variant="h5" className="mt-4">
+                            <Typography variant="h5" className="mt-4" data-aos="fade-up">
                                 Color
                             </Typography>
                             <ImageList
+                                data-aos="fade-up"
                                 className="w-4/5 overflow-hidden mt-4"
                                 sx={{
                                     height: 350,
@@ -98,28 +99,28 @@ export default function WigProductItem() {
                                     </ImageListItem>
                                 ))}
                             </ImageList>
-                            <Typography variant="h5" className="mt-8">
+                            <Typography variant="h5" className="mt-8" data-aos="fade-up">
                                 Details
                             </Typography>
-                            <Typography variant="subtitle1" className="text-stone-600 mt-3">
+                            <Typography variant="subtitle1" className="text-stone-600 mt-3" data-aos="fade-up">
                                 CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots
                             </Typography>
-                            <Grid item className="mt-8 space-x-4 max-sm:text-center">
+                            <Grid item className="mt-8 space-x-4 max-sm:text-center" data-aos="fade-up">
                                 <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add Your Favorite</Button>
                                 <Link href="/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button></Link>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <hr className="my-10 mx-auto w-full h-[1px] rounded border-0 bg-gray-400"></hr>
+                    <hr data-aos="fade-up" className="my-10 mx-auto w-full h-[1px] rounded border-0 bg-gray-400"></hr>
                     <Grid container spacing={3} className="mb-8">
-                        <Grid item xs={12}>
+                        <Grid item xs={12} data-aos="fade-up">
                             <Typography variant="h5">
                                 Recomended
                             </Typography>
                         </Grid>
                         {
                             Wig_Product.slice(0, 4).map((item, i) =>
-                                <Grid key={i} item xs={6} sm={6} md={3}>
+                                <Grid key={i} item xs={6} sm={6} md={3} data-aos="fade-up">
                                     <Link href="/user/WigProduct">
                                         <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                             <CardActionArea>

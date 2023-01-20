@@ -63,7 +63,7 @@ export default function Profile() {
           <Navbar />
           <Container maxWidth="xl" >
             <UserHeader />
-            <Box className="w-full py-6" sx={{ typography: 'body1' }}>
+            <Box className="w-full py-6" sx={{ typography: 'body1' }} data-aos="fade-up">
               <TabContext value={value}>
                 <Box className="border-b border-[#886828]">
                   <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
@@ -72,13 +72,13 @@ export default function Profile() {
                     <Tab label="Change Password" className="text-[#F0CA83] font-bold" value="3" />
                   </TabList>
                 </Box>
-                <TabPanel value="1">
+                <TabPanel value="1"  data-aos="fade-up">
                   <MyDetail_Profile />
                 </TabPanel>
-                <TabPanel value="2">
+                <TabPanel value="2"  data-aos="fade-up">
                   <EditProfile_Profile />
                 </TabPanel>
-                <TabPanel value="3">
+                <TabPanel value="3"  data-aos="fade-up">
                   <ChangePassword_Profile />
                 </TabPanel>
                 <hr className="w-full h-[1px] rounded border-0 bg-[#886828] mt-3"></hr>
