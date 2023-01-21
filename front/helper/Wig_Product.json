@@ -6,7 +6,8 @@
         "desc": "CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
         "color": "Blondes",
         "size": "Long",
-        "brand": "Ellen Wille"
+        "brand": "Ellen Wille",
+        "view": 21
     },
     {
         "id": 2,
@@ -15,7 +16,8 @@
         "desc": "EMOTION by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
         "color": "Blondes",
         "size": "Long",
-        "brand": "Ellen Wille"
+        "brand": "Ellen Wille",
+        "view": 14
     },
     {
         "id": 3,
@@ -24,7 +26,8 @@
         "desc": "WISH by ELLEN WILLE in SANDY-BLONDE-ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
         "color": "Blondes",
         "size": "Short",
-        "brand": "Ellen Wille"
+        "brand": "Ellen Wille",
+        "view": 11
     },
     {
         "id": 4,
@@ -33,7 +36,8 @@
         "desc": "ANGIE by Jon Renau in FS6/30/27 TOFFEE TRUFFLE | Brown, Medium Red-Gold, Medium Red-Gold Blonde Blend with Medium Gold Blonde Bold Highlights",
         "color": "Brown",
         "size": "Long",
-        "brand": "Jon Renau"
+        "brand": "Jon Renau",
+        "view": 27
     },
     {
         "id": 5,
@@ -42,7 +46,8 @@
         "desc": "MONDO by ELLEN WILLE in CHOCOLATE MIX | Medium to Dark Brown base with Light Reddish Brown highlights",
         "color": "Brown",
         "size": "Short",
-        "brand": "Ellen Wille"
+        "brand": "Ellen Wille",
+        "view": 30
     },
     {
         "id": 6,
@@ -51,7 +56,8 @@
         "desc": "LAPIS by Vivica Fox in NATURAL | Uncolored Off Black",
         "color": "Black",
         "size": "Medium",
-        "brand": "Vivica Fox"
+        "brand": "Vivica Fox",
+        "view": 9
     },
     {
         "id": 7,
@@ -60,7 +66,8 @@
         "desc": "WASHINGTON by Vivica Fox in NATURAL | Uncolored Off Black",
         "color": "Black",
         "size": "Medium",
-        "brand": "Vivica Fox"
+        "brand": "Vivica Fox",
+        "view": 16
     },
     {
         "id": 8,
@@ -69,7 +76,8 @@
         "desc": "APPLAUSE by Raquel Welch in R14/88H GOLDEN WHEAT | Dark Blonde Evenly Blended with Pale Blonde Highlights",
         "color": "Blondes",
         "size": "Short",
-        "brand": "Raquel Welch"
+        "brand": "Raquel Welch",
+        "view": 6
     },
     {
         "id": 9,
@@ -78,7 +86,8 @@
         "desc": "CARRIE by Jon Renau in 12FS12 MALIBU BLONDE | Light Gold Brown, Light Natural Gold Blonde & Pale Natural Gold-Blonde Blend, Shaded with Light Gold Brown",
         "color": "Blondes",
         "size": "Medium",
-        "brand": "Jon Renau"
+        "brand": "Jon Renau",
+        "view": 36
     },
     {
         "id": 10,
@@ -87,7 +96,8 @@
         "desc": "UPSTAGE by Raquel Welch in RL29/25 | GOLDEN RUSSET Ginger Blonde Evenly Blended with Medium Golden Blonde",
         "color": "Blondes",
         "size": "Short",
-        "brand": "Raquel Welch"
+        "brand": "Raquel Welch",
+        "view": 10
     },
     {
         "id": 11,
@@ -96,7 +106,8 @@
         "desc": "TAB by ELLEN WILLE in SILVER MIX | Pure Silver White and Pearl Platinum Blonde Blend",
         "color": "Silver",
         "size": "Short",
-        "brand": "Ellen Wille"
+        "brand": "Ellen Wille",
+        "view": 22
     },
     {
         "id": 12,
@@ -105,7 +116,8 @@
         "desc": "BEST SELLER | The Always Wig by Raquel Welch can be worn wavy, straight, up or down.",
         "color": "Blondes",
         "size": "Long",
-        "brand": "Raquel Welch"
+        "brand": "Raquel Welch",
+        "view": 17
     }
 
 ]
