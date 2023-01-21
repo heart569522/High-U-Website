@@ -1,50 +1,30 @@
 import React from 'react'
 import { BarChart, } from "@tremor/react";
 
-function Bar_Chart() {
-    const dayOfWeek = [
-        {
-            name: "Sunday",
-            "Number of Views": 254,
-        },
-        {
-            name: "Monday",
-            "Number of Views": 162,
-        },
-        {
-            name: "Tuesday",
-            "Number of Views": 87,
-        },
-        {
-            name: "Wednesday",
-            "Number of Views": 124,
-        },
-        {
-            name: "Thursday",
-            "Number of Views": 64,
-        },
-        {
-            name: "Friday",
-            "Number of Views": 210,
-        },
-        {
-            name: "Saturday",
-            "Number of Views": 175,
-        },
-    ];
+import Website_View from '../../helper/Website_View.json'
 
-    // const dataFormatter = (number: number) => {
-    //     return "$ " + Intl.NumberFormat("us").format(number).toString();
-    // };
+interface WebsiteViewData {
+    id: number;
+    date: string;
+    web_view: number;
+    day?: string;
+}
+
+function Bar_Chart() {
+
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    Website_View.map(data => {
+        let date = new Date(data.date);
+        data.day = days[date.getUTCDay()]
+    })
 
     return (
         <div>
             <BarChart
-                data={dayOfWeek}
-                dataKey="name"
-                categories={["Number of Views"]}
-                colors={["amber"]}
-                // valueFormatter={dataFormatter}
+                data={Website_View}
+                dataKey="day"
+                categories={["view"]}
+                colors={["amber",]}
                 marginTop="mt-6"
                 yAxisWidth="w-12"
             />

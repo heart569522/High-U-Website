@@ -1,48 +1,25 @@
 import React from 'react'
 import { DonutChart, } from "@tremor/react";
 
-export default function Donut_Chart() {
-    const cities = [
-        {
-            name: 'New York',
-            sales: 9800,
-        },
-        {
-            name: 'London',
-            sales: 4567,
-        },
-        {
-            name: 'Hong Kong',
-            sales: 3908,
-        },
-        {
-            name: 'San Francisco',
-            sales: 2400,
-        },
-        {
-            name: 'Singapore',
-            sales: 1908,
-        },
-        {
-            name: 'Zurich',
-            sales: 1398,
-        },
-    ];
+import Wig_Product from '../../helper/Wig_Product.json'
 
+export default function Donut_Chart() {
+    const topFiveViews = Wig_Product.sort((item1, item2) => item2.view - item1.view).slice(0, 5);
+    
     const valueFormatter = (number: number) => (
-        `$ ${Intl.NumberFormat('us').format(number).toString()}`
+        `Views : ${Intl.NumberFormat().format(number).toString()}`
     );
 
     return (
         <div>
             <DonutChart
-                data={cities}
-                category="sales"
-                variant="pie"
-                dataKey="name"
-                // valueFormatter={valueFormatter}
+                data={topFiveViews}
+                category="view"
+                variant="donut"
+                dataKey="title"
+                valueFormatter={valueFormatter}
                 marginTop="mt-6"
-                colors={["slate", "violet", "indigo", "rose", "cyan", "amber"]}
+                colors={["yellow", "amber", "orange", "rose", "red"]}
                 height="h-72"
             />
         </div>

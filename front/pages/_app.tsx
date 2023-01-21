@@ -3,6 +3,7 @@ import AOS from 'aos';
 
 import 'aos/dist/aos.css';
 import '../styles/globals.css'
+import '../styles/lodingStyle.css'
 import '../styles/globals_admin.css'
 import '@tremor/react/dist/esm/tremor.css'
 

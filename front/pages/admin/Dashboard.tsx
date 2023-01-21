@@ -38,7 +38,7 @@ function Dashboard() {
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
               <Typography className="text-[#303030] font-bold text-xl">
@@ -59,11 +59,11 @@ function Dashboard() {
                 The most viewed wig show
               </Typography>
               <Grid container>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} sm={6}>
                   <Donut_Chart />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Donut_Chart />
+                <Grid item xs={12} sm={6}>
+                  
                 </Grid>
               </Grid>
             </Box>
