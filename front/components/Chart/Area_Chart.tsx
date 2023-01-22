@@ -1,17 +1,9 @@
 import React from 'react'
-import { BarChart, } from "@tremor/react";
+import { AreaChart, } from "@tremor/react";
 
 import Website_View from '../../helper/Website_View.json'
 
-interface WebsiteViewData {
-    id: number;
-    date: string;
-    web_view: number;
-    day?: string;
-}
-
-function Bar_Chart() {
-
+export default function Area_Chart() {
     const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     Website_View.map(data => {
         let date = new Date(data.date);
@@ -20,16 +12,14 @@ function Bar_Chart() {
 
     return (
         <div>
-            <BarChart
+            <AreaChart
                 data={Website_View}
                 dataKey="day"
                 categories={["view"]}
-                colors={["amber",]}
+                colors={["red",]}
                 marginTop="mt-6"
                 yAxisWidth="w-12"
             />
         </div>
     )
 }
-
-export default Bar_Chart

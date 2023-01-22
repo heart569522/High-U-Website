@@ -1,39 +1,34 @@
-import React from 'react'
 import {
-    Box,
-    Typography,
-    Toolbar,
-    Grid,
-    Hidden,
-    ButtonGroup,
+    Card,
+    Metric,
+    Footer,
+    ButtonInline,
+    Text,
     Button,
-    Modal,
-    Divider,
-} from "@mui/material";
+} from '@tremor/react';
+import { Grid } from '@mui/material';
 
-function test() {
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+
+export default function Example() {
     return (
-        <Box className='background-load'>
-            <div id="wifi-loader">
-                <svg className="circle-outer" viewBox="0 0 86 86">
-                    <circle className="back" cx="43" cy="43" r="40"></circle>
-                    <circle className="front" cx="43" cy="43" r="40"></circle>
-                    <circle className="new" cx="43" cy="43" r="40"></circle>
-                </svg>
-                <svg className="circle-middle" viewBox="0 0 60 60">
-                    <circle className="back" cx="30" cy="30" r="27"></circle>
-                    <circle className="front" cx="30" cy="30" r="27"></circle>
-                </svg>
-                <svg className="circle-inner" viewBox="0 0 34 34">
-                    <circle className="back" cx="17" cy="17" r="14"></circle>
-                    <circle className="front" cx="17" cy="17" r="14"></circle>
-                </svg>
-                <div className="text" data-text="Loading..."></div>
-            </div>
-        </Box>
-
-
-    )
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+                <Card>
+                    <Text>{}</Text>
+                    <Metric>{}</Metric>
+                    <Footer>
+                        <Button
+                            variant="light"
+                            size="sm"
+                            text="View Details"
+                            icon={ArrowRightAltIcon}
+                            iconPosition="right"
+                            color="amber"
+                        />
+                    </Footer>
+                </Card>
+            </Grid>
+        </Grid>
+    );
 }
-
-export default test

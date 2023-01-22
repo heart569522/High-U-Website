@@ -2,17 +2,17 @@ import React from 'react'
 
 // IMPORT COMPONENT
 import DrawerBar from '../../components/Navigation/DrawerBar'
-import WigEdit from './WigEdit/[id]'
+import AddMember_Form from '../../components/Form/AddMember_Form'
 
 // IMPORT PAGE
 
-function WigManage() {
+function AddWig() {
   return (
     <div>
       <DrawerBar />
-      <WigEdit />
+      <AddMember_Form />
     </div>
   )
 }
 
-export default WigManage
+export default AddWig

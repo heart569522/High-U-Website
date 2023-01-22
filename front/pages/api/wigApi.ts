@@ -17,7 +17,7 @@ export function getWig(id: number) {
   })
 }
 
-export function updateWig (data: Wig) {
+export function updateWig(data: Wig) {
   return new Promise<void>((resolve) => {
     //   let updated = //update the product
     //   resolve(updated)

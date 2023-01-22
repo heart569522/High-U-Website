@@ -73,7 +73,7 @@ function MemberList_Table() {
                             <Typography className="text-[#303030] font-bold text-2xl">
                                 Member Manage
                             </Typography>
-                            <Link href="/admin/AddMember_Form">
+                            <Link href="/admin/AddMember">
                                 <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Member</Button>
                             </Link>
                         </Grid>
