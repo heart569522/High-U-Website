@@ -9,20 +9,13 @@ import {
   Hidden,
   ButtonGroup,
   Button,
-  Modal,
-  Divider,
   TextField,
-  FormControl,
-  FormHelperText,
-  Avatar,
-  Link
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../../components/Navigation/DrawerBar';
 import Loading from '../../../components/Other/Loading';
-import { title } from 'process';
 
 const drawerWidth = 240;
 const theme = createTheme({

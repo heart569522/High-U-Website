@@ -9,6 +9,8 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 import Bar_Chart from '../../components/Chart/Bar_Chart';
 import Donut_Chart from '../../components/Chart/Donut_Chart';
+import SummaryCard_Chart from '../../components/Chart/SummaryCard_Chart';
+import Area_Chart from '../../components/Chart/Area_Chart';
 
 const drawerWidth = 240;
 
@@ -38,7 +40,10 @@ function Dashboard() {
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <Grid container spacing={2}>
+        <Grid container spacing={2} className="pb-5">
+          <Grid item xs={12}>
+            <SummaryCard_Chart />
+          </Grid>
           <Grid item xs={12} md={6}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
               <Typography className="text-[#303030] font-bold text-xl">
@@ -58,32 +63,17 @@ function Dashboard() {
               <Typography variant='subtitle1' className="text-[#656565]">
                 The most viewed wig show
               </Typography>
-              <Grid container>
-                <Grid item xs={12} sm={6}>
-                  <Donut_Chart />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  
-                </Grid>
-              </Grid>
+              <Donut_Chart />
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
               <Typography className="text-[#303030] font-bold text-xl">
-                Top Week AR Wig
+                Top 10 Favorite Wigs
               </Typography>
-
+              <Area_Chart />
             </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box className="bg-white w-full h-full rounded-xl p-5">
-              <Typography className="text-[#303030] font-bold text-xl">
-                Members Active
-              </Typography>
-
-            </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </ThemeProvider>

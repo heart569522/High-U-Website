@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getWig, updateWig } from '../../api/wigApi'
+import { getMember, updateMember } from '../../api/memberApi'
 import {
   Box,
   Typography,
@@ -9,20 +9,13 @@ import {
   Hidden,
   ButtonGroup,
   Button,
-  Modal,
-  Divider,
   TextField,
-  FormControl,
-  FormHelperText,
-  Avatar,
-  Link
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../../components/Navigation/DrawerBar';
 import Loading from '../../../components/Other/Loading';
-import { title } from 'process';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -41,59 +34,59 @@ const theme = createTheme({
   },
 });
 
-interface Wig {
+interface Member {
   id: number;
   image: string;
-  title: string;
-  desc: string;
-  color: string;
-  size: string;
-  brand: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  username: string;
+  password: string;
 }
 
 const MemberEdit = () => {
-  const [wig, setWig] = useState<Wig>({
+  const [member, setMember] = useState<Member>({
     id: 0,
     image: '',
-    title: '',
-    desc: '',
-    color: '',
-    size: '',
-    brand: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    username: '',
+    password: '',
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const router = useRouter()
 
-  const [editTitle, setEditTitle] = useState('');
-  const [editDesc, setEditDesc] = useState('');
-  const [editColor, setEditColor] = useState('');
-  const [editSize, setEditSize] = useState('');
-  const [editBrand, setEditBrand] = useState('');
+  const [editFirstname, setEditFirstname] = useState('');
+  const [editLastname, setEditLastname] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editUsername, setEditUsername] = useState('');
+  const [editPassword, setEditPassword] = useState('');
 
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    const fetchWig = async () => {
+    const fetchMember = async () => {
       setLoading(true);
       try {
         const id = typeof router.query.id === 'string' ? Number(router.query.id) : undefined;
         if (!id) {
-          window.location.href = '/admin/WigManage'
+          window.location.href = '/admin/MemberList'
           return;
         }
-        const wig = await getWig(id as number);
-        setWig(wig as Wig);
+        const member = await getMember(id as number);
+        setMember(member as Member);
         setLoading(false);
       } catch (err) {
         setError(err as Error);
         setLoading(false);
       }
     };
-    fetchWig();
+    fetchMember();
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -130,15 +123,15 @@ const MemberEdit = () => {
     try {
       const formData = new FormData();
       if (image) formData.append('image', new Blob([image]), image.name);
-      formData.append('title', editTitle);
-      formData.append('desc', editDesc);
-      formData.append('color', editColor);
-      formData.append('size', editSize);
-      formData.append('brand', editBrand);
-      // await updateWig(wig.id, formData);
+      formData.append('firstname', editFirstname)
+      formData.append('lastname', editLastname)
+      formData.append('email', editEmail)
+      formData.append('username', editUsername)
+      formData.append('password', editPassword)
+      // await updateMember(member.id, formData);
 
-      alert('Wig updated successfully');
-      router.push('/admin/WigManage');
+      alert('Member updated successfully');
+      router.push('/admin/MemberList');
     } catch (err) {
       setError(err as Error);
     }
@@ -151,13 +144,13 @@ const MemberEdit = () => {
   //   setEditBrand('');
   //   setEditSize('');
   //   setImage(null);
-  //   setPreviewUrl(wig.image);
+  //   setPreviewUrl(member.image);
   //   setError(null);
   // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setWig({ ...wig, [name]: value });
+    setMember({ ...member, [name]: value });
   };
 
   if (loading) {
@@ -181,7 +174,7 @@ const MemberEdit = () => {
           <Grid container>
             <Grid item xs={12}>
               <Typography className="text-[#303030] font-bold text-xl">
-                Wigs Manage
+                Member Manage
               </Typography>
             </Grid>
           </Grid>
@@ -197,7 +190,7 @@ const MemberEdit = () => {
                     onChange={handleImageChange}
                   />
                   <img
-                    src={previewUrl || wig.image}
+                    src={previewUrl || member.image}
                     className="rounded-lg object-top object-cover h-auto w-96"
                   />
                   <label htmlFor="upload-button">
@@ -214,12 +207,12 @@ const MemberEdit = () => {
               </Grid>
               <Grid item xs={12} md={8}>
                 <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Firstname</Typography>
                   <TextField
                     type='text'
-                    value={wig.title}
+                    value={member.firstname}
                     fullWidth
-                    name='title'
+                    name='firstname'
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={handleInputChange}
@@ -230,12 +223,12 @@ const MemberEdit = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Lastname</Typography>
                   <TextField
                     type='text'
-                    value={wig.color}
+                    value={member.lastname}
                     fullWidth
-                    name='color'
+                    name='lastname'
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={handleInputChange}
@@ -246,12 +239,12 @@ const MemberEdit = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Email</Typography>
                   <TextField
-                    type='text'
-                    value={wig.size}
+                    type='email'
+                    value={member.email}
                     fullWidth
-                    name='size'
+                    name='email'
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={handleInputChange}
@@ -262,12 +255,12 @@ const MemberEdit = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Username</Typography>
                   <TextField
                     type='text'
-                    value={wig.brand}
+                    value={member.username}
                     fullWidth
-                    name='brand'
+                    name='username'
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={handleInputChange}
@@ -278,12 +271,12 @@ const MemberEdit = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography>
+                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Password</Typography>
                   <TextField
                     type='text'
-                    value={wig.desc}
+                    value={member.password}
                     fullWidth
-                    name='desc'
+                    name='password'
                     variant='outlined'
                     className="font-bold rounded pb-3"
                     onChange={handleInputChange}
