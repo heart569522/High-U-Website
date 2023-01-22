@@ -24,3 +24,7 @@ export function updateWig(data: Wig) {
     resolve()
   })
 }
+
+export function deleteWig() {
+  
+}

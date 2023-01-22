@@ -7,7 +7,8 @@
         "color": "Blondes",
         "size": "Long",
         "brand": "Ellen Wille",
-        "view": 21
+        "view": 21,
+        "favorite": 6 
     },
     {
         "id": 2,
@@ -17,7 +18,8 @@
         "color": "Blondes",
         "size": "Long",
         "brand": "Ellen Wille",
-        "view": 14
+        "view": 14,
+        "favorite": 4
     },
     {
         "id": 3,
@@ -27,7 +29,8 @@
         "color": "Blondes",
         "size": "Short",
         "brand": "Ellen Wille",
-        "view": 11
+        "view": 11,
+        "favorite": 7
     },
     {
         "id": 4,
@@ -37,7 +40,8 @@
         "color": "Brown",
         "size": "Long",
         "brand": "Jon Renau",
-        "view": 27
+        "view": 27,
+        "favorite": 15
     },
     {
         "id": 5,
@@ -47,7 +51,8 @@
         "color": "Brown",
         "size": "Short",
         "brand": "Ellen Wille",
-        "view": 30
+        "view": 30,
+        "favorite": 24
     },
     {
         "id": 6,
@@ -57,7 +62,8 @@
         "color": "Black",
         "size": "Medium",
         "brand": "Vivica Fox",
-        "view": 9
+        "view": 9,
+        "favorite": 3
     },
     {
         "id": 7,
@@ -67,7 +73,8 @@
         "color": "Black",
         "size": "Medium",
         "brand": "Vivica Fox",
-        "view": 16
+        "view": 16,
+        "favorite": 8
     },
     {
         "id": 8,
@@ -77,7 +84,8 @@
         "color": "Blondes",
         "size": "Short",
         "brand": "Raquel Welch",
-        "view": 6
+        "view": 6,
+        "favorite": 2
     },
     {
         "id": 9,
@@ -87,7 +95,8 @@
         "color": "Blondes",
         "size": "Medium",
         "brand": "Jon Renau",
-        "view": 36
+        "view": 36,
+        "favorite": 31
     },
     {
         "id": 10,
@@ -97,7 +106,8 @@
         "color": "Blondes",
         "size": "Short",
         "brand": "Raquel Welch",
-        "view": 10
+        "view": 10,
+        "favorite": 5
     },
     {
         "id": 11,
@@ -107,7 +117,8 @@
         "color": "Silver",
         "size": "Short",
         "brand": "Ellen Wille",
-        "view": 22
+        "view": 22,
+        "favorite": 13
     },
     {
         "id": 12,
@@ -117,7 +128,8 @@
         "color": "Blondes",
         "size": "Long",
         "brand": "Raquel Welch",
-        "view": 17
+        "view": 17,
+        "favorite": 7
     }
 
 ]

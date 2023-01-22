@@ -41,7 +41,7 @@ export default function HomeBackground() {
               top: '400px',
               fontFamily: 'Prompt, sans-serif',
             }}
-            data-aos="fade-up" 
+            data-aos="fade-zoom-in" 
           >
             a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
           </Typography>

@@ -1,22 +1,18 @@
 import React from 'react'
 import { AreaChart, } from "@tremor/react";
 
-import Website_View from '../../helper/Website_View.json'
+import Wig_Product from '../../helper/Wig_Product.json'
 
 export default function Area_Chart() {
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    Website_View.map(data => {
-        let date = new Date(data.date);
-        data.day = days[date.getUTCDay()]
-    })
-
+    const topTenFav = Wig_Product.sort((item1, item2) => item2.favorite - item1.favorite).slice(0, 10);
     return (
         <div>
             <AreaChart
-                data={Website_View}
-                dataKey="day"
-                categories={["view"]}
-                colors={["red",]}
+                data={topTenFav}
+                dataKey="title"
+                showXAxis={false}
+                categories={["favorite"]}
+                colors={["amber",]}
                 marginTop="mt-6"
                 yAxisWidth="w-12"
             />

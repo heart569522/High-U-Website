@@ -59,11 +59,11 @@ const MemberEdit = () => {
   const [error, setError] = useState<Error | null>(null);
   const router = useRouter()
 
-  const [editFirstname, setFirstname] = useState('');
-  const [editLastname, setLastname] = useState('');
-  const [editEmail, setEmail] = useState('');
-  const [editUsername, setUsername] = useState('');
-  const [editPassword, setPassword] = useState('');
+  const [editFirstname, setEditFirstname] = useState('');
+  const [editLastname, setEditLastname] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editUsername, setEditUsername] = useState('');
+  const [editPassword, setEditPassword] = useState('');
 
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
