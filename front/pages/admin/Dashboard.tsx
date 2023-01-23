@@ -7,10 +7,14 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
-import Bar_Chart from '../../components/Chart/Bar_Chart';
-import Donut_Chart from '../../components/Chart/Donut_Chart';
+
+// IMPORT COMPONENT
+import DrawerBar from '../../components/Navigation/DrawerBar';
+import WebsiteView_AreaChart from '../../components/Chart/WebsiteView_AreaChart';
+import TopFiveWigView_DonutChart from '../../components/Chart/TopFiveWigView_DonutChart';
 import SummaryCard_Chart from '../../components/Chart/SummaryCard_Chart';
 import Area_Chart from '../../components/Chart/Area_Chart';
+
 
 const drawerWidth = 240;
 
@@ -34,6 +38,7 @@ const theme = createTheme({
 function Dashboard() {
   return (
     <ThemeProvider theme={theme}>
+      <DrawerBar />
       <Box
         component="main"
         className="bg-slate-200 h-screen p-5 ml-[240px] max-[899px]:ml-0"
@@ -52,7 +57,7 @@ function Dashboard() {
               <Typography variant='subtitle1' className="text-[#656565]">
                 The number of visitors to the website each day.
               </Typography>
-              <Bar_Chart />
+              <WebsiteView_AreaChart />
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -63,7 +68,7 @@ function Dashboard() {
               <Typography variant='subtitle1' className="text-[#656565]">
                 The most viewed wig show
               </Typography>
-              <Donut_Chart />
+              <TopFiveWigView_DonutChart />
             </Box>
           </Grid>
           {/* <Grid item xs={12}>

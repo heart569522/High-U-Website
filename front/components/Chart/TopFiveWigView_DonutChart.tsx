@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 
 import Wig_Product from '../../helper/Wig_Product.json'
 
-export default function Donut_Chart() {
+export default function TopFiveWigView_DonutChart() {
     const topFiveViews = Wig_Product.sort((item1, item2) => item2.view - item1.view).slice(0, 5);
 
     return (

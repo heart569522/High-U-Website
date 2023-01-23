@@ -80,7 +80,7 @@ export default function DrawerBar(props: Props) {
       {/* <Divider /> */}
       <List>
         <ListItem key="Dashboard" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/Dashboard')}>
             <DashboardIcon className="mr-3" />
             <ListItemText primary="Dashboard" />
           </ListItemButton>
