@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ChangeEvent, FormEvent, KeyboardEventHandler, } from 'react';
+import React, { useState, useCallback, ChangeEvent, FormEvent, KeyboardEventHandler, useRef } from 'react';
 import { useRouter } from 'next/router'
 import {
     IconButton,
@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+
+import Admin_Data from '../../helper/Admin_Data.json'
 
 const theme = createTheme({
     typography: {
@@ -32,6 +34,7 @@ const theme = createTheme({
 
 const SignIn = React.memo(() => {
     const router = useRouter()
+    const formRef = useRef(null);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -59,11 +62,27 @@ const SignIn = React.memo(() => {
         }
     }, []);
 
-    const onSubmit = useCallback((event: FormEvent) => {
-        event.preventDefault();
-        console.log(username);
-        console.log(password);
-    }, [username, password]);
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        try {
+            const admin = Admin_Data.find(
+                (admin: { username: string, password: string }) => admin.username === username && admin.password === password
+            )
+
+            if (admin) {
+                // User found, successful login
+                // Store the user data in local storage or a cookie
+                localStorage.setItem('admin', JSON.stringify(admin))
+                // Redirect to the protected page
+                router.push('/admin/Dashboard');
+            } else {
+                // Handle unsuccessful login
+                console.error('Invalid username or password')
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     return (
 
@@ -77,7 +96,7 @@ const SignIn = React.memo(() => {
                         <Typography variant="h5" color="black" className="font-bold text-center">
                             High U - Administrator
                         </Typography>
-                        <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+                        <form onSubmit={handleSubmit} className="mt-1">
                             <TextField
                                 label="Username"
                                 value={username}
@@ -101,21 +120,9 @@ const SignIn = React.memo(() => {
                                 autoComplete="current-password"
                                 onChange={handlePasswordChange}
                                 onKeyPress={handleKeyPress}
-                                // type={showPassword ? 'text' : 'password'}
                                 type='password'
                                 variant="outlined"
                                 fullWidth
-                            // InputProps={{
-                            //     endAdornment: (
-                            //         <IconButton
-                            //             aria-label="toggle password visibility"
-                            //             onClick={handleClickShowPassword}
-                            //             onMouseDown={handleMouseDownPassword}
-                            //         >
-                            //             {showPassword ? <Visibility /> : <VisibilityOff />}
-                            //         </IconButton>
-                            //     ),
-                            // }}
                             />
                             <Button
                                 type="submit"
@@ -125,7 +132,7 @@ const SignIn = React.memo(() => {
                             >
                                 Sign In
                             </Button>
-                        </Box>
+                        </form>
                     </Box>
 
                 </Container>
