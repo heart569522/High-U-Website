@@ -20,14 +20,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Face3Icon from '@mui/icons-material/Face3';
 import GroupsIcon from '@mui/icons-material/Groups';
 import MenuIcon from '@mui/icons-material/Menu';
-
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
+import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 
 const theme = createTheme({
   typography: {
@@ -47,9 +40,8 @@ const theme = createTheme({
 
 const drawerWidth = 240;
 
-export default function DrawerBar(props: Props) {
+export default function DrawerBar() {
   const router = useRouter()
-  const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -91,6 +83,12 @@ export default function DrawerBar(props: Props) {
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
+        <ListItem key="AR Manage" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/ARManage')}>
+            <AspectRatioIcon className="mr-3" />
+            <ListItemText primary="AR Manage" />
+          </ListItemButton>
+        </ListItem>
         <ListItem key="Member List" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberList')}>
             <GroupsIcon className="mr-3" />
@@ -99,15 +97,13 @@ export default function DrawerBar(props: Props) {
         </ListItem>
         <ListItem key="Test" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/test')}>
-            {/* <GroupsIcon className="mr-3" /> */}
+            <GroupsIcon className="mr-3" />
             <ListItemText primary="Test" />
           </ListItemButton>
         </ListItem>
       </List>
     </div>
   );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <ThemeProvider theme={theme}>
@@ -126,12 +122,12 @@ export default function DrawerBar(props: Props) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
+              sx={{ mr: 0, display: { md: 'none' } }}
             >
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className="font-bold" noWrap component="div">
-              ...
+              
             </Typography>
           </Toolbar>
         </AppBar>
@@ -142,7 +138,6 @@ export default function DrawerBar(props: Props) {
         >
           {/* Responsive */}
           <Drawer
-            container={container}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}

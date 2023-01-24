@@ -12,7 +12,6 @@ import {
     Button,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import Admin_Data from '../../helper/Admin_Data.json'
 
@@ -34,11 +33,10 @@ const theme = createTheme({
 
 const SignIn = React.memo(() => {
     const router = useRouter()
-    const formRef = useRef(null);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
 
     const handleUsernameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -46,14 +44,6 @@ const SignIn = React.memo(() => {
 
     const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
-    }, []);
-
-    const handleClickShowPassword = useCallback(() => {
-        setShowPassword(!showPassword);
-    }, [showPassword]);
-
-    const handleMouseDownPassword = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
     }, []);
 
     const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
@@ -70,14 +60,11 @@ const SignIn = React.memo(() => {
             )
 
             if (admin) {
-                // User found, successful login
-                // Store the user data in local storage or a cookie
                 localStorage.setItem('admin', JSON.stringify(admin))
-                // Redirect to the protected page
                 router.push('/admin/Dashboard');
             } else {
-                // Handle unsuccessful login
                 console.error('Invalid username or password')
+                setErrorMessage("Invalid Username or Password");
             }
         } catch (err) {
             console.error(err)
@@ -88,10 +75,8 @@ const SignIn = React.memo(() => {
 
         <ThemeProvider theme={theme}>
             <Box className="bg-[#e8e8e8] h-full w-full bg-cover fixed">
-                {/* <Box className="colorBackgroundGold h-full w-full bg-cover fixed" > */}
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
-
                     <Box className="my-12 shadow-lg top-0 rounded-lg bg-white p-5" data-aos="fade-zoom-in">
                         <Typography variant="h5" color="black" className="font-bold text-center">
                             High U - Administrator
@@ -124,6 +109,7 @@ const SignIn = React.memo(() => {
                                 variant="outlined"
                                 fullWidth
                             />
+                            {errorMessage ? <p className="text-red-500 font-bold">{errorMessage}</p> : null}
                             <Button
                                 type="submit"
                                 fullWidth
@@ -134,9 +120,7 @@ const SignIn = React.memo(() => {
                             </Button>
                         </form>
                     </Box>
-
                 </Container>
-                {/* </Box> */}
             </Box>
         </ThemeProvider>
 
