@@ -7,7 +7,7 @@ import {
     Icon,
     Flex,
 } from '@tremor/react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Tooltip } from '@mui/material';
 import Link from 'next/link';
 
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
@@ -60,16 +60,17 @@ export default function SummaryCard_Chart() {
                                 <Text>Total Wigs</Text>
                                 <Metric>{totalWigs}</Metric>
                             </Block>
-                            <Link href="/admin/WigManage">
-                                <Button
-                                    text="View Details"
-                                    icon={OutboundIcon}
-                                    iconPosition="right"
-                                    variant="light"
-                                    size="md"
-                                    color="amber"
-                                />
-                            </Link>
+                            <Tooltip title="View Detail">
+                                <Link href="/admin/WigManage">
+                                    <Button
+                                        icon={OutboundIcon}
+                                        iconPosition="right"
+                                        variant="light"
+                                        size="xl"
+                                        color="amber"
+                                    />
+                                </Link>
+                            </Tooltip>
                         </Flex>
                     </Box>
                 </Card>
@@ -88,16 +89,18 @@ export default function SummaryCard_Chart() {
                                 <Text>Total Members</Text>
                                 <Metric>{totalMembers}</Metric>
                             </Block>
-                            <Link href="/admin/MemberList">
-                                <Button
-                                    text="View Details"
-                                    icon={OutboundIcon}
-                                    iconPosition="right"
-                                    variant="light"
-                                    size="md"
-                                    color="orange"
-                                />
-                            </Link>
+                            <Tooltip title="View Detail">
+                                <Link href="/admin/MemberList">
+                                    <Button
+                                        // text="View Details"
+                                        icon={OutboundIcon}
+                                        iconPosition="right"
+                                        variant="light"
+                                        size="xl"
+                                        color="orange"
+                                    />
+                                </Link>
+                            </Tooltip>
                         </Flex>
                     </Box>
                 </Card>

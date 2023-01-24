@@ -1,20 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Typography,
   Toolbar,
   Grid
 } from '@mui/material'
+import { Flex, Toggle, ToggleItem } from '@tremor/react';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
-
+import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
+import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 
 // IMPORT COMPONENT
 import DrawerBar from '../../components/Navigation/DrawerBar';
 import WebsiteView_AreaChart from '../../components/Chart/WebsiteView_AreaChart';
 import TopFiveWigView_DonutChart from '../../components/Chart/TopFiveWigView_DonutChart';
+import TopFiveWigView_List from '../../components/Chart/TopFiveWigView_List';
 import SummaryCard_Chart from '../../components/Chart/SummaryCard_Chart';
-import Area_Chart from '../../components/Chart/Area_Chart';
-
 
 const drawerWidth = 240;
 
@@ -36,6 +37,8 @@ const theme = createTheme({
 });
 
 function Dashboard() {
+  const [selectedView, setSelectedView] = useState('chart');
+
   return (
     <ThemeProvider theme={theme}>
       <DrawerBar />
@@ -62,13 +65,35 @@ function Dashboard() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
-              <Typography className="text-[#303030] font-bold text-xl">
-                Top 5 Wigs View
-              </Typography>
-              <Typography variant='subtitle1' className="text-[#656565]">
-                The most viewed wig show
-              </Typography>
-              <TopFiveWigView_DonutChart />
+              <Flex
+                spaceX="space-x-8"
+                justifyContent="justify-between"
+                alignItems="items-center"
+              >
+                <Box className='flex-col'>
+                  <Typography className="text-[#303030] font-bold text-xl">
+                    Top 5 Wigs View
+                  </Typography>
+                  <Typography variant='subtitle1' className="text-[#656565]">
+                    The most viewed wig show
+                  </Typography>
+                </Box>
+                <Toggle
+                  defaultValue="chart"
+                  color="gray"
+                  onValueChange={(value) => setSelectedView(value)}
+                >
+                  <ToggleItem value="chart" icon={PieChartOutlinedIcon} />
+                  <ToggleItem value="list" icon={ViewListOutlinedIcon} />
+                </Toggle>
+              </Flex>
+              {selectedView === 'chart' ? (
+                <TopFiveWigView_DonutChart />
+              ) : (
+                <>
+                  <TopFiveWigView_List />
+                </>
+              )}
             </Box>
           </Grid>
           {/* <Grid item xs={12}>
