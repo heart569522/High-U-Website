@@ -78,8 +78,8 @@ function WigList() {
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        {uniqueColors.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                        {uniqueColors.map((item, i) => (
+                                            <MenuItem value={item} key={i}>{item}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -100,8 +100,8 @@ function WigList() {
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        {uniqueSizes.map((item) => (
-                                            <MenuItem value={item}>{item}</MenuItem>
+                                        {uniqueSizes.map((item, i) => (
+                                            <MenuItem value={item} key={i}>{item}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>

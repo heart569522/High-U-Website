@@ -135,7 +135,7 @@ export default function EditProfile_Profile() {
                 <Grid item xs={12}>
                     <hr className="w-full h-[1px] rounded border-0 bg-[#886828] mt-1"></hr>
                 </Grid>
-                <Grid item xs={12} sm={6} spacing={1} className="flex items-center">
+                <Grid item xs={12} sm={6} className="flex items-center">
                     <input
                         accept="image/*"
                         style={{ display: "none", }}
@@ -158,7 +158,7 @@ export default function EditProfile_Profile() {
                         className="w-24 h-24 ml-5 rounded-full max-sm:mx-auto"
                     />
                 </Grid>
-                <Grid item xs={12} sm={6} spacing={1} className="flex items-center justify-end">
+                <Grid item xs={12} sm={6} className="flex items-center justify-end">
                     <Button
                         variant="contained"
                         size="large"

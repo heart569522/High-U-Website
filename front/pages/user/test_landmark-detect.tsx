@@ -47,7 +47,7 @@ const Webcam: React.FC = () => {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.addEventListener('loadedmetadata', function () {
+        videoRef.current.addEventListener('loadedmetadata', function() {
           if (canvasRef.current) {
             canvasRef.current.width = this.videoWidth;
             canvasRef.current.height = this.videoHeight;
@@ -69,9 +69,11 @@ const Webcam: React.FC = () => {
     startTracking();
   }, [videoRef]);
 
+  
+
   return (
     <div>
-      <video ref={videoRef} autoPlay={true} className="mirror-cam"/>
+      <video ref={videoRef} autoPlay={true} />
       <canvas ref={canvasRef} />
       {faceTracked ? <p className='text-green-500'>Face is being tracked</p> : <p className='text-red-500'>No face detected</p>}
     </div>
@@ -79,3 +81,4 @@ const Webcam: React.FC = () => {
 };
 
 export default Webcam;
+

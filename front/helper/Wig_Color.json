@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659914-14884658151535-1670517351549-resized__0008_Caramel_Lighted_1500x.jpg?v=1670517522",
+        "color": "CARAMEL LIGHTED"
+    },
+    {
+        "id": 2,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32229162352751-14884667457647-1670517351549-resized__0000_Ginger_Brown_Mix1_1500x.jpg?v=1670517508",
+        "color": "COPPER BROWN MIX"
+    },
+    {
+        "id": 3,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659594-14884661690479-1670517351549-resized__0005_Espresso_Rooted_1500x.jpg?v=1670519314",
+        "color": "ESPRESSO ROOTED"
+    },
+    {
+        "id": 4,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659722-14884663754863-1670517351549-resized__0003_Mocca_Rooted_1500x.jpg?v=1670519303",
+        "color": "MOCCA ROOTED"
+    },
+    {
+        "id": 5,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659658-14884660510831-1670517351549-resized__0006_Chocolate_Rooted_1500x.jpg?v=1670519243",
+        "color": "CHOCOLATE"
+    },
+    {
+        "id": 6,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659850-14884665426031-1670517351549-resized__0002_Sand_Multi_Rooted_1500x.jpg?v=1670517681",
+        "color": "SAND MULTI ROOTED"
+    },
+    {
+        "id": 7,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659978-14884659396719-1670517351549-resized__0007_Champagne_Rooted_1500x.jpg?v=1670517657",
+        "color": "CHAMPAGNE ROOTED"
+    },
+    {
+        "id": 8,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32214659786-14884662935663-1670517351549-resized__0004_Light_Bernstein_Rooted_1500x.jpg?v=1670517633",
+        "color": "LIGHT BERNSTEIN"
+    },
+    {
+        "id": 9,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9280397962-32228872781935-14884666441839-1670517351549-resized__0001_Platin_Blonde_Rooted_1500x.jpg?v=1670519245",
+        "color": "PLATIN BLONDE"
+    },
+    {
+        "id": 10,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/9289459274-31361800208495-14521516785775-1670514656708-Flurry_1500x.jpg?v=1670516224",
+        "color": "FLURRY"
+    }
+]
