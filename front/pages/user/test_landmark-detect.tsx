@@ -73,9 +73,9 @@ const Webcam: React.FC = () => {
 
   return (
     <div>
-      <video ref={videoRef} autoPlay={true} className="mirror-cam"/>
+      <video ref={videoRef} autoPlay={true} />
       <canvas ref={canvasRef} />
-      {faceTracked ? <p className='text-green-500 text-lg font-bold'>Face is being tracked</p> : <p className='text-red-500 text-lg font-bold'>No face detected</p>}
+      {faceTracked ? <p className='text-green-500'>Face is being tracked</p> : <p className='text-red-500'>No face detected</p>}
     </div>
   );
 };

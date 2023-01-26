@@ -292,23 +292,6 @@ function Navbar() {
                     ทดลอง AR
                   </Box>
                 </Link>
-                {/* <Link href="/test" underline="none"
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    px: 2,
-                    my: 2,
-                    color: '#F0CA83',
-                    display: 'block',
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      color: "#ffefd1",
-                    },
-                    transition: '.3s',
-                  }}
-                >
-                  Test Page
-                </Link> */}
-                {/* ))} */}
               </Box>
 
               {/* SEARCH MENU */}
@@ -328,8 +311,9 @@ function Navbar() {
               </Search>
 
               {/* If Login OR Non-Login */}
-              {/* <NavbarLikeProfile /> */}
-              <NavbarSignInUpButton />
+
+              <NavbarLikeProfile />
+              {/* <NavbarSignInUpButton /> */}
 
             </Toolbar>
           </Container>

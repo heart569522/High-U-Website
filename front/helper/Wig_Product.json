@@ -130,6 +130,17 @@
         "brand": "Raquel Welch",
         "view": 17,
         "favorite": 7
+    },
+    {
+        "id": 13,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/ewpretty_04_lg.jpg?v=1627594778",
+        "title": "Pretty | Synthetic Wig (Mono Crown)",
+        "desc": "PRETTY by Ellen Wille in ESPRESSO MIX | Darkest Brown Base with a Blend of Dark Brown and Warm Medium Brown throughout",
+        "color": "Black",
+        "size": "Long",
+        "brand": "Ellen Wille",
+        "view": 23,
+        "favorite": 12
     }
 
 ]

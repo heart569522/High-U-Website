@@ -79,7 +79,7 @@ function WigManage_Table() {
                                 Wigs Manage
                             </Typography>
                             <Link href="/admin/AddWig">
-                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Wig</Button>
+                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Wig</Button>
                             </Link>
                         </Grid>
                         <Hidden mdDown >

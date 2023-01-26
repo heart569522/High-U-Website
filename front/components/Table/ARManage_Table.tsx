@@ -70,8 +70,8 @@ export default function ARManage_Table() {
                             <Typography className="text-[#303030] font-bold text-2xl">
                                 AR Manage
                             </Typography>
-                            <Link href="/admin/AddWig">
-                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#5c5c5c]">Add AR</Button>
+                            <Link href="/admin/AddAR">
+                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add AR</Button>
                             </Link>
                         </Grid>
                         <Hidden mdDown >
@@ -89,15 +89,15 @@ export default function ARManage_Table() {
                                     <TableBody>
                                         {AR_Data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
                                             <TableRow key={item.id} className="hover:bg-gray-50">
-                                                <TableCell className="flex justify-center">
-                                                    <img src={item.image} className="object-top rounded-lg object-cover h-48 w-48 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                                                <TableCell className="w-auto flex justify-center">
+                                                    <img src={item.image} className="object-top rounded-lg object-cover h-36 w-36 max-xl:h-32 max-xl:w-32 max-[1075px]:h-28 max-[1075px]:w-28 max-[1000px]:h-24 max-[1000px]:w-24" />
                                                 </TableCell>
                                                 <TableCell className="w-[40%] text-base">{item.title}</TableCell>
                                                 <TableCell className="w-[10%] text-base text-center">{item.color}</TableCell>
                                                 <TableCell className="w-[10%] text-base text-center">{item.use}</TableCell>
                                                 <TableCell className="w-[15%] text-center ">
                                                     <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                        <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
+                                                        <Link href="/admin/AREdit/[id]" as={`/admin/AREdit/${item.id}`}>
                                                             <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                         </Link>
                                                         {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
@@ -129,7 +129,9 @@ export default function ARManage_Table() {
                                             <Typography className="font-semibold">{item.title}</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails className="w-52 h-auto">
-                                            <img src={item.image} alt={item.title} />
+                                            <center>
+                                                <img src={item.image} alt={item.title} />
+                                            </center>
                                         </AccordionDetails>
                                         <AccordionDetails className="bg-gray-50">
                                             <Typography>Color: {item.color}</Typography><br />
@@ -137,7 +139,7 @@ export default function ARManage_Table() {
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
+                                                <Link href="/admin/AREdit/[id]" as={`/admin/AREdit/${item.id}`}>
                                                     <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                 </Link>
                                                 <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>

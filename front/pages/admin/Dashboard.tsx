@@ -16,6 +16,7 @@ import WebsiteView_AreaChart from '../../components/Chart/WebsiteView_AreaChart'
 import TopFiveWigView_DonutChart from '../../components/Chart/TopFiveWigView_DonutChart';
 import TopFiveWigView_List from '../../components/Chart/TopFiveWigView_List';
 import SummaryCard_Chart from '../../components/Chart/SummaryCard_Chart';
+import TopThreeFavWig from '../../components/Chart/TopThreeFavWig';
 
 const drawerWidth = 240;
 
@@ -96,14 +97,14 @@ function Dashboard() {
               )}
             </Box>
           </Grid>
-          {/* <Grid item xs={12}>
+          <Grid item xs={12}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
               <Typography className="text-[#303030] font-bold text-xl">
-                Top 10 Favorite Wigs
+                Top 3 Favorite Wigs
               </Typography>
-              <Area_Chart />
+              <TopThreeFavWig />
             </Box>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Box>
     </ThemeProvider>
