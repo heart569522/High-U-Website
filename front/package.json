@@ -19,6 +19,8 @@
     "@techstark/opencv-js": "^4.6.0-release.1",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow-models/face-detection": "^1.0.1",
+    "@tensorflow-models/face-landmarks-detection": "^1.0.2",
+    "@tensorflow-models/facemesh": "^0.0.5",
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^4.2.0",
     "@tensorflow/tfjs-backend-wasm": "^4.2.0",

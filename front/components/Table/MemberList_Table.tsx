@@ -74,7 +74,7 @@ function MemberList_Table() {
                                 Member Manage
                             </Typography>
                             <Link href="/admin/AddMember">
-                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-blue-700">Add Member</Button>
+                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Member</Button>
                             </Link>
                         </Grid>
                         <Hidden mdDown >

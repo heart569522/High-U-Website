@@ -76,7 +76,7 @@ const SignInForm = React.memo(() => {
                 <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
                     <Container component="main" maxWidth="sm">
                         <CssBaseline />
-                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-sm" data-aos="fade-up">
+                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-sm" data-aos="flip-left">
                             <Typography component="h1" variant="h5" color="primary" className="font-bold">
                                 High U - Member
                             </Typography>

@@ -28,7 +28,7 @@ import Webcam from 'react-webcam';
 // IMPORT COMPONENT
 import Navbar from "../../components/Navigation/Navigation"
 
-import Wig_Product from '../../helper/Wig_Product.json';
+import AR_Data from '../../helper/AR_Data.json';
 
 const theme = createTheme({
     palette: {
@@ -68,7 +68,7 @@ export default function TryAR() {
     return (
         <ThemeProvider theme={theme}>
             <Navbar />
-            <Box className="bg-[#252525] h-screen max-[899px]:h-full">
+            <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
                 <Container maxWidth="xl" >
                     <Grid container>
                         <Grid item xs={12} className="pt-4 ">
@@ -101,7 +101,7 @@ export default function TryAR() {
                             </Box>
                         </Grid>
                         <Grid item sm={12} md={6}>
-                            {Wig_Product.slice(0, 9).map((item, i) =>
+                            {AR_Data.map((item, i) =>
                                 <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                                     <Card variant="outlined" className="content">
                                         <CardActionArea>
@@ -137,46 +137,10 @@ export default function TryAR() {
                                 </IconButton>
                             </Box>
                         </Modal>
-                        {/* <Grid item sm={12} md={6} spacing={2}>
-                            <ImageList
-                                className="w-full h-full overflow-hidden object-top"
-                                sx={{
-                                    height: 350,
-                                    '@media (max-width: 1257px)': {
-                                        height: 250,
-                                    },
-                                    '@media (max-width: 991px)': {
-                                        height: 310,
-                                    },
-                                    '@media (max-width: 767px)': {
-                                        height: 270,
-                                    },
-                                    '@media (max-width: 575px)': {
-                                        height: 200,
-                                    },
-                                }}
-                                cols={4}
-                                rowHeight={0}
-                            >
-                                {Wig_Product.map((item) => (
-                                    <Box className="bg-white m-2">
-                                        <ImageListItem key={item.image} className="p-2">
-                                            <img
-                                                className="rounded hover:opacity-80 transition duration-200 ease-in-out"
-                                                src={item.image}
-                                                alt={item.color}
-                                                loading="lazy"
-                                            />
-                                        </ImageListItem>
-                                    </Box>
-
-                                ))}
-                            </ImageList>
-                        </Grid> */}
 
                     </Grid>
                 </Container>
-            </Box>
+            </Paper>
         </ThemeProvider>
 
     )

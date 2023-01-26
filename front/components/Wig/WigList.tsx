@@ -23,7 +23,7 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Link from 'next/link'
 import _ from 'lodash';
 
-import WigList_Item from './WigList_Item';
+// import WigList_Item from './WigList_Item';
 import Wig_Product from '../../helper/Wig_Product.json';
 
 import EmptyWig from '../Other/EmptyWig';
@@ -48,6 +48,8 @@ function WigList() {
     const uniqueColors = Array.from(new Set(Wig_Product.map(item => item.color)));
     const [selectedSize, setSelectedSize] = React.useState<string | null>(null);
     const uniqueSizes = Array.from(new Set(Wig_Product.map(item => item.size)));
+    const [selectedBrand, setSelectedBrand] = React.useState<string | null>(null);
+    const uniqueBrand = Array.from(new Set(Wig_Product.map(item => item.brand)));
 
     const handleChange_Color = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
         setSelectedColor(event.target.value as string);
@@ -55,6 +57,10 @@ function WigList() {
 
     const handleChange_Size = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
         setSelectedSize(event.target.value as string);
+    };
+
+    const handleChange_Brand = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
+        setSelectedBrand(event.target.value as string);
     };
 
     return (
@@ -107,36 +113,65 @@ function WigList() {
                                 </FormControl>
                             </Box>
                         </Grid>
-                        {/* CHECKBOX */}
-                        {/* <Grid item xs={12} sm={5}>
-                            <FormGroup row>
-                                <FormControlLabel control={<Checkbox color='warning' />} label="Check1" />
-                                <FormControlLabel control={<Checkbox color='warning' />} label="Check2" />
-                                <FormControlLabel control={<Checkbox color='warning' />} label="Check3" />
-                                <FormControlLabel control={<Checkbox color='warning' />} label="Check4" />
-                            </FormGroup>
-                        </Grid> */}
+                        <Grid item xs={12} sm={4}>
+                            <Box sx={{ minWidth: 100 }}>
+                                <FormControl fullWidth >
+                                    <InputLabel color='warning'>Brands</InputLabel>
+                                    <Select
+                                        color='warning'
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={selectedBrand || ''}
+                                        label="third Menu"
+                                        onChange={handleChange_Brand}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        {uniqueBrand.map((item, i) => (
+                                            <MenuItem value={item} key={i}>{item}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Grid>
                     </Grid>
                     {/* WIG PRODUCT */}
                     <Grid container spacing={3} className="p-3">
                         {
                             Wig_Product.filter((item) => {
-                                if (selectedColor && selectedSize) {
+                                if (selectedColor && selectedSize && selectedBrand) {
+                                    return item.color === selectedColor && item.size === selectedSize && item.brand === selectedBrand
+                                } else if (selectedColor && selectedSize) {
                                     return item.color === selectedColor && item.size === selectedSize
+                                } else if (selectedColor && selectedBrand) {
+                                    return item.color === selectedColor && item.brand === selectedBrand
+                                } else if (selectedSize && selectedBrand) {
+                                    return item.size === selectedSize && item.brand === selectedBrand
                                 } else if (selectedColor) {
                                     return item.color === selectedColor
                                 } else if (selectedSize) {
                                     return item.size === selectedSize
+                                } else if (selectedBrand) {
+                                    return item.brand === selectedBrand
                                 }
                                 return true
                             }).length ?
                                 Wig_Product.filter((item) => {
-                                    if (selectedColor && selectedSize) {
+                                    if (selectedColor && selectedSize && selectedBrand) {
+                                        return item.color === selectedColor && item.size === selectedSize && item.brand === selectedBrand
+                                    } else if (selectedColor && selectedSize) {
                                         return item.color === selectedColor && item.size === selectedSize
+                                    } else if (selectedColor && selectedBrand) {
+                                        return item.color === selectedColor && item.brand === selectedBrand
+                                    } else if (selectedSize && selectedBrand) {
+                                        return item.size === selectedSize && item.brand === selectedBrand
                                     } else if (selectedColor) {
                                         return item.color === selectedColor
                                     } else if (selectedSize) {
                                         return item.size === selectedSize
+                                    } else if (selectedBrand) {
+                                        return item.brand === selectedBrand
                                     }
                                     return true
                                 }).map((item, i) => (

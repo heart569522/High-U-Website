@@ -107,7 +107,7 @@ export default function WigProductItem() {
                             </Typography>
                             <Grid item className="mt-8 space-x-4 max-sm:text-center" data-aos="fade-up">
                                 <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add Your Favorite</Button>
-                                <Link href="/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button></Link>
+                                <Link href="/user/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button></Link>
                             </Grid>
                         </Grid>
                     </Grid>

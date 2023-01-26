@@ -12,7 +12,11 @@ import {
   Divider,
   Toolbar,
   Typography,
-  IconButton
+  IconButton,
+  Avatar,
+  Link,
+  Menu,
+  MenuItem
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -43,6 +47,7 @@ const drawerWidth = 240;
 export default function DrawerBar() {
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -51,6 +56,14 @@ export default function DrawerBar() {
   const handleMenuItemClick = (path: string) => {
     router.push(path)
   }
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const drawer = (
     <div>
@@ -95,12 +108,12 @@ export default function DrawerBar() {
             <ListItemText primary="Member List" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Test" className="py-3">
+        {/* <ListItem key="Test" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/test')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Test" />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
       </List>
     </div>
   );
@@ -116,19 +129,50 @@ export default function DrawerBar() {
             ml: { md: `${drawerWidth}px` },
           }}
         >
-          <Toolbar className="bg-white">
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 0, display: { md: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className="font-bold" noWrap component="div">
-              
-            </Typography>
+          <Toolbar className="bg-white flex justify-between">
+            <Box>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 0, display: { md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+            <Box>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="" src="" />
+              </IconButton>
+              <Menu
+                sx={{ mt: '45px', }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link onClick={() => handleMenuItemClick('/admin/Profile')} underline="none" >
+                    <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Profile</Typography>
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href="#" underline="none" >
+                    <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">SignOut</Typography>
+                  </Link>
+                </MenuItem>
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
         <Box

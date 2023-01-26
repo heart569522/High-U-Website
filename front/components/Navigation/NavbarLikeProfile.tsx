@@ -42,7 +42,7 @@ function NavbarLikeProfile() {
             <Box sx={{ flexGrow: 0, paddingLeft: 1, paddingTop: .5 }}>
                 <Tooltip title="Profile">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                        <Avatar alt="" src="" />
                     </IconButton>
                 </Tooltip>
                 <Menu
