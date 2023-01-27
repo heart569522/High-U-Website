@@ -312,8 +312,8 @@ function Navbar() {
 
               {/* If Login OR Non-Login */}
 
-              <NavbarLikeProfile />
-              {/* <NavbarSignInUpButton /> */}
+              {/* <NavbarLikeProfile /> */}
+              <NavbarSignInUpButton />
 
             </Toolbar>
           </Container>
