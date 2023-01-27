@@ -71,6 +71,11 @@ a {
     
 }
 
+.hide-scroll {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
 .mirror-cam {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);

@@ -45,13 +45,13 @@ export default function HomeContent() {
       <Box className="bg-[#303030] h-max py-10">
         <Container maxWidth="xl">
           <Grid container>
-            <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-right">
+            <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-zoom-in">
               <img
                 className="w-full max-w-lg p-3"
                 src="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
               />
             </Grid>
-            <Grid item xs={12} sm={6} className="flex items-center text-left max-sm:text-center" data-aos="fade-left">
+            <Grid item xs={12} sm={6} className="flex items-center text-left max-sm:text-center" data-aos="fade-zoom-in">
               <Typography
                 className="text-2xl px-3 max-sm:text-lg"
               >
@@ -64,14 +64,14 @@ export default function HomeContent() {
       <Box className="bg-[#787878] h-max py-10">
         <Container maxWidth="xl">
           <Grid container className="max-sm:flex-wrap-reverse">
-            <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center" data-aos="fade-right">
+            <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center" data-aos="fade-zoom-in">
               <Typography
                 className="text-2xl p-3 max-sm:text-lg"
               >
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-left">
+            <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-zoom-in">
               <img
                 className="w-full max-w-lg px-3"
                 src="https://t4.ftcdn.net/jpg/04/27/41/49/360_F_427414979_2GhGAcGPFFUwfANjcpurjis6lVrU45Bx.jpg"
@@ -90,7 +90,7 @@ export default function HomeContent() {
                 Wig_Product.slice(0, 4).map((item, i) =>
                   <Grid key={i} item xs={6} sm={6} md={3}>
                     <Link href="/user/WigProduct">
-                      <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-up">
+                      <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-zoom-in">
                         <CardActionArea>
                           <div className="content-overlay" />
                           <CardMedia
