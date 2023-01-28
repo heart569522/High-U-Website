@@ -114,7 +114,7 @@ export default function SignUpForm() {
                 <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
                     <Container component="main" maxWidth="sm">
                         <CssBaseline />
-                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-sm" data-aos="flip-right">
+                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="flip-left">
                             <Typography component="h1" variant="h5" color="primary" className="font-bold">
                                 High U - Sign Up
                             </Typography>
@@ -218,7 +218,7 @@ export default function SignUpForm() {
                                             type="submit"
                                             fullWidth
                                             variant="contained"
-                                            className="bg-amber-400 mt-3 mb-2 font-bold"
+                                            className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
                                         >
                                             Sign Up
                                         </Button>

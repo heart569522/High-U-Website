@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Paper, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+import { useEffect } from 'react';
 
 const bgHome = 'https://images.squarespace-cdn.com/content/v1/557dc7afe4b0452ec69dc879/1539722002377-ZS55K8YB3D1ZN31RN3NC/hair+models.png?format=2500w';
+const bgCut = '../hair_models.png'
 
 const theme = createTheme();
 
@@ -17,36 +19,76 @@ theme.typography.h3 = {
   },
 };
 
+// function myFunction() {
+//   const scrollY = window.scrollY;
+//   const image = document.getElementById("bg-image");
+//   // const imageWidth = image !== null ? image.clientWidth : 0;
+//   image.style.transform = `translateX(${scrollY}px)`;
+// }
+
+
 export default function HomeBackground() {
+  // useEffect(() => {
+  //   window.addEventListener("scroll", myFunction);
+  //   return () => {
+  //     window.removeEventListener("scroll", myFunction);
+  //   };
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <Paper
-        sx={{
-          backgroundImage: `url(${bgHome})`,
-          height: '90vh',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundAttachment: 'scroll',
-        }}
-      >
-        <Box className="flex justify-start">
-          <Typography
-            variant="h3"
-            className='colorTextGold font-bold absolute'
+      <Box sx={{ position: 'relative', height: '90vh', overflowX: 'hidden' }}>
+        <Box
+          sx={{
+            backgroundColor: '#9F9289',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: -1,
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundAttachment: 'fixed',
+          }}
+        >
+          <Box
+            // id="bg-image"
+            data-aos="fade-left"
             sx={{
-              width: '555',
-              left: '8vh',
-              top: '400px',
-              fontFamily: 'Prompt, sans-serif',
+              backgroundImage: `url(${bgCut})`,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: -2,
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundAttachment: 'scroll',
             }}
-            data-aos="fade-zoom-in" 
           >
-            a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
-          </Typography>
+          </Box>
+          <Box className="flex justify-start">
+            <Typography
+              variant="h3"
+              className='colorTextGold font-bold absolute max-[460px]:text-3xl'
+              sx={{
+                width: '555',
+                left: '8vh',
+                top: '320px',
+                fontFamily: 'Prompt, sans-serif',
+              }}
+            data-aos="fade-zoom-in"
+            >
+              a Day of Beauty, <br /> a Day of Care, <br /> a Day of Happiness.
+            </Typography>
+          </Box>
         </Box>
-      </Paper>
-    </ThemeProvider>
+      </Box>
+
+    </ThemeProvider >
   )
 }

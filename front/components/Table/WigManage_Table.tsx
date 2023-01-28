@@ -148,7 +148,7 @@ function WigManage_Table() {
                                         </AccordionDetails> */}
                                         <AccordionDetails className="bg-gray-50">
                                             <Typography>Color: {item.color}</Typography><br />
-                                            <Typography>Size: {item.size}</Typography>
+                                            <Typography>Size: {item.size}</Typography><br />
                                         </AccordionDetails>
                                         <AccordionActions>
                                             <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
@@ -198,6 +198,12 @@ function WigManage_Table() {
                                         </div>
                                         <div className='flex my-5 max-lg:my-2 max-md:my-0'>
                                             <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
+                                        </div>
+                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                            <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">VIEW : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;21</div>
+                                        </div>
+                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
+                                            <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">FAVORITE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;6</div>
                                         </div>
                                         <Hidden mdUp>
                                             <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">

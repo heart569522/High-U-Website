@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
 import NavbarSignInUpButton from './NavbarSignInUpButton';
+import { Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 // Create Theme
 const theme = createTheme({
@@ -92,26 +93,14 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
-function Navbar() {
+const drawerWidth = 240;
+
+export default function Navbar() {
   const router = useRouter()
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -124,12 +113,58 @@ function Navbar() {
     router.push(path)
   }
 
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }} className="bg-[#303030] h-screen">
+      <Typography
+        variant="h6"
+        className="cursor-pointer py-4"
+        // onClick={() => handleMenuItemClick('/')}
+        sx={{
+          // my: 2,
+          fontFamily: 'monospace',
+          fontWeight: 700,
+          letterSpacing: '.3rem',
+          color: '#F0CA83',
+          textDecoration: 'none',
+        }}
+      >
+        HIGH-U
+      </Typography>
+      <Divider className="bg-[#f0ca83]"/>
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/')}>
+            <ListItemText primary="Home" className="text-[#f0ca83]"/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/Wig')}>
+            <ListItemText primary="Wig" className="text-[#f0ca83]"/>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/Wig')}>
+            <ListItemText primary="TryAR" className="text-[#f0ca83]"/>
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <HideOnScroll>
-        <AppBar position="sticky" sx={{ backgroundColor: '#303030' }}>
+        <AppBar position="sticky" component="nav" sx={{ backgroundColor: '#303030' }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters >
+              <IconButton
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ color: '#F0CA83', mr: 2, display: { md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
               {/* LOGO */}
               <Typography
                 variant="h6"
@@ -139,7 +174,7 @@ function Navbar() {
                 onClick={() => handleMenuItemClick('/')}
                 sx={{
                   mr: 2,
-                  display: { xs: 'none', md: 'flex' },
+                  display: { xs: 'none', md: 'block' },
                   fontFamily: 'monospace',
                   fontWeight: 700,
                   letterSpacing: '.3rem',
@@ -151,96 +186,49 @@ function Navbar() {
               </Typography>
 
               {/* LOGO-MENU RESPONSIVE */}
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
+              <Box component="nav">
+                <Drawer
+                  variant="temporary"
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                  }}
                   sx={{
-                    color: '#F0CA83',
+                    display: { xs: 'block', md: 'none' },
+                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                   }}
                 >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none', },
-                  }}
-                >
-                  <Link onClick={() => handleMenuItemClick('/')} underline="none">
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography
-                        textAlign="center"
-                        color={'black'}
-                      >
-                        หน้าแรก
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                  <Link onClick={() => handleMenuItemClick('/user/Wig')} underline="none">
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography
-                        textAlign="center"
-                        color={'black'}
-                      >
-                        วิก
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                  <Link onClick={() => handleMenuItemClick('/user/TryAR')} underline="none">
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography
-                        textAlign="center"
-                        color={'black'}
-                      >
-                        ทดลอง AR
-                      </Typography>
-                    </MenuItem>
-                  </Link>
-                </Menu>
+                  {drawer}
+                </Drawer>
               </Box>
-
-              <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                onClick={() => handleMenuItemClick('/')}
-                className="max-sm:text-sm cursor-pointer"
-                sx={{
-                  mr: 2,
-                  display: { xs: 'flex', md: 'none' },
-                  flexGrow: 1,
-                  fontFamily: 'monospace',
-                  fontWeight: 600,
-                  letterSpacing: '.3rem',
-                  color: '#F0CA83',
-                  textDecoration: 'none',
-                }}
-              >
-                HIGH-U
-              </Typography>
+              <Hidden smDown>
+                <Typography
+                  variant="h5"
+                  noWrap
+                  component="a"
+                  onClick={() => handleMenuItemClick('/')}
+                  className="max-sm:text-xl cursor-pointer"
+                  sx={{
+                    // mr: 2,
+                    display: { xs: 'block', sm: 'flex', md: 'none' },
+                    flexGrow: 1,
+                    fontFamily: 'monospace',
+                    fontWeight: 600,
+                    letterSpacing: '.3rem',
+                    color: '#F0CA83',
+                    textDecoration: 'none',
+                  }}
+                >
+                  HIGH-U
+                </Typography>
+              </Hidden>
 
               {/* MENU */}
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, fontFamily: 'Prompt, sans-serif', }}>
                 {/* {pages.map((page) => ( */}
                 <Link onClick={() => handleMenuItemClick('/')} className="cursor-pointer" underline='none'>
                   <Box
-                    onClick={handleCloseNavMenu}
                     sx={{
                       px: 2,
                       my: 2,
@@ -258,7 +246,6 @@ function Navbar() {
                 </Link>
                 <Link onClick={() => handleMenuItemClick('/user/Wig')} className="cursor-pointer" underline='none'>
                   <Box
-                    onClick={handleCloseNavMenu}
                     sx={{
                       px: 2,
                       my: 2,
@@ -276,7 +263,6 @@ function Navbar() {
                 </Link>
                 <Link onClick={() => handleMenuItemClick('/user/TryAR')} className="cursor-pointer" underline='none'>
                   <Box
-                    onClick={handleCloseNavMenu}
                     sx={{
                       px: 2,
                       my: 2,
@@ -294,27 +280,26 @@ function Navbar() {
                 </Link>
               </Box>
 
-              {/* SEARCH MENU */}
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon sx={{ color: '#F0CA83', }} />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ 'aria-label': 'search' }}
-                  onKeyPress={handleKeyPress}
-                  sx={{
-                    color: '#F0CA83',
-                    fontFamily: 'Prompt, sans-serif',
-                  }}
-                />
-              </Search>
-
-              {/* If Login OR Non-Login */}
-
-              <NavbarLikeProfile />
-              {/* <NavbarSignInUpButton /> */}
-
+              <Box className="flex justify-end items-center">
+                {/* SEARCH MENU */}
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon sx={{ color: '#F0CA83', }} />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                    onKeyPress={handleKeyPress}
+                    sx={{
+                      color: '#F0CA83',
+                      fontFamily: 'Prompt, sans-serif',
+                    }}
+                  />
+                </Search>
+                {/* If Login OR Non-Login */}
+                {/* <NavbarLikeProfile /> */}
+                <NavbarSignInUpButton />
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
@@ -322,4 +307,4 @@ function Navbar() {
     </ThemeProvider>
   );
 }
-export default Navbar;
+

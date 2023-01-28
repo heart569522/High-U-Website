@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router'
+import { Box } from '@mui/material';
 
 function NavbarSignInUpButton() {
     const router = useRouter()
@@ -11,7 +12,7 @@ function NavbarSignInUpButton() {
     }
 
     return (
-        <Grid>
+        <Box className='flex justify-end items-center'>
             {/* Login , Register Button */}
             <Stack sx={{ paddingLeft: 1 }} spacing={1} direction="row">
                 <Button
@@ -30,13 +31,6 @@ function NavbarSignInUpButton() {
                     signin
                 </Button>
                 <Button
-                    // sx={{
-                    //     backgroundColor: '#F0CA83',
-                    //     '&:hover': {
-                    //         backgroundColor: '#cf9d40',
-                    //     },
-                    //     fontWeight: 'bold'
-                    // }}
                     className="font-bold bg-[#F0CA83] hover:bg-[#cf9d40]"
                     onClick={() => handleMenuItemClick('/user/SignUp')}
                     variant="contained"
@@ -44,7 +38,7 @@ function NavbarSignInUpButton() {
                     signup
                 </Button>
             </Stack>
-        </Grid>
+        </Box>
     )
 }
 
