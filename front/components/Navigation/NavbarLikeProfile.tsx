@@ -10,6 +10,7 @@ import Link from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import { useRouter } from 'next/router'
+import { Divider } from '@mui/material';
 
 function NavbarLikeProfile() {
     const router = useRouter()
@@ -28,9 +29,9 @@ function NavbarLikeProfile() {
     }
 
     return (
-        <Grid sx={{ display: 'flex' }}>
+        <Box className='flex justify-end items-center'>
             {/* LIKE MENU */}
-            <Box sx={{ flexGrow: 0, paddingLeft: 1 }}>
+            <Box sx={{ paddingLeft: 1 }}>
                 <Tooltip title="Favorites">
                     <IconButton onClick={() => handleMenuItemClick('/user/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
                         <FavoriteTwoToneIcon />
@@ -39,7 +40,7 @@ function NavbarLikeProfile() {
             </Box>
 
             {/* PROFILE MENU */}
-            <Box sx={{ flexGrow: 0, paddingLeft: 1, paddingTop: .5 }}>
+            <Box className="flex items-center justify-end">
                 <Tooltip title="Profile">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         <Avatar alt="" src="" />
@@ -61,19 +62,20 @@ function NavbarLikeProfile() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 >
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Link onClick={() => handleMenuItemClick('/user/Profile')} underline="none" >
-                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">โปรไฟล์</Typography>
-                        </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Link href="#" underline="none" >
-                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">ออกจากระบบ</Typography>
-                        </Link>
-                    </MenuItem>
+                    <Link onClick={() => handleMenuItemClick('/user/Profile')} underline="none" >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Profile</Typography>
+                        </MenuItem>
+                    </Link>
+                    <Divider />
+                    <Link href="#" underline="none" >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Sign Out</Typography>
+                        </MenuItem>
+                    </Link>
                 </Menu>
             </Box>
-        </Grid>
+        </Box>
     )
 }
 

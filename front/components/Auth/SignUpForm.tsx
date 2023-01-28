@@ -218,7 +218,7 @@ export default function SignUpForm() {
                                             type="submit"
                                             fullWidth
                                             variant="contained"
-                                            className="bg-amber-400 mt-3 mb-2 font-bold"
+                                            className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
                                         >
                                             Sign Up
                                         </Button>

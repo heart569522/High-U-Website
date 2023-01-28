@@ -23,6 +23,7 @@ import {
     Divider,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MUIDataTable from "mui-datatables";
 
 import AR_Data from '../../helper/AR_Data.json';
 
@@ -55,6 +56,7 @@ export default function ARManage_Table() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -100,17 +102,19 @@ export default function ARManage_Table() {
                                                         <Link href="/admin/AREdit/[id]" as={`/admin/AREdit/${item.id}`}>
                                                             <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                         </Link>
-                                                        {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                        <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                        {/* </Link> */}
+                                                        <Button href={`/admin/AREdit/${item.id}`} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                     </ButtonGroup>
-
                                                 </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
+                            {/* <MUIDataTable
+                                title={"AR Manage"}
+                                data={tb_data}
+                                columns={tb_columns}
+                            /> */}
                             <TablePagination
                                 rowsPerPageOptions={[5, 10, 25, 50]}
                                 component="div"

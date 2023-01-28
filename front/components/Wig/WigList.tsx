@@ -14,7 +14,8 @@ import {
     CardMedia,
     CardContent,
     CardActionArea,
-    Typography
+    Typography,
+    Skeleton
 
 } from '@mui/material'
 import Select, { SelectChangeEvent, SelectProps } from '@mui/material/Select';
@@ -27,6 +28,10 @@ import _ from 'lodash';
 import Wig_Product from '../../helper/Wig_Product.json';
 
 import EmptyWig from '../Other/EmptyWig';
+
+interface MediaProps {
+    loading?: boolean;
+}
 
 const theme = createTheme({
     palette: {
@@ -42,7 +47,15 @@ const theme = createTheme({
 
 });
 
-function WigList() {
+function WigList(props: MediaProps) {
+    const [loading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch data
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+    }, [loading]);
 
     const [selectedColor, setSelectedColor] = React.useState<string | null>(null);
     const uniqueColors = Array.from(new Set(Wig_Product.map(item => item.color)));
@@ -68,74 +81,83 @@ function WigList() {
             <Paper sx={{ backgroundColor: '#faf7f7', }}>
                 <Container maxWidth="xl" >
                     {/* SELECT INPUT */}
+
                     <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ padding: 5, }}>
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ minWidth: 100 }}>
-                                <FormControl fullWidth >
-                                    <InputLabel color='warning'>Colors</InputLabel>
-                                    <Select
-                                        color='warning'
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={selectedColor || ''}
-                                        label="First Menu"
-                                        onChange={handleChange_Color}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        {uniqueColors.map((item, i) => (
-                                            <MenuItem value={item} key={i}>{item}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
+                                <Box sx={{ minWidth: 100 }}>
+                                    <FormControl fullWidth >
+                                        <InputLabel color='warning'>Colors</InputLabel>
+                                        <Select
+                                            color='warning'
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectedColor || ''}
+                                            label="First Menu"
+                                            onChange={handleChange_Color}
+                                        >
+                                            <MenuItem value="">
+                                                <em>None</em>
+                                            </MenuItem>
+                                            {uniqueColors.map((item, i) => (
+                                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ minWidth: 100 }}>
-                                <FormControl fullWidth >
-                                    <InputLabel color='warning'>Sizes</InputLabel>
-                                    <Select
-                                        color='warning'
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={selectedSize || ''}
-                                        label="Second Menu"
-                                        onChange={handleChange_Size}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        {uniqueSizes.map((item, i) => (
-                                            <MenuItem value={item} key={i}>{item}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
+                                <Box sx={{ minWidth: 100 }}>
+                                    <FormControl fullWidth >
+                                        <InputLabel color='warning'>Sizes</InputLabel>
+                                        <Select
+                                            color='warning'
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectedSize || ''}
+                                            label="Second Menu"
+                                            onChange={handleChange_Size}
+                                        >
+                                            <MenuItem value="">
+                                                <em>None</em>
+                                            </MenuItem>
+                                            {uniqueSizes.map((item, i) => (
+                                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            )}
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <Box sx={{ minWidth: 100 }}>
-                                <FormControl fullWidth >
-                                    <InputLabel color='warning'>Brands</InputLabel>
-                                    <Select
-                                        color='warning'
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={selectedBrand || ''}
-                                        label="third Menu"
-                                        onChange={handleChange_Brand}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        {uniqueBrand.map((item, i) => (
-                                            <MenuItem value={item} key={i}>{item}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
+                                <Box sx={{ minWidth: 100 }}>
+                                    <FormControl fullWidth >
+                                        <InputLabel color='warning'>Brands</InputLabel>
+                                        <Select
+                                            color='warning'
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectedBrand || ''}
+                                            label="third Menu"
+                                            onChange={handleChange_Brand}
+                                        >
+                                            <MenuItem value="">
+                                                <em>None</em>
+                                            </MenuItem>
+                                            {uniqueBrand.map((item, i) => (
+                                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            )}
                         </Grid>
                     </Grid>
+
+
                     {/* WIG PRODUCT */}
                     <Grid container spacing={2} className="p-3">
                         {
@@ -175,26 +197,28 @@ function WigList() {
                                     }
                                     return true
                                 }).map((item, i) => (
-                                    <Grid item xs={6} sm={4} md={3} key={i} data-aos="fade-zoom-in">
-                                        <Link href="/user/WigProduct">
-                                            <Card variant="outlined" sx={{ maxWidth: 320 }}>
-                                                <CardActionArea>
-                                                    <CardMedia
-                                                        className=' hover:opacity-90 transition duration-200 ease-in-out'
-                                                        component="img"
-                                                        image={item.image}
-                                                    />
-                                                    <CardContent>
-                                                        <Typography gutterBottom component="div" className="font-bold text-base mb-2 max-sm:text-xs">
-                                                            {item.title}
-                                                        </Typography>
-                                                        <Typography variant="body2" className="text-gray-500 text-base max-sm:text-xs">
-                                                            {item.brand}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </CardActionArea>
-                                            </Card>
-                                        </Link>
+                                    <Grid item xs={6} sm={4} md={3} key={i}>
+                                        {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-96 rounded-md" />) : (
+                                            <Link href="/user/WigProduct">
+                                                <Card variant="outlined" sx={{ maxWidth: 320 }}>
+                                                    <CardActionArea>
+                                                        <CardMedia
+                                                            className=' hover:opacity-90 transition duration-200 ease-in-out'
+                                                            component="img"
+                                                            image={item.image}
+                                                        />
+                                                        <CardContent>
+                                                            <Typography gutterBottom component="div" className="font-bold text-base mb-2 max-sm:text-xs">
+                                                                {item.title}
+                                                            </Typography>
+                                                            <Typography variant="body2" className="text-gray-500 text-base max-sm:text-xs">
+                                                                {item.brand}
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </CardActionArea>
+                                                </Card>
+                                            </Link>
+                                        )}
                                     </Grid>
                                 ))
                                 :
