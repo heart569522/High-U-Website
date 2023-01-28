@@ -42,45 +42,46 @@ export default function HomeContent() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box className="bg-[#303030] h-max py-10">
-        <Container maxWidth="xl">
-          <Grid container>
-            <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-zoom-in">
-              <img
-                className="w-full max-w-lg p-3"
-                src="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
-              />
+      <Box sx={{ overflowX: 'hidden' }}>
+        <Box className="bg-[#303030] h-max py-10">
+          <Container maxWidth="xl">
+            <Grid container>
+              <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-right">
+                <img
+                  className="w-full max-w-lg p-3"
+                  src="https://t4.ftcdn.net/jpg/04/27/41/05/360_F_427410504_H6zGuHXoNdaH7Ghwpou1dXgbODusZeAg.jpg"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} className="flex items-center text-left max-sm:text-center" data-aos="fade-left">
+                <Typography
+                  className="text-2xl px-3 max-sm:text-lg"
+                >
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} className="flex items-center text-left max-sm:text-center" data-aos="fade-zoom-in">
-              <Typography
-                className="text-2xl px-3 max-sm:text-lg"
-              >
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-              </Typography>
+          </Container>
+        </Box>
+        <Box className="bg-[#787878] h-max py-10">
+          <Container maxWidth="xl">
+            <Grid container className="max-sm:flex-wrap-reverse">
+              <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center" data-aos="fade-right">
+                <Typography
+                  className="text-2xl p-3 max-sm:text-lg"
+                >
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-left">
+                <img
+                  className="w-full max-w-lg px-3"
+                  src="https://t4.ftcdn.net/jpg/04/27/41/49/360_F_427414979_2GhGAcGPFFUwfANjcpurjis6lVrU45Bx.jpg"
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </Box>
       </Box>
-      <Box className="bg-[#787878] h-max py-10">
-        <Container maxWidth="xl">
-          <Grid container className="max-sm:flex-wrap-reverse">
-            <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center" data-aos="fade-zoom-in">
-              <Typography
-                className="text-2xl p-3 max-sm:text-lg"
-              >
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-zoom-in">
-              <img
-                className="w-full max-w-lg px-3"
-                src="https://t4.ftcdn.net/jpg/04/27/41/49/360_F_427414979_2GhGAcGPFFUwfANjcpurjis6lVrU45Bx.jpg"
-              />
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-
       {/* CARD 4 IMAGE */}
       <Box className="bg-[#c0b7a7] h-max">
         <Box className="colorBackgroundContentGold h-max py-10">
@@ -110,7 +111,7 @@ export default function HomeContent() {
                 )
               }
             </Grid>
-            <Grid item xs={12} data-aos="fade-right">
+            <Grid item xs={12} data-aos="fade-zoom-in">
               <center>
                 <Link href="/user/Wig">
                   <Button className="text-[#303030] shadow border-[#303030] font-bold bg-[#FFCF76] hover:bg-[#ffbd44] focus:ring-4 focus:outline-none focus:ring-[#805e00] rounded text-sm px-5 py-2.5 text-center inline-flex items-center">

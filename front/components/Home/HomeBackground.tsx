@@ -37,7 +37,7 @@ export default function HomeBackground() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ position: 'relative', height: '90vh' }}>
+      <Box sx={{ position: 'relative', height: '90vh', overflowX: 'hidden' }}>
         <Box
           sx={{
             backgroundColor: '#9F9289',
@@ -55,7 +55,7 @@ export default function HomeBackground() {
         >
           <Box
             // id="bg-image"
-            data-aos="fade-right"
+            data-aos="fade-left"
             sx={{
               backgroundImage: `url(${bgCut})`,
               position: 'absolute',

@@ -137,7 +137,7 @@ function WigList() {
                         </Grid>
                     </Grid>
                     {/* WIG PRODUCT */}
-                    <Grid container spacing={3} className="p-3">
+                    <Grid container spacing={2} className="p-3">
                         {
                             Wig_Product.filter((item) => {
                                 if (selectedColor && selectedSize && selectedBrand) {
@@ -175,20 +175,20 @@ function WigList() {
                                     }
                                     return true
                                 }).map((item, i) => (
-                                    <Grid item xs={6} sm={6} md={3} key={i} data-aos="fade-zoom-in">
+                                    <Grid item xs={6} sm={4} md={3} key={i} data-aos="fade-zoom-in">
                                         <Link href="/user/WigProduct">
-                                            <Card variant="outlined" sx={{ maxWidth: 400 }}>
+                                            <Card variant="outlined" sx={{ maxWidth: 320 }}>
                                                 <CardActionArea>
                                                     <CardMedia
-                                                        className='hover:opacity-90 transition duration-200 ease-in-out'
+                                                        className=' hover:opacity-90 transition duration-200 ease-in-out'
                                                         component="img"
                                                         image={item.image}
                                                     />
                                                     <CardContent>
-                                                        <Typography gutterBottom component="div" className="font-bold text-md mb-2">
+                                                        <Typography gutterBottom component="div" className="font-bold text-base mb-2 max-sm:text-xs">
                                                             {item.title}
                                                         </Typography>
-                                                        <Typography variant="body2" className="text-gray-500 text-base">
+                                                        <Typography variant="body2" className="text-gray-500 text-base max-sm:text-xs">
                                                             {item.brand}
                                                         </Typography>
                                                     </CardContent>
