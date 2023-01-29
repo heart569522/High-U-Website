@@ -16,7 +16,7 @@ type Task struct {
 	Status string `bson:"status"`
 }
 
-func connect_db() {
+func connect() {
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb+srv://high_u:1234@cluster0.8rriamb.mongodb.net/?retryWrites=true&w=majority"))
 	if err != nil {
