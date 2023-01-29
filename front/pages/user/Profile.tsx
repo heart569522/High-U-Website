@@ -77,7 +77,7 @@ export default function Profile() {
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 bg-[#f0ca8350] rounded-md" />) : (
                   <Box className="border-b border-[#886828]">
                     <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
-                      <Tab label="My Details" className="text-[#F0CA83] font-bold" value="1" />
+                      <Tab label="My Profile" className="text-[#F0CA83] font-bold" value="1" />
                       <Tab label="Edit Profile" className="text-[#F0CA83] font-bold" value="2" />
                       <Tab label="Change Password" className="text-[#F0CA83] font-bold" value="3" />
                     </TabList>

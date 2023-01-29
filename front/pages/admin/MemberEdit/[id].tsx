@@ -305,8 +305,6 @@ const MemberEdit = () => {
                       onChange={handleInputChange}
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
-                      multiline
-                      maxRows={5}
                       required
                       focused
                     />

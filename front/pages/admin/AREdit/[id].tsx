@@ -131,7 +131,7 @@ const AREdit = () => {
       // await updateAR(ar.id, formData);
 
       alert('AR updated successfully');
-      router.push('/admin/ARmanage');
+      router.push('/admin/ARManage');
     } catch (err) {
       setError(err as Error);
     }
