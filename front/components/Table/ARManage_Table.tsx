@@ -52,7 +52,7 @@ export default function ARManage_Table() {
         // Fetch data
         setTimeout(() => {
             setIsLoading(false);
-        }, 1000);
+        }, 800);
     }, [loading]);
 
     const [page, setPage] = useState(0);

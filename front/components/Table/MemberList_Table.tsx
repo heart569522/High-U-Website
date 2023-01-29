@@ -52,7 +52,7 @@ function MemberList_Table() {
         // Fetch data
         setTimeout(() => {
             setIsLoading(false);
-        }, 1000);
+        }, 800);
     }, [loading]);
 
     const [selectedId, setSelectedId] = useState(0);

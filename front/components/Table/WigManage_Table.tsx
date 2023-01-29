@@ -51,7 +51,7 @@ function WigManage_Table() {
         // Fetch data
         setTimeout(() => {
             setIsLoading(false);
-        }, 1000);
+        }, 800);
     }, [loading]);
 
     const [modalOpen, setModalOpen] = useState(false);
