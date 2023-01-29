@@ -19,6 +19,8 @@ func main() {
 	handler := http.HandlerFunc(handleHello)
 	http.Handle("/api/hello", c.Handler(handler))
 
+	go connect_db()
+
 	fmt.Println("Listening on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
