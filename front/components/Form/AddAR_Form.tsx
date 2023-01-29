@@ -15,7 +15,8 @@ import {
   FormControl,
   FormHelperText,
   Avatar,
-  Link
+  Link,
+  Skeleton
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -42,6 +43,14 @@ const theme = createTheme({
 
 const AddAR_Form = () => {
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch data
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
+  }, [loading]);
+
   const [error, setError] = useState<Error | null>(null);
   const router = useRouter()
 
@@ -100,8 +109,6 @@ const AddAR_Form = () => {
       // navigate to wig listing page
     } catch (err) {
       setError(err as Error)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -125,85 +132,97 @@ const AddAR_Form = () => {
         <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
           <Grid container>
             <Grid item xs={12}>
-              <Typography className="text-[#303030] font-bold text-xl">
-                Create AR
-              </Typography>
+              {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
+                <Typography className="text-[#303030] font-bold text-xl">
+                  Create AR
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <form onSubmit={handleSubmit} onReset={handleReset} className="pt-3">
             <Grid container className="pt-3" spacing={3}>
               <Grid item xs={12} md={4}>
-                <center>
-                  <input
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    onChange={handleImageChange}
-                  />
-                  <img
-                    src={previewUrl || defaultImageUrl}
-                    className="rounded-lg object-top object-cover h-auto w-96"
-                  />
-                  <label htmlFor="upload-button">
-                    <Button
-                      variant='contained'
-                      className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
-                      component="span"
-                      startIcon={<AddAPhotoIcon />}
-                    >
-                      Add Image
-                    </Button>
-                  </label>
-                </center>
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-72 rounded-md" />) : (
+                  <center>
+                    <input
+                      accept="image/*"
+                      style={{ display: "none", }}
+                      id="upload-button"
+                      type="file"
+                      onChange={handleImageChange}
+                    />
+                    <img
+                      src={previewUrl || defaultImageUrl}
+                      className="rounded-lg object-top object-cover h-auto w-96"
+                    />
+                    <label htmlFor="upload-button">
+                      <Button
+                        variant='contained'
+                        className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
+                        component="span"
+                        startIcon={<AddAPhotoIcon />}
+                      >
+                        Add Image
+                      </Button>
+                    </label>
+                  </center>
+                )}
               </Grid>
               <Grid item xs={12} md={8}>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
-                  <TextField
-                    type='text'
-                    value={title}
-                    fullWidth
-                    name='title'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={(e) => setTitle(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
-                  <TextField
-                    type='text'
-                    value={color}
-                    fullWidth
-                    name='color'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={(e) => setColor(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
+                    <TextField
+                      type='text'
+                      value={title}
+                      fullWidth
+                      name='title'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={(e) => setTitle(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
+                    <TextField
+                      type='text'
+                      value={color}
+                      fullWidth
+                      name='color'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={(e) => setColor(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <Hidden mdDown>
-                    <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
-                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
-                    </ButtonGroup>
+                    {loading ? (<Skeleton animation="wave" variant="rectangular" sx={{ float: 'right' }} className="w-1/5 justify-end h-10 my-1 rounded-md" />) : (
+                      <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
+                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
+                        <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
+                      </ButtonGroup>
+                    )}
                   </Hidden>
                   <Hidden mdUp>
-                    <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
-                      <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
-                    </ButtonGroup>
+                    {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 my-1 rounded-md" />) : (
+                      <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
+                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
+                        <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
+                      </ButtonGroup>
+                    )}
                   </Hidden>
                 </Grid>
               </Grid>

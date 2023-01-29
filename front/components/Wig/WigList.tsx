@@ -29,10 +29,6 @@ import Wig_Product from '../../helper/Wig_Product.json';
 
 import EmptyWig from '../Other/EmptyWig';
 
-interface MediaProps {
-    loading?: boolean;
-}
-
 const theme = createTheme({
     palette: {
         warning: {
@@ -47,7 +43,7 @@ const theme = createTheme({
 
 });
 
-function WigList(props: MediaProps) {
+function WigList() {
     const [loading, setIsLoading] = useState(true);
 
     useEffect(() => {

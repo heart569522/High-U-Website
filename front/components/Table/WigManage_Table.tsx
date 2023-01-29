@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link';
 import {
     Table,
@@ -21,11 +21,11 @@ import {
     Button,
     Modal,
     Divider,
+    Skeleton,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Wig_Product from '../../helper/Wig_Product.json';
-import { Close } from '@mui/icons-material';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -45,6 +45,15 @@ const theme = createTheme({
 });
 
 function WigManage_Table() {
+    const [loading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch data
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 800);
+    }, [loading]);
+
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedId, setSelectedId] = useState(0);
 
@@ -75,98 +84,114 @@ function WigManage_Table() {
                 <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
                     <Grid container>
                         <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
-                            <Typography className="text-[#303030] font-bold text-2xl">
-                                Wigs Manage
-                            </Typography>
-                            <Link href="/admin/AddWig">
-                                <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Wig</Button>
-                            </Link>
+                            {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
+                                <Typography className="text-[#303030] font-bold text-2xl">
+                                    Wigs Manage
+                                </Typography>
+                            )}
+                            {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
+                                <Link href="/admin/AddWig">
+                                    <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Wig</Button>
+                                </Link>
+                            )}
                         </Grid>
                         <Hidden mdDown >
                             <TableContainer className="mt-3 rounded-md">
-                                <Table className="">
-                                    <TableHead>
-                                        <TableRow className=" bg-[#F0CA83]">
-                                            <TableCell className="w-auto text-lg text-center font-bold">Image</TableCell>
-                                            <TableCell className="w-auto text-lg font-bold">Title</TableCell>
-                                            <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
-                                            <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
-                                            <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
-                                        </TableRow>
-                                    </TableHead>
+                                <Table>
+                                    {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-12 rounded-md" />) : (
+                                        <TableHead>
+                                            <TableRow className="bg-[#F0CA83]">
+                                                <TableCell className="w-auto text-lg text-center font-bold">Image</TableCell>
+                                                <TableCell className="w-auto text-lg font-bold">Title</TableCell>
+                                                <TableCell className="w-[15%] text-lg font-bold">Color</TableCell>
+                                                <TableCell className="w-[15%] text-lg font-bold">Size</TableCell>
+                                                <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                    )}
                                     <TableBody>
                                         {Wig_Product.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
-                                            <TableRow key={item.id} className="hover:bg-gray-50">
-                                                <TableCell className="flex justify-center">
-                                                    <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24"/>
-                                                </TableCell>
-                                                <TableCell
-                                                    className="w-auto text-lg cursor-pointer hover:underline max-[1000px]:text-base"
-                                                    onClick={() => {
-                                                        setModalOpen(true);
-                                                        // setSelectedId(item.id);
-                                                    }}>
-                                                    {item.title}
-                                                </TableCell>
-                                                <TableCell className="w-[15%] text-base">{item.color}</TableCell>
-                                                <TableCell className="w-[15%] text-base">{item.size}</TableCell>
-                                                <TableCell className="w-[15%] text-center ">
-                                                    <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                        <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
-                                                            <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                        </Link>
-                                                        {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                        <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                        {/* </Link> */}
-                                                    </ButtonGroup>
+                                            loading ? (<Skeleton key={item.id} animation="wave" variant="rectangular" className="w-full h-32 my-4 rounded-md" />) : (
+                                                <TableRow key={item.id} className="hover:bg-gray-50">
+                                                    <TableCell className="flex justify-center">
+                                                        <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                                                    </TableCell>
+                                                    <TableCell
+                                                        className="w-auto text-lg cursor-pointer hover:underline max-[1000px]:text-base"
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            // setSelectedId(item.id);
+                                                        }}>
+                                                        <Typography>{item.title}</Typography>
+                                                    </TableCell>
+                                                    <TableCell className="w-[15%] text-base">
+                                                        <Typography>{item.color}</Typography>
+                                                    </TableCell>
+                                                    <TableCell className="w-[15%] text-base">
+                                                        <Typography>{item.size}</Typography>
+                                                    </TableCell>
+                                                    <TableCell className="w-[15%] text-center ">
+                                                        <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                            <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
+                                                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                            </Link>
+                                                            {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
+                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                            {/* </Link> */}
+                                                        </ButtonGroup>
 
-                                                </TableCell>
-                                            </TableRow>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
                                         ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, 50]}
-                                component="div"
-                                count={Wig_Product.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+                            {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-2xl mb-2 rounded-md" />) : (
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25, 50]}
+                                    component="div"
+                                    count={Wig_Product.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            )}
                         </Hidden>
                         <Grid item xs={12}>
                             <Hidden mdUp>
                                 {Wig_Product.map((item, i) => (
-                                    <Accordion key={item.id} className="shadow-md">
-                                        <AccordionSummary>
-                                            <Typography className="font-semibold">{item.title}</Typography>
-                                        </AccordionSummary>
-                                        {/* <AccordionDetails className="w-52 h-auto">
+                                    loading ? (<Skeleton key={item.id} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
+                                        <Accordion key={item.id} className="shadow-md">
+                                            <AccordionSummary>
+                                                <Typography className="font-semibold">{item.title}</Typography>
+                                            </AccordionSummary>
+                                            {/* <AccordionDetails className="w-52 h-auto">
                                             <img src={item.image} alt={item.title} />
                                         </AccordionDetails> */}
-                                        <AccordionDetails className="bg-gray-50">
-                                            <Typography>Color: {item.color}</Typography><br />
-                                            <Typography>Size: {item.size}</Typography><br />
-                                        </AccordionDetails>
-                                        <AccordionActions>
-                                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                <Button
-                                                    className="bg-[#303030] text-white hover:bg-blue-500"
-                                                    onClick={() => {
-                                                        setModalOpen(true);
-                                                        // setSelectedId(item.id);
-                                                    }}>
-                                                    Detail
-                                                </Button>
-                                                <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
-                                                    <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                </Link>
-                                                <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                            </ButtonGroup>
-                                        </AccordionActions>
-                                    </Accordion>
+                                            <AccordionDetails className="bg-gray-50">
+                                                <Typography>Color: {item.color}</Typography><br />
+                                                <Typography>Size: {item.size}</Typography><br />
+                                            </AccordionDetails>
+                                            <AccordionActions>
+                                                <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                    <Button
+                                                        className="bg-[#303030] text-white hover:bg-blue-500"
+                                                        onClick={() => {
+                                                            setModalOpen(true);
+                                                            // setSelectedId(item.id);
+                                                        }}>
+                                                        Detail
+                                                    </Button>
+                                                    <Link href="/admin/WigEdit/[id]" as={`/admin/WigEdit/${item.id}`}>
+                                                        <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                    </Link>
+                                                    <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                </ButtonGroup>
+                                            </AccordionActions>
+                                        </Accordion>
+                                    )
                                 ))}
                             </Hidden>
                         </Grid>

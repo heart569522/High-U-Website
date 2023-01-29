@@ -19,10 +19,6 @@ import Link from 'next/link'
 import Wig_Color from '../../helper/Wig_Color.json';
 import Wig_Product from '../../helper/Wig_Product.json';
 
-interface MediaProps {
-    loading?: boolean;
-}
-
 const theme = createTheme({
     palette: {
         primary: {

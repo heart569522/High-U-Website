@@ -56,7 +56,7 @@ export default function HomeContent() {
                 <Typography
                   className="text-2xl px-3 max-sm:text-lg"
                 >
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                  Discover your new, bold look with our short wig collection. From pixie cuts to bobs, our high-quality wigs offer a range of options for every style. Comfortable and natural-looking, change up your look in an instant.
                 </Typography>
               </Grid>
             </Grid>
@@ -69,7 +69,7 @@ export default function HomeContent() {
                 <Typography
                   className="text-2xl p-3 max-sm:text-lg"
                 >
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+                  Transform your look with our collection of short wigs. From pixie cuts to bobs, choose the perfect style for you. Made with premium materials for a natural look and comfortable fit. Change up your look with ease.
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-left">

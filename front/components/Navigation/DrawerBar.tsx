@@ -102,10 +102,10 @@ export default function DrawerBar() {
             <ListItemText primary="AR Manage" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="Member List" className="py-3">
+        <ListItem key="Member Manage" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberList')}>
             <GroupsIcon className="mr-3" />
-            <ListItemText primary="Member List" />
+            <ListItemText primary="Member Manage" />
           </ListItemButton>
         </ListItem>
         {/* <ListItem key="Test" className="py-3">

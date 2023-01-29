@@ -66,7 +66,7 @@ export default function Profile() {
                                     <TabContext value={value}>
                                         <Box className="border-b border-[#6f6f6f]">
                                             <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
-                                                <Tab label="Details" className="text-[#303030] font-bold" value="1" />
+                                                <Tab label="My Profile" className="text-[#303030] font-bold" value="1" />
                                                 <Tab label="Edit Profile" className="text-[#303030] font-bold" value="2" />
                                                 <Tab label="Change Password" className="text-[#303030] font-bold" value="3" />
                                             </TabList>

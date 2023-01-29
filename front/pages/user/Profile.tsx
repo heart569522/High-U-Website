@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IconButton,
   Container,
@@ -16,6 +16,7 @@ import {
   CardContent,
   CardActionArea,
   Avatar,
+  Skeleton,
 } from '@mui/material';
 import {
   TabContext,
@@ -48,6 +49,14 @@ const theme = createTheme({
 });
 
 export default function Profile() {
+  const [loading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch data
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  }, [loading]);
 
   const [value, setValue] = React.useState('1');
 
@@ -59,29 +68,33 @@ export default function Profile() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <Paper className="bg-[#252525] h-screen">
+        <Paper className="bg-[#252525] h-screen max-[450px]:h-max">
           <Navbar />
           <Container maxWidth="xl" >
             <UserHeader />
-            <Box className="w-full py-6" sx={{ typography: 'body1' }} data-aos="fade-up">
+            <Box className="w-full py-6" sx={{ typography: 'body1' }}>
               <TabContext value={value}>
-                <Box className="border-b border-[#886828]">
-                  <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
-                    <Tab label="My Details" className="text-[#F0CA83] font-bold" value="1" />
-                    <Tab label="Edit Profile" className="text-[#F0CA83] font-bold" value="2" />
-                    <Tab label="Change Password" className="text-[#F0CA83] font-bold" value="3" />
-                  </TabList>
-                </Box>
-                <TabPanel value="1"  data-aos="fade-up">
-                  <MyDetail_Profile />
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 bg-[#f0ca8350] rounded-md" />) : (
+                  <Box className="border-b border-[#886828]">
+                    <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
+                      <Tab label="My Profile" className="text-[#F0CA83] font-bold" value="1" />
+                      <Tab label="Edit Profile" className="text-[#F0CA83] font-bold" value="2" />
+                      <Tab label="Change Password" className="text-[#F0CA83] font-bold" value="3" />
+                    </TabList>
+                  </Box>
+                )}
+                <TabPanel value="1">
+                  {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-72 bg-[#f0ca8350] rounded-md" />) : (
+                    <MyDetail_Profile />
+                  )}
                 </TabPanel>
-                <TabPanel value="2"  data-aos="fade-up">
+                <TabPanel value="2" data-aos="fade-up">
                   <EditProfile_Profile />
                 </TabPanel>
-                <TabPanel value="3"  data-aos="fade-up">
+                <TabPanel value="3" data-aos="fade-up">
                   <ChangePassword_Profile />
                 </TabPanel>
-                <hr className="w-full h-[1px] rounded border-0 bg-[#886828] mt-3"></hr>
+                <hr data-aos="fade-zoom-in" className="w-full h-[1px] rounded border-0 bg-[#886828] mt-3"></hr>
               </TabContext>
             </Box>
           </Container>

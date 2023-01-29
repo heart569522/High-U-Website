@@ -143,7 +143,7 @@ export default function Navbar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/Wig')}>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/TryAR')}>
             <ListItemText primary="TryAR" className="text-[#f0ca83]"/>
           </ListItemButton>
         </ListItem>

@@ -10,6 +10,7 @@ import {
   ButtonGroup,
   Button,
   TextField,
+  Skeleton,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -56,6 +57,15 @@ const MemberEdit = () => {
   });
 
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch data
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
+  }, [loading]);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const router = useRouter()
 
@@ -71,7 +81,7 @@ const MemberEdit = () => {
 
   useEffect(() => {
     const fetchMember = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         const id = typeof router.query.id === 'string' ? Number(router.query.id) : undefined;
         if (!id) {
@@ -80,10 +90,10 @@ const MemberEdit = () => {
         }
         const member = await getMember(id as number);
         setMember(member as Member);
-        setLoading(false);
+        setIsLoading(false);
       } catch (err) {
         setError(err as Error);
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchMember();
@@ -153,7 +163,7 @@ const MemberEdit = () => {
     setMember({ ...member, [name]: value });
   };
 
-  if (loading) {
+  if (isLoading) {
     return <div><Loading /></div>;
   }
 
@@ -173,133 +183,149 @@ const MemberEdit = () => {
         <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
           <Grid container>
             <Grid item xs={12}>
-              <Typography className="text-[#303030] font-bold text-xl">
-                Member Manage
-              </Typography>
+              {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
+                <Typography className="text-[#303030] font-bold text-xl">
+                  Member Manage
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <form onSubmit={handleSubmit} className="pt-3">
             <Grid container className="pt-3" spacing={3}>
               <Grid item xs={12} md={4}>
-                <center>
-                  <input
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    onChange={handleImageChange}
-                  />
-                  <img
-                    src={previewUrl || member.image}
-                    className="rounded-lg object-top object-cover h-auto w-96"
-                  />
-                  <label htmlFor="upload-button">
-                    <Button
-                      variant='contained'
-                      className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
-                      component="span"
-                      startIcon={<AddAPhotoIcon />}
-                    >
-                      Edit Image
-                    </Button>
-                  </label>
-                </center>
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-72 rounded-md" />) : (
+                  <center>
+                    <input
+                      accept="image/*"
+                      style={{ display: "none", }}
+                      id="upload-button"
+                      type="file"
+                      onChange={handleImageChange}
+                    />
+                    <img
+                      src={previewUrl || member.image}
+                      className="rounded-lg object-top object-cover h-auto w-96"
+                    />
+                    <label htmlFor="upload-button">
+                      <Button
+                        variant='contained'
+                        className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
+                        component="span"
+                        startIcon={<AddAPhotoIcon />}
+                      >
+                        Edit Image
+                      </Button>
+                    </label>
+                  </center>
+                )}
               </Grid>
               <Grid item xs={12} md={8}>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Firstname</Typography>
-                  <TextField
-                    type='text'
-                    value={member.firstname}
-                    fullWidth
-                    name='firstname'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Lastname</Typography>
-                  <TextField
-                    type='text'
-                    value={member.lastname}
-                    fullWidth
-                    name='lastname'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Email</Typography>
-                  <TextField
-                    type='email'
-                    value={member.email}
-                    fullWidth
-                    name='email'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Username</Typography>
-                  <TextField
-                    type='text'
-                    value={member.username}
-                    fullWidth
-                    name='username'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    required
-                    focused
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography className="text-[#303030] font-bold pb-2 text-lg">Password</Typography>
-                  <TextField
-                    type='text'
-                    value={member.password}
-                    fullWidth
-                    name='password'
-                    variant='outlined'
-                    className="font-bold rounded pb-3"
-                    onChange={handleInputChange}
-                    inputProps={{ style: { color: "#303030" } }}
-                    sx={{ color: '#303030' }}
-                    multiline
-                    maxRows={5}
-                    required
-                    focused
-                  />
-                </Grid>
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Firstname</Typography>
+                    <TextField
+                      type='text'
+                      value={member.firstname}
+                      fullWidth
+                      name='firstname'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Lastname</Typography>
+                    <TextField
+                      type='text'
+                      value={member.lastname}
+                      fullWidth
+                      name='lastname'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Email</Typography>
+                    <TextField
+                      type='email'
+                      value={member.email}
+                      fullWidth
+                      name='email'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Username</Typography>
+                    <TextField
+                      type='text'
+                      value={member.username}
+                      fullWidth
+                      name='username'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Password</Typography>
+                    <TextField
+                      type='text'
+                      value={member.password}
+                      fullWidth
+                      name='password'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <Hidden mdDown>
-                    <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
-                      {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
-                    </ButtonGroup>
+                    {loading ? (<Skeleton animation="wave" variant="rectangular" sx={{ float: 'right' }} className="w-1/5 justify-end h-10 my-1 rounded-md" />) : (
+                      <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
+                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                        {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
+                      </ButtonGroup>
+                    )}
                   </Hidden>
                   <Hidden mdUp>
-                    <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
-                      <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
-                      {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
-                    </ButtonGroup>
+                    {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 my-1 rounded-md" />) : (
+                      <ButtonGroup variant="contained" className="gap-1 my-2" fullWidth aria-label="contained button group">
+                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">Update</Button>
+                        {/* <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button> */}
+                      </ButtonGroup>
+                    )}
                   </Hidden>
                 </Grid>
               </Grid>
