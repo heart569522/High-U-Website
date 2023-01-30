@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link';
 import clientPromise from '../../lib/mongodb';
-import { InferGetServerSidePropsType } from 'next';
+import next, { InferGetServerSidePropsType } from 'next';
 import {
   Table,
   TableBody,
@@ -44,10 +44,10 @@ type Member = {
   password: string;
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
-    let response = await fetch("http://localhost:3000/api/member/getMember");
-    let member = await response.json();
+    let memberResponse = await fetch("http://localhost:3000/api/member/getMember");
+    let member = await memberResponse.json();
     return {
       props: { member: JSON.parse(JSON.stringify(member)) }
     }
@@ -57,8 +57,18 @@ export async function getServerSideProps() {
   return {
     props: {}
   }
-
 }
+
+// async function fetchMember() {
+//   let memberResponse = await fetch("http://localhost:3000/api/member/getMember");
+//   caches: "force-cache" // SSG getStaticSideProps
+//   // caches: "no-store" // SSR getServerSideProps
+//   // next: {
+//   //   revalidate: 20 // ISR revalidate
+//   // },
+//   console.log("fetching Members")
+//   return memberResponse.json();
+// }
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -78,8 +88,11 @@ const theme = createTheme({
 });
 
 function MemberList_Table(props: Props) {
+// async function MemberList_Table() {
 
+  // const member = await fetchMember();
   const [member, setMember] = useState<[Member]>(props.member);
+  console.log("Number of Members: ", member.length)
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
