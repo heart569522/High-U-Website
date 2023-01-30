@@ -29,8 +29,6 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { title } from 'process';
 
-// import Member_Data from '../../helper/Member_Data.json';
-
 
 type Props = {
   member: [Member]
@@ -82,7 +80,6 @@ const theme = createTheme({
 function MemberList_Table(props: Props) {
 
   const [member, setMember] = useState<[Member]>(props.member);
-
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -94,14 +91,12 @@ function MemberList_Table(props: Props) {
 
   return (
     <ThemeProvider theme={theme}>
-
       <Box
         component="main"
         className="h-full p-5 ml-[240px] max-[899px]:ml-0"
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Head><title>Member Manage | High U</title></Head>
-
         <Toolbar />
         <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
           <Grid container>
@@ -133,71 +128,73 @@ function MemberList_Table(props: Props) {
                       </TableRow>
                     </TableHead>
                   )}
-                  {member?.length > 0 ? (
-                    <TableBody>
-                      {member.map((item, i) => (
-                        <TableRow key={i} className="hover:bg-gray-50">
-                          <TableCell className="flex justify-center items-center">
-                            <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
-                          </TableCell>
-                          <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
-                          <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
-                          <TableCell className="w-[12%] text-base">{item.email}</TableCell>
-                          <TableCell className="w-[12%] text-base">{item.username}</TableCell>
-                          <TableCell className="w-[12%] text-base">{item.password}</TableCell>
-                          <TableCell className="w-[15%] text-center ">
-                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                              <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item._id}`}>
-                                <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                              </Link>
-                              {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                              <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                              {/* </Link> */}
-                            </ButtonGroup>
+                  {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
+                    member?.length > 0 ? (
+                      <TableBody>
+                        {member.map((item, i) => (
+                          <TableRow key={i} className="hover:bg-gray-50">
+                            <TableCell className="flex justify-center items-center">
+                              <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                            </TableCell>
+                            <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
+                            <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
+                            <TableCell className="w-[12%] text-base">{item.email}</TableCell>
+                            <TableCell className="w-[12%] text-base">{item.username}</TableCell>
+                            <TableCell className="w-[12%] text-base">{item.password}</TableCell>
+                            <TableCell className="w-[15%] text-center ">
+                              <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item._id}`}>
+                                  <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                </Link>
+                                {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
+                                <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                {/* </Link> */}
+                              </ButtonGroup>
 
-                          </TableCell>
-                        </TableRow>
+                            </TableCell>
+                          </TableRow>
 
-                      ))}
-                    </TableBody>
-                  ) : (
-                    <TableRow className="hover:bg-gray-50">
+                        ))}
+                      </TableBody>
+                    ) : (
+                      <TableRow className="hover:bg-gray-50">
                         <TableCell className="w-[12%] text-base">no data</TableCell>
-                    </TableRow>
+                      </TableRow>
+                    )
                   )}
                 </Table>
               </TableContainer>
             </Hidden>
-            {/* <Grid item xs={12}>
-            <Hidden mdUp>
-              {member.map((item, i) => (
-                loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
-                  <Accordion key={i} className="shadow-md">
-                    <AccordionSummary>
-                      <Typography className="font-semibold">{item.username}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails className="w-52 h-auto">
-                      <img src={item.image} alt={item.username} />
-                    </AccordionDetails>
-                    <AccordionDetails className="bg-gray-50">
-                      <Typography>Firstname: {item.firstname}</Typography><br />
-                      <Typography>Lastname: {item.lastname}</Typography><br />
-                      <Typography>Email: {item.email}</Typography><br />
-                      <Typography>Password: {item.password}</Typography>
-                    </AccordionDetails>
-                    <AccordionActions>
-                      <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                        <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item._id}`}>
-                          <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                        </Link>
-                        <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                      </ButtonGroup>
-                    </AccordionActions>
-                  </Accordion>
-                )
-              ))}
-            </Hidden>
-          </Grid> */}
+            <Grid item xs={12}>
+              <Hidden mdUp>
+                {member.map((item, i) => (
+                  loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
+                    <Accordion key={i} className="shadow-md">
+                      <AccordionSummary>
+                        <Typography className="font-semibold">{item.username}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails className="w-52 h-auto">
+                        <img src={item.image} alt={item.username} />
+                      </AccordionDetails>
+                      <AccordionDetails className="bg-gray-50">
+                        <Typography>Firstname: {item.firstname}</Typography><br />
+                        <Typography>Lastname: {item.lastname}</Typography><br />
+                        <Typography>Email: {item.email}</Typography><br />
+                        <Typography>Password: {item.password}</Typography>
+                      </AccordionDetails>
+                      <AccordionActions>
+                        <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                          <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item._id}`}>
+                            <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                          </Link>
+                          <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                        </ButtonGroup>
+                      </AccordionActions>
+                    </Accordion>
+                  )
+                ))}
+              </Hidden>
+            </Grid>
           </Grid>
         </Box>
       </Box>

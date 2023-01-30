@@ -56,7 +56,7 @@ export default function HomeContent() {
                 <Typography
                   className="text-2xl px-3 max-sm:text-lg"
                 >
-                  Discover your new, bold look with our short wig collection. From pixie cuts to bobs, our high-quality wigs offer a range of options for every style. Comfortable and natural-looking, change up your look in an instant.
+                  Discover your new, bold look with our wig collection. From pixie cuts to bobs, our high-quality wigs offer a range of options for every style. Comfortable and natural-looking, change up your look in an instant.
                 </Typography>
               </Grid>
             </Grid>
@@ -69,7 +69,7 @@ export default function HomeContent() {
                 <Typography
                   className="text-2xl p-3 max-sm:text-lg"
                 >
-                  Transform your look with our collection of short wigs. From pixie cuts to bobs, choose the perfect style for you. Made with premium materials for a natural look and comfortable fit. Change up your look with ease.
+                  Discover a new you with our diverse collection of wigs. Find the perfect fit, style, and color to enhance your look. Effortless beauty, comfort, and confidence guaranteed.
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-left">
