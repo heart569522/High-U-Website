@@ -29,6 +29,7 @@ import Webcam from 'react-webcam';
 import Navbar from "../../components/Navigation/Navigation"
 
 import AR_Data from '../../helper/AR_Data.json';
+import Head from 'next/head';
 
 const theme = createTheme({
     palette: {
@@ -67,6 +68,7 @@ export default function TryAR() {
 
     return (
         <ThemeProvider theme={theme}>
+            <Head><title>Try AR | High U</title></Head>
             <Navbar />
             <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
                 <Container maxWidth="xl" >

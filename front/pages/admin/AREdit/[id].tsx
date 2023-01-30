@@ -17,6 +17,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../../components/Navigation/DrawerBar';
 import Loading from '../../../components/Other/Loading';
+import Head from 'next/head';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -163,6 +164,7 @@ const AREdit = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head><title>Edit AR | High U Administrator</title></Head>
       <DrawerBar />
       <Box
         component="main"

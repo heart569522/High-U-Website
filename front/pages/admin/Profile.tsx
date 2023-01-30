@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Head from 'next/head';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // IMPORT COMPONENT
@@ -14,6 +14,7 @@ import {
 import ChangePassword_Profile_admin from '../../components/Other/ChangePassword_Profile_admin';
 import EditProfile_Profile_admin from '../../components/Other/EditProfile_Profile_admin';
 import MyDetail_Profile_admin from '../../components/Other/MyDetail_Profile_admin';
+
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -41,6 +42,7 @@ export default function Profile() {
 
     return (
         <ThemeProvider theme={theme}>
+            <Head><title>Profile | High U Administrator</title></Head>
             <Container maxWidth="xl">
                 <DrawerBar />
                 <Box

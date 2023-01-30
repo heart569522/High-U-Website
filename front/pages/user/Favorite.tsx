@@ -28,6 +28,7 @@ import EmptyARImage from '../../components/Other/EmptyARImage';
 
 import Wig_Product from '../../helper/Wig_Product.json';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 const theme = createTheme({
     palette: {
@@ -66,6 +67,7 @@ export default function Favorite() {
     return (
         <div>
             <ThemeProvider theme={theme}>
+                <Head><title>Favorite | High U</title></Head>
                 <Paper className="bg-[#252525] h-screen">
                     <Navbar />
                     <Container maxWidth="xl" >

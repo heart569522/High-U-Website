@@ -241,7 +241,7 @@ export default function Navbar() {
                       transition: '.3s',
                     }}
                   >
-                    หน้าแรก
+                    Home
                   </Box>
                 </Link>
                 <Link onClick={() => handleMenuItemClick('/user/Wig')} className="cursor-pointer" underline='none'>
@@ -258,7 +258,7 @@ export default function Navbar() {
                       transition: '.3s',
                     }}
                   >
-                    วิก
+                    Wig
                   </Box>
                 </Link>
                 <Link onClick={() => handleMenuItemClick('/user/TryAR')} className="cursor-pointer" underline='none'>
@@ -275,7 +275,7 @@ export default function Navbar() {
                       transition: '.3s',
                     }}
                   >
-                    ทดลอง AR
+                    Try AR
                   </Box>
                 </Link>
               </Box>

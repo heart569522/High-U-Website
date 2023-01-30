@@ -18,6 +18,7 @@ import Link from 'next/link'
 
 import Wig_Color from '../../helper/Wig_Color.json';
 import Wig_Product from '../../helper/Wig_Product.json';
+import Head from 'next/head';
 
 const theme = createTheme({
     palette: {
@@ -48,6 +49,7 @@ export default function WigProductItem() {
 
     return (
         <ThemeProvider theme={theme}>
+            <Head><title>Wig | High U</title></Head>
             <Paper sx={{ backgroundColor: '#faf7f7', paddingTop: 4, paddingBottom: 2 }}>
                 <Container maxWidth="xl" >
                     <Grid container spacing={2}>

@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import React from 'react'
 
 // IMPORT COMPONENT
@@ -9,6 +10,7 @@ import ARManage_Table from '../../components/Table/ARManage_Table'
 function ARManage() {
   return (
     <div>
+      <Head><title>AR Manage | High U Administrator</title></Head>
       <DrawerBar />
       <ARManage_Table />
     </div>

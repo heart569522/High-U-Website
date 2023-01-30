@@ -74,11 +74,11 @@ function WigList() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Paper sx={{ backgroundColor: '#faf7f7', }}>
+            <Paper sx={{ backgroundColor: '#faf7f7', pb: 4}}>
                 <Container maxWidth="xl" >
                     {/* SELECT INPUT */}
 
-                    <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ padding: 5, }}>
+                    <Grid container spacing={3} alignItems="center" justifyContent="center" className="py-8">
                         <Grid item xs={12} sm={4}>
                             {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
                                 <Box sx={{ minWidth: 100 }}>
@@ -155,7 +155,7 @@ function WigList() {
 
 
                     {/* WIG PRODUCT */}
-                    <Grid container spacing={2} className="p-3">
+                    <Grid container spacing={2}>
                         {
                             Wig_Product.filter((item) => {
                                 if (selectedColor && selectedSize && selectedBrand) {
@@ -193,7 +193,7 @@ function WigList() {
                                     }
                                     return true
                                 }).map((item, i) => (
-                                    <Grid item xs={6} sm={4} md={3} key={i}>
+                                    <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
                                         {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-96 rounded-md" />) : (
                                             <Link href="/user/WigProduct">
                                                 <Card variant="outlined" sx={{ maxWidth: 320 }}>

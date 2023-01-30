@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Head from 'next/head';
 import {
   Box,
   Typography,
@@ -42,6 +43,7 @@ function Dashboard() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head><title>Dashboard | High U Administrator</title></Head>
       <DrawerBar />
       <Box
         component="main"

@@ -8,6 +8,7 @@ import Footer from '../../components/Footer/Footer';
 import WigList from '../../components/Wig/WigList';
 
 import { Skeleton } from '@mui/material';
+import Head from 'next/head';
 
 export default function Wig() {
   const [loading, setIsLoading] = useState(true);
@@ -22,6 +23,7 @@ export default function Wig() {
 
   return (
     <div>
+      <Head><title>Wig | High U</title></Head>
       <Navbar />
       {loading ? (Skeleton_Loading) : (
         <WigBanner />

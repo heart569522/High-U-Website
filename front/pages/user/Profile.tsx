@@ -31,6 +31,7 @@ import UserHeader from '../../components/Auth/UserHeader';
 import MyDetail_Profile from '../../components/Other/MyDetail_Profile';
 import EditProfile_Profile from '../../components/Other/EditProfile_Profile';
 import ChangePassword_Profile from '../../components/Other/ChangePassword_Profile';
+import Head from 'next/head';
 
 const theme = createTheme({
   palette: {
@@ -68,6 +69,7 @@ export default function Profile() {
   return (
     <div>
       <ThemeProvider theme={theme}>
+        <Head><title>Profile | High U</title></Head>
         <Paper className="bg-[#252525] h-screen max-[450px]:h-max">
           <Navbar />
           <Container maxWidth="xl" >
