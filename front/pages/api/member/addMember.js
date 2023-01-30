@@ -7,7 +7,7 @@ export default async (req, res) => {
     const db = client.db("high_u");
     const { image, firstname, lastname, email, username, password } = req.body;
 
-    const member = await db.collection("high_u").insertOne({
+    const member = await db.collection("member").insertOne({
         image,
         firstname,
         lastname,
