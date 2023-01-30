@@ -45,7 +45,8 @@ const AddMember_Form = () => {
         }, 800);
     }, [loading]);
 
-    const [error, setError] = useState<Error | null>(null);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
     const router = useRouter()
 
     const [firstname, setFirstname] = useState('');
@@ -76,9 +77,9 @@ const AddMember_Form = () => {
         setPreviewUrl(URL.createObjectURL(image));
     }
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === " ") {
-            event.preventDefault();
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === " ") {
+            e.preventDefault();
         }
     };
 
@@ -90,13 +91,13 @@ const AddMember_Form = () => {
         setPassword("");
         setImage(null);
         setPreviewUrl(null);
-        setError(null);
+        setError("");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
-        setError(null)
+        setError("")
         try {
             const formData = new FormData()
             formData.append('firstname', firstname)
@@ -107,24 +108,21 @@ const AddMember_Form = () => {
             if (image !== null) {
                 formData.append('image', image)
             }
-            alert('Wig created successfully');
-            // console.log(firstname)
-            // console.log(image)
-            const response = await fetch('/api/wigs', {
+
+            let response = await fetch("http://locahost:3000/api/addMember", {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json"
+                }
             })
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else { }
-            // router.push('/WigManage');
-            // navigate to wig listing page
-        } catch (err) {
-            setError(err as Error)
-        } finally {
-            setLoading(false)
+            response = await response.json();
             handleReset();
+            setMessage("Member Added Successfully!");
 
+        } catch (errorMessage: any) {
+            setError(errorMessage);
         }
     }
 
@@ -141,9 +139,14 @@ const AddMember_Form = () => {
                     <Grid container>
                         <Grid item xs={12}>
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                                <Typography className="text-[#303030] font-bold text-xl">
-                                    Add Member
-                                </Typography>
+                                <Box className='flex gap-3'>
+                                    <Typography className="text-[#303030] font-bold text-xl">
+                                        Add Member
+                                    </Typography>
+                                    {error ? <Typography className="text-red-500 font-bold text-xl">{error}</Typography> : null}
+                                    {message ? <Typography className="text-green-700 font-bold text-xl">{message}</Typography> : null}
+                                </Box>
+
                             )}
                         </Grid>
                     </Grid>
