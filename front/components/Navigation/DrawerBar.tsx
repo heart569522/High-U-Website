@@ -103,7 +103,7 @@ export default function DrawerBar() {
           </ListItemButton>
         </ListItem>
         <ListItem key="Member Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberList')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberManage')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Member Manage" />
           </ListItemButton>
