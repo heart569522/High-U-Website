@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getAR, updateAR } from '../../api/arApi'
+import { getAR, updateAR } from '../../api/old/arApi'
 import {
   Box,
   Typography,

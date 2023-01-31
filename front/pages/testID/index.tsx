@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link';
-
+import clientPromise from '../../lib/mongodb';
 import next, { InferGetServerSidePropsType } from 'next';
 import {
     Table,
@@ -30,29 +30,32 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { title } from 'process';
 
 
-// type Props = {
-//     member: [Member]
-// }
+type Props = {
+    members: [Member]
+}
 
 type Member = {
-    id: number;
+    _id: string;
     image: string;
     firstname: string;
     lastname: string;
     email: string;
     username: string;
     password: string;
-    create_time: any;
-    update_time: any;
 }
 
-export const getServerSideProps = async () => {
-    let memberResponse = await fetch("http://localhost:3000/api/member/getAllMember");
-    let member: Member[] = await memberResponse.json();
-    return {
-        props: { member, }
+export async function getServerSideProps() {
+    try {
+        let membersResponse = await fetch("http://localhost:3000/api/member/getAllMember");
+        let members = await membersResponse.json();
+        return {
+            props: { members: JSON.parse(JSON.stringify(members)) }
+        }
+    } catch (e) {
+        console.error(e);
     }
 }
+
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -71,9 +74,10 @@ const theme = createTheme({
     },
 });
 
-function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function MemberList_Table(props: Props) {
 
-    console.log("Number of Members: ", member.length)
+    const [members, setMembers] = useState<[Member]>(props.members);
+    console.log("Number of Members: ", members.length)
 
     const [loading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -101,7 +105,7 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
                                 </Typography>
                             )}
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                                <Link href="/admin/AddMember">
+                                <Link href="/testID/add">
                                     <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Member</Button>
                                 </Link>
                             )}
@@ -123,10 +127,10 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
                                         </TableHead>
                                     )}
                                     {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
-                                        member?.length > 0 ? (
+                                        members?.length > 0 ? (
                                             <TableBody>
-                                                {member.map((item, i) => (
-                                                    <TableRow key={item.id} className="hover:bg-gray-50">
+                                                {members.map((item, i) => (
+                                                    <TableRow key={i} className="hover:bg-gray-50">
                                                         <TableCell className="flex justify-center items-center">
                                                             <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
                                                         </TableCell>
@@ -137,7 +141,7 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
                                                         <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                                                         <TableCell className="w-[15%] text-center ">
                                                             <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                                <Link href={"/testID/" + item.id}>
+                                                                <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                                     <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                                 </Link>
                                                                 {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
@@ -161,9 +165,9 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
                         </Hidden>
                         <Grid item xs={12}>
                             <Hidden mdUp>
-                                {member.map((item, i) => (
-                                    loading ? (<Skeleton key={item.id} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
-                                        <Accordion key={item.id} className="shadow-md">
+                                {members.map((item, i) => (
+                                    loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
+                                        <Accordion key={i} className="shadow-md">
                                             <AccordionSummary>
                                                 <Typography className="font-semibold">{item.username}</Typography>
                                             </AccordionSummary>
@@ -178,7 +182,7 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
                                             </AccordionDetails>
                                             <AccordionActions>
                                                 <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                    <Link href={"/testID/" + item.id}>
+                                                    <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                         <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                     </Link>
                                                     <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
@@ -195,5 +199,3 @@ function MemberList_Table({ member }: InferGetServerSidePropsType<typeof getServ
         </ThemeProvider>
     )
 }
-
-export default MemberList_Table

@@ -1,4 +1,4 @@
-import AR_Data from '../../helper/AR_Data.json';
+import AR_Data from '../../../helper/AR_Data.json';
 
 interface AR {
     id: number;

@@ -1,17 +1,33 @@
-import connection from '../connect_db';
+import clientPromise from '../../../lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-    const { image, firstname, lastname, email, username, password } = req.body;
-    connection.query(
-        'INSERT INTO member (image, firstname, lastname, email, username, password) VALUES (?, ?, ?, ?, ?, ?)',
-        [image, firstname, lastname, email, username, password],
-        function (err, result) {
-            if (err) {
-                res.status(500).json({ message: 'Insertion failed' });
-            } else {
-                res.status(200).json(result);
-            }
-        }
-    );
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+
+        const client = await clientPromise;
+        const db = client.db("high_u");
+        const { 
+            // image, 
+            firstname, 
+            lastname, 
+            email, 
+            username, 
+            password 
+        } = req.body;
+
+        const member = await db.collection("member").insertOne({
+            // image, 
+            firstname, 
+            lastname, 
+            email, 
+            username, 
+            password
+        })
+
+        res.json(member);
+
+    } catch (e: any) {
+        console.error(e);
+        throw new Error(e).message;
+    }
 }

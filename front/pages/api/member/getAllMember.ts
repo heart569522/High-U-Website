@@ -1,12 +1,20 @@
-import connection from '../connect_db'
+import clientPromise from '../../../lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
-    connection.query(
-        'SELECT * FROM member',
-        function (err, results,) {
-            console.log(results); // results contains rows returned by server
-            res.status(200).json(results)
-        }   
-    );
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+
+        const client = await clientPromise;
+        const db = client.db("high_u");
+
+        const members = await db.collection("member").find({}).toArray();
+
+        res.json(members);
+
+    } catch (e: any) {
+
+        console.error(e);
+        throw new Error(e).message;
+
+    }
 }

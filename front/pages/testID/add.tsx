@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-// import { getWig, updateWig } from '../api/wigApi'
+import clientPromise from '../../lib/mongodb';
 import {
     Box,
     Typography,
@@ -54,7 +54,6 @@ const add = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
     // const [image, setImage] = useState<File | null>(null);
     // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     // const defaultImageUrl = 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg';
@@ -94,33 +93,34 @@ const add = () => {
         setError("");
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault()
-        setLoading(true)
-        setError("")
-        try {
 
-            let response = await fetch("http://locahost:3000/api/member/addMember", {
-                method: 'POST',
-                body: JSON.stringify({
-                    firstname,
-                    lastname,
-                    email,
-                    username,
-                    password,
-                    // image
-                }),
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json"
-                }
-            })
-            response = await response.json();
-            handleReset();
-            setMessage("Member Added Successfully!");
-
-        } catch (errorMessage: any) {
-            setError(errorMessage);
+        if (firstname && lastname && email && username && password) {
+            try {
+                let response = await fetch("http://locahost:3000/api/member/addMember", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        // image,
+                        firstname,
+                        lastname,
+                        email,
+                        username,
+                        password
+                    }),
+                    headers: {
+                        Accept: "application/json, text/plain, */*",
+                        "Content-Type": "application/json"
+                    }
+                })
+                response = await response.json();
+                handleReset();
+                setMessage("Member Added Successfully!");
+            } catch (errorMessage: any) {
+                setError(errorMessage);
+            }
+        } else {
+            return setError("All fields are required!");
         }
     }
 
