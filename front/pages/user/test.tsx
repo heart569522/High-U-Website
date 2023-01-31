@@ -1,103 +1,97 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Skeleton from '@mui/material/Skeleton';
-import { useEffect, useState } from 'react';
+declare module '@tensorflow-models/face-detection';
 
-interface MediaProps {
-  loading?: boolean;
-}
+import React, { useState, useEffect } from 'react';
+import * as tf from '@tensorflow/tfjs';
+import * as facemodel from '@tensorflow-models/face-detection';
 
-function Media(props: MediaProps) {
-  // const { loading = false } = props;
-    const [loading, setIsLoading] = useState(true);
+const Home = async () => {
+  
+  const model = await facemodel.load();
+  const predictions = await model.detect(SVGImageElement) as any;
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
-    useEffect(() => {
-    // Fetch data
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, [loading]);
+  useEffect(() => {
+    async function loadModel() {
+      const m = await facemodel.load();
+      setModel(m);
+    }
+    loadModel();
+  }, []);
 
-  return (
-    <Card sx={{ maxWidth: 345, m: 2 }}>
-      <CardHeader
-        avatar={
-          loading ? (
-            <Skeleton animation="wave" variant="circular" width={40} height={40} />
-          ) : (
-            <Avatar
-              alt="Ted talk"
-              src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg"
-            />
-          )
+  const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    const image = new Image();
+    image.src = URL.createObjectURL(e.target.files[0]);
+    image.onload = async () => {
+      const predictions = await model?.detect(image);
+      predictions(predictions || []);
+      setImageUrl(image.src);
+    };
+  };
+
+  const handleWebcam = async () => {
+    if (navigator.mediaDevices.getUserMedia) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false,
+      });
+      videoRef.current?.srcObject = stream;
+      videoRef.current?.onloadedmetadata = async () => {
+        videoRef.current?.play();
+
+        const canvas = canvasRef.current;
+        if (!canvas) {
+          return;
         }
-        action={
-          loading ? null : (
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          )
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return;
         }
-        title={
-          loading ? (
-            <Skeleton
-              animation="wave"
-              height={10}
-              width="80%"
-              style={{ marginBottom: 6 }}
-            />
-          ) : (
-            'Ted'
-          )
-        }
-        subheader={
-          loading ? (
-            <Skeleton animation="wave" height={10} width="40%" />
-          ) : (
-            '5 hours ago'
-          )
-        }
-      />
-      {loading ? (
-        <Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
-      ) : (
-        <CardMedia
-          component="img"
-          height="140"
-          image="https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512"
-          alt="Nicola Sturgeon on a TED talk stage"
-        />
-      )}
-      <CardContent>
-        {loading ? (
-          <React.Fragment>
-            <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
-            <Skeleton animation="wave" height={10} width="80%" />
-          </React.Fragment>
-        ) : (
-          <Typography variant="body2" color="text.secondary" component="p">
-            {
-              "Why First Minister of Scotland Nicola Sturgeon thinks GDP is the wrong measure of a country's success:"
-            }
-          </Typography>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
 
-export default function Facebook() {
+        const intervalId = setInterval(async () => {
+          ctx.drawImage(videoRef.current!, 0, 0, 300, 300);
+          const predictions = await model?.detect(canvas);
+          predictions(predictions || []);
+        }, 100);
+
+        return () => {
+          clearInterval(intervalId);
+        };
+      };
+    }
+  };
+
   return (
     <div>
-      <Media loading />
-      {/* <Media /> */}
+      <input type="file" onChange={handleImage} />
+      <button onClick={handleWebcam}>Open Webcam</button>
+      <br />
+      {imageUrl ? (
+        <img src={imageUrl} width={300} height={300} />
+      ) : (
+        <video ref={videoRef} width={300} height={300} />
+      )}
+      <canvas ref={canvasRef} width={300} height={300} />
+      {predictions.map((prediction: { box: any }) => (
+        <div
+          key={prediction.box}
+          style={{
+            position: 'absolute',
+            border: '2px solid red',
+            left: prediction.box[0],
+            top: prediction.box[1],
+            width: prediction.box[2] - prediction.box[0],
+            height: prediction.box[3] - prediction.box[1],
+          }}
+        />
+      ))}
     </div>
   );
-}
+};
+
+export default Home;
