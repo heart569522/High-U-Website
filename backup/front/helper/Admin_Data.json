@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "image": "https://www.nicepng.com/png/detail/263-2635962_png-file-svg-admin-icon-png.png",
+        "firstname": "admin",
+        "lastname": "test",
+        "email": "admin@hu.com",
+        "username": "admin",
+        "password": "1234"
+    }
+
+]
