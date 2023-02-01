@@ -311,8 +311,8 @@
 
 // export default add
 
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
 
 const AddMemberForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -323,6 +323,10 @@ const AddMemberForm = () => {
     const [image, setImage] = useState<File | null>(null);
     const [message, setMessage] = useState('');
 
+    const handleImageChange = (e: any) => {
+        setImage(e.target.files[0]);
+    }
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -330,7 +334,7 @@ const AddMemberForm = () => {
             return setMessage('Image is required.');
         }
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('firstname', firstName);
         formData.append('lastname', lastName);
         formData.append('email', email);
@@ -339,10 +343,12 @@ const AddMemberForm = () => {
         formData.append('image', image, image.name);
 
         try {
-            await axios.post('http://localhost:3000/api/member/addMember', formData, {
+            await fetch('http://localhost:3000/api/member/addMember', {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                method: "POST",
+                body: formData,
             });
 
             setMessage('Member added successfully.');
@@ -404,7 +410,7 @@ const AddMemberForm = () => {
                     type="file"
                     id="image"
                     accept="image/*"
-                    onChange={(event) => setImage(event.target.files![0])}
+                    onChange={handleImageChange}
                 />
             </div>
             <button type="submit">Add Member</button>
