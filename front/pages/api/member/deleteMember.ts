@@ -1,18 +1,23 @@
-import connection from '../connect_db';
+import clientPromise from "../../../lib/mongodb";
+import { ObjectId } from "mongodb"
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
-
   try {
-    const result = await connection.query(
-      'DELETE FROM member WHERE id = ?',
-      [id]
-    );
-    console.log(result);
-    res.status(200).json({ message: 'Member deleted successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Failed to delete member' });
+
+    const client = await clientPromise;
+    const db = client.db("high_u");
+    const { id } = req.query;
+
+    const idValue = Array.isArray(id) ? id[0] : id;
+    const member = await db.collection("member").deleteOne({
+      _id: new ObjectId(idValue)
+    })
+
+    res.status(200).json(member);
+
+  } catch (e: any) {
+    console.error(e);
+    throw new Error(e).message;
   }
-};
+}

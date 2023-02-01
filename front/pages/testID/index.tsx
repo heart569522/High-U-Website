@@ -87,6 +87,25 @@ export default function MemberList_Table(props: Props) {
         }, 800);
     }, [loading]);
 
+    const handleDeleteMember = async (memberId: string) => {
+        try {
+    
+          let response = await fetch("http://localhost:3000/api/member/deleteMember?id=" + memberId, {
+            method: "POST",
+            headers: {
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json"
+            }
+          })
+    
+          response = await response.json();
+          window.location.href = '/testID'
+    
+        } catch(error) {
+          console.log("An error occured while deleting ", error);
+        }
+      }
+
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -100,13 +119,13 @@ export default function MemberList_Table(props: Props) {
                     <Grid container>
                         <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                                <Typography className="text-[#303030] font-bold text-2xl">
-                                    Member Manage
+                                <Typography className="text-[#303030] font-bold text-2xl max-[450px]:text-lg">
+                                    Member&nbsp;Manage
                                 </Typography>
                             )}
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
                                 <Link href="/testID/add">
-                                    <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Member</Button>
+                                    <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add&nbsp;Member</Button>
                                 </Link>
                             )}
                         </Grid>
@@ -144,9 +163,7 @@ export default function MemberList_Table(props: Props) {
                                                                 <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                                     <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                                 </Link>
-                                                                {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                                <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                                {/* </Link> */}
+                                                                <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                             </ButtonGroup>
 
                                                         </TableCell>
@@ -185,7 +202,7 @@ export default function MemberList_Table(props: Props) {
                                                     <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                         <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                     </Link>
-                                                    <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                    <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                 </ButtonGroup>
                                             </AccordionActions>
                                         </Accordion>

@@ -1,17 +1,36 @@
-import connection from '../connect_db'
+import clientPromise from '../../../lib/mongodb';
+import { ObjectId } from "mongodb"
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { id } = req.query;
-    const { firstname, lastname, email, username, password } = req.body;
-
     try {
-        const result = await connection.query(
-            'UPDATE member SET firstname = ?, lastname = ?, email = ?, username = ?, password = ? WHERE id = ?',
-            [firstname, lastname, email, username, password, id]
-        );
-        res.status(200).json(result);
-    } catch (error) {
-        res.status(500).json({ message: 'Update member failed', error });
+
+        const client = await clientPromise;
+        const db = client.db("high_u");
+        const { id } = req.query;
+        const { image, firstname, lastname, email, username, password } = req.body;
+
+        const idValue = Array.isArray(id) ? id[0] : id;
+        const member = await db.collection("member").updateOne(
+            {
+                _id: new ObjectId(idValue)
+            },
+            {
+                $set: {
+                    image: image, 
+                    firstname: firstname, 
+                    lastname: lastname,
+                    email: email,
+                    username: username,
+                    password: password
+                }
+            }
+        )
+
+        res.status(200).json(member);
+
+    } catch (e: any) {
+        console.error(e);
+        throw new Error(e).message;
     }
 }
