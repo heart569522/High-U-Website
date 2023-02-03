@@ -82,6 +82,18 @@ export default function MemberList_Table(props: Props) {
         }, 800);
     }, [loading]);
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     const handleDeleteMember = async (memberId: string) => {
         try {
 
@@ -140,41 +152,51 @@ export default function MemberList_Table(props: Props) {
                                             </TableRow>
                                         </TableHead>
                                     )}
-                                    {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
-                                        members?.length > 0 ? (
-                                            <TableBody>
-                                                {members.map((item, i) => (
-                                                    loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
-                                                        <TableRow key={item._id} className="hover:bg-gray-50">
-                                                            <TableCell className="flex justify-center items-center">
-                                                                <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
-                                                            </TableCell>
-                                                            <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
-                                                            <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
-                                                            <TableCell className="w-[12%] text-base">{item.email}</TableCell>
-                                                            <TableCell className="w-[12%] text-base">{item.username}</TableCell>
-                                                            <TableCell className="w-[12%] text-base">{item.password}</TableCell>
-                                                            <TableCell className="w-[15%] text-center ">
-                                                                <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                                    <Link href="/testID/[id]" as={`/testID/${item._id}`}>
-                                                                        <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                                    </Link>
-                                                                    <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                                </ButtonGroup>
 
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                ))}
-                                            </TableBody>
-                                        ) : (
-                                            <TableRow className="hover:bg-gray-50">
-                                                <TableCell className="w-[12%] text-base">no data</TableCell>
-                                            </TableRow>
-                                        )
+                                    {members?.length > 0 ? (
+                                        <TableBody>
+                                            {members.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
+                                                loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
+                                                    <TableRow key={item._id} className="hover:bg-gray-50">
+                                                        <TableCell className="flex justify-center items-center">
+                                                            <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                                                        </TableCell>
+                                                        <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
+                                                        <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
+                                                        <TableCell className="w-[12%] text-base">{item.email}</TableCell>
+                                                        <TableCell className="w-[12%] text-base">{item.username}</TableCell>
+                                                        <TableCell className="w-[12%] text-base">{item.password}</TableCell>
+                                                        <TableCell className="w-[15%] text-center ">
+                                                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                                <Link href="/testID/[id]" as={`/testID/${item._id}`}>
+                                                                    <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                                </Link>
+                                                                <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                            </ButtonGroup>
+
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            ))}
+                                        </TableBody>
+                                    ) : (
+                                        <TableRow className="hover:bg-gray-50">
+                                            <TableCell className="w-[12%] text-base">no data</TableCell>
+                                        </TableRow>
                                     )}
                                 </Table>
                             </TableContainer>
+                            {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-2xl mb-2 rounded-md" />) : (
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25, 50]}
+                                    component="div"
+                                    count={members.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            )}
                         </Hidden>
                         <Grid item xs={12}>
                             <Hidden mdUp>
