@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/2109_banner_lacefront.jpg?v=1631708020",
+        "title": "Lace Front"
+    },
+    {
+        "id": 2,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/2109_Banner-1370x357_human-hair.jpg?v=1630441633",
+        "title": "Human Hair"
+    },
+    {
+        "id": 3,
+        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/Banner-1370x357_see-whats-new_no-cta.jpg?v=1664817069",
+        "title": "New & Now"
+    }
+]
