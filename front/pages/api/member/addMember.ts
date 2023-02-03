@@ -1,59 +1,32 @@
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import * as firebase from 'firebase/app';
+import clientPromise from "../../../lib/mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const storage = getStorage();
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const client = await clientPromise;
+    const db = client.db("high_u");
+    const { image, firstname, lastname, email, username, password } = req.body;
 
-// Create the file metadata
-/** @type {any} */
-const metadata = {
-  contentType: 'image/jpeg'
-};
+    const member = await db.collection("member").insertOne({
+      image,
+      firstname,
+      lastname,
+      email,
+      username,
+      password,
+      createdAt: new Date(Date.now()).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    });
 
-export default async (req: any, res: any) => {
-  const file = req.files;
-
-  // Upload file and metadata to the object 'images/mountains.jpg'
-  const storageRef = ref(storage, 'member_images/' + file.name);
-  const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-  // Listen for state changes, errors, and completion of the upload.
-  uploadTask.on('state_changed',
-    (snapshot) => {
-      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      switch (snapshot.state) {
-        case 'paused':
-          console.log('Upload is paused');
-          break;
-        case 'running':
-          console.log('Upload is running');
-          break;
-      }
-    },
-    (error) => {
-      // A full list of error codes is available at
-      // https://firebase.google.com/docs/storage/web/handle-errors
-      switch (error.code) {
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
-
-        // ...
-
-        case 'storage/unknown':
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-    },
-    () => {
-      // Upload completed successfully, now we can get the download URL
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log('File available at', downloadURL);
-      });
-    }
-  )
+    res.status(201).json(member);
+    console.log(res)
+  } catch (e: any) {
+    console.error(e);
+    throw new Error(e).message;
+  }
 };

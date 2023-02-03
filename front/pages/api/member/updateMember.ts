@@ -17,12 +17,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             },
             {
                 $set: {
-                    image: image, 
-                    firstname: firstname, 
+                    image: image,
+                    firstname: firstname,
                     lastname: lastname,
                     email: email,
                     username: username,
-                    password: password
+                    password: password,
+                    updatedAt: new Date(Date.now()).toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })
                 }
             }
         )
