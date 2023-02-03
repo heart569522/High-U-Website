@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import Head from 'next/head'
 import Link from 'next/link';
-import clientPromise from '../../lib/mongodb';
-import { InferGetServerSidePropsType } from 'next';
 import {
     Table,
     TableBody,
@@ -27,8 +26,31 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import Member_Data from '../../helper/Member_Data.json';
+type Props = {
+    members: [Member]
+}
 
+type Member = {
+    _id: string;
+    image: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    username: string;
+    password: string;
+}
+
+export async function getServerSideProps() {
+    try {
+        let membersResponse = await fetch("http://localhost:3000/api/member/getAllMember");
+        let members = await membersResponse.json();
+        return {
+            props: { members: JSON.parse(JSON.stringify(members)) }
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -47,18 +69,35 @@ const theme = createTheme({
     },
 });
 
+export default function MemberList_Table(props: Props) {
+    const [members, setMembers] = useState<[Member]>(props.members);
 
-function MemberList_Table() {
     const [loading, setIsLoading] = useState(true);
-
     useEffect(() => {
         // Fetch data
         setTimeout(() => {
             setIsLoading(false);
-        }, 800);
+        }, 700);
     }, [loading]);
 
-    const [selectedId, setSelectedId] = useState(0);
+    const handleDeleteMember = async (memberId: string) => {
+        try {
+
+            let response = await fetch("http://localhost:3000/api/member/deleteMember?id=" + memberId, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json"
+                }
+            })
+
+            response = await response.json();
+            window.location.href = '../../pages/admin/MemberManage'
+
+        } catch (error) {
+            console.log("An error occured while deleting ", error);
+        }
+    }
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -79,18 +118,19 @@ function MemberList_Table() {
                 className="h-full p-5 ml-[240px] max-[899px]:ml-0"
                 sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
             >
+                <Head><title>Member Manage | High U</title></Head>
                 <Toolbar />
                 <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
                     <Grid container>
                         <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                                <Typography className="text-[#303030] font-bold text-2xl">
-                                    Member Manage
+                                <Typography className="text-[#303030] font-bold text-2xl max-[450px]:text-lg">
+                                    Member&nbsp;Manage
                                 </Typography>
                             )}
                             {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                                <Link href="/admin/AddMember">
-                                    <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add Member</Button>
+                                <Link href="/testID/add">
+                                    <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add&nbsp;Member</Button>
                                 </Link>
                             )}
                         </Grid>
@@ -111,9 +151,9 @@ function MemberList_Table() {
                                         </TableHead>
                                     )}
                                     <TableBody>
-                                        {Member_Data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
-                                            loading ? (<Skeleton key={item.id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
-                                                <TableRow key={item.id} className="hover:bg-gray-50">
+                                        {members.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
+                                            loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
+                                                <TableRow key={item._id} className="hover:bg-gray-50">
                                                     <TableCell className="flex justify-center items-center">
                                                         <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
                                                     </TableCell>
@@ -124,12 +164,10 @@ function MemberList_Table() {
                                                     <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                                                     <TableCell className="w-[15%] text-center ">
                                                         <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                            <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item.id}`}>
+                                                            <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                                 <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                             </Link>
-                                                            {/* <Link href="/WigEdit/[id]" as={`/WigEdit/${item.id}`}> */}
-                                                            <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                            {/* </Link> */}
+                                                            <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                         </ButtonGroup>
 
                                                     </TableCell>
@@ -143,7 +181,7 @@ function MemberList_Table() {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, 50]}
                                     component="div"
-                                    count={Member_Data.length}
+                                    count={members.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     onPageChange={handleChangePage}
@@ -153,9 +191,9 @@ function MemberList_Table() {
                         </Hidden>
                         <Grid item xs={12}>
                             <Hidden mdUp>
-                                {Member_Data.map((item, i) => (
-                                    loading ? (<Skeleton key={item.id} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
-                                        <Accordion key={item.id} className="shadow-md">
+                                {members.map((item, i) => (
+                                    loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
+                                        <Accordion key={item._id} className="shadow-md">
                                             <AccordionSummary>
                                                 <Typography className="font-semibold">{item.username}</Typography>
                                             </AccordionSummary>
@@ -170,10 +208,10 @@ function MemberList_Table() {
                                             </AccordionDetails>
                                             <AccordionActions>
                                                 <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                    <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item.id}`}>
+                                                    <Link href="/testID/[id]" as={`/testID/${item._id}`}>
                                                         <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
                                                     </Link>
-                                                    <Button className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                    <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
                                                 </ButtonGroup>
                                             </AccordionActions>
                                         </Accordion>
@@ -187,5 +225,3 @@ function MemberList_Table() {
         </ThemeProvider>
     )
 }
-
-export default MemberList_Table

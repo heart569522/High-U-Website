@@ -14,14 +14,13 @@ import {
   Skeleton,
   Snackbar,
   Alert,
-  AlertTitle
+  AlertTitle,
+  LinearProgress
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../components/Navigation/DrawerBar';
-import Loading from '../../components/Other/Loading';
-import axios from 'axios';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -42,7 +41,6 @@ const theme = createTheme({
 
 
 const add = () => {
-
   const [openAlert, setOpenAlert] = useState(false);
 
   const [message, setMessage] = useState('');
@@ -87,16 +85,17 @@ const add = () => {
         throw new Error('File is required')
       }
 
-      const name = image.name
       const storageRef = ref(storage, `member_images/${username}_${firstname}`)
       const uploadTask = uploadBytesResumable(storageRef, image)
 
       uploadTask.on(
         'state_changed',
         (snapshot: any) => {
+          
           setProgress(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           )
+          setOpenAlert(true);
         },
         (error: any) => {
           setError(error)
@@ -121,8 +120,8 @@ const add = () => {
           })
           console.log(response)
           handleReset();
-          setMessage("Member Added Successfully!");
           setOpenAlert(true);
+          setMessage("Member Added Successfully!");
           if (!response.ok) {
             throw new Error(await response.text())
           }
@@ -130,8 +129,8 @@ const add = () => {
       )
     } catch (error: any) {
       console.error(error);
-      setError("An error occurred while adding the member. Please try again later.");
       setOpenAlert(true);
+      setError("An error occurred while adding the member. Please try again later.");
     }
   }
 
@@ -170,20 +169,21 @@ const add = () => {
         <Toolbar />
         {message ?
           <Snackbar open={openAlert} autoHideDuration={3000}>
-            <Alert icon={false} onClose={handleCloseAlert} className="bg-green-700 text-white text-lg">
+            <Alert icon={false} onClose={handleCloseAlert} className="bg-green-700 text-white text-lg max-sm:text-base">
               {message}
             </Alert>
           </Snackbar>
           : null}
         {error ?
           <Snackbar open={openAlert} autoHideDuration={3000}>
-            <Alert icon={false} onClose={handleCloseAlert} className="bg-red-700 text-white text-lg">
+            <Alert icon={false} onClose={handleCloseAlert} className="bg-red-700 text-white text-lg max-sm:text-base">
               {error}
             </Alert>
           </Snackbar>
           : null}
 
         <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
+
           <Grid container>
             <Grid item xs={12}>
 
@@ -191,7 +191,6 @@ const add = () => {
                 <Typography className="text-[#303030] font-bold text-xl">
                   Add Member
                 </Typography>
-
               </Box>
 
 

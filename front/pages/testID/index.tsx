@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link';
-import clientPromise from '../../lib/mongodb';
-import next, { InferGetServerSidePropsType } from 'next';
 import {
     Table,
     TableBody,
@@ -27,8 +25,6 @@ import {
     Skeleton,
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { title } from 'process';
-
 
 type Props = {
     members: [Member]
@@ -55,7 +51,6 @@ export async function getServerSideProps() {
         console.error(e);
     }
 }
-
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -89,22 +84,22 @@ export default function MemberList_Table(props: Props) {
 
     const handleDeleteMember = async (memberId: string) => {
         try {
-    
-          let response = await fetch("http://localhost:3000/api/member/deleteMember?id=" + memberId, {
-            method: "POST",
-            headers: {
-              Accept: "application/json, text/plain, */*",
-              "Content-Type": "application/json"
-            }
-          })
-    
-          response = await response.json();
-          window.location.href = '/testID'
-    
-        } catch(error) {
-          console.log("An error occured while deleting ", error);
+
+            let response = await fetch("http://localhost:3000/api/member/deleteMember?id=" + memberId, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json"
+                }
+            })
+
+            response = await response.json();
+            window.location.href = '/testID'
+
+        } catch (error) {
+            console.log("An error occured while deleting ", error);
         }
-      }
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -149,26 +144,27 @@ export default function MemberList_Table(props: Props) {
                                         members?.length > 0 ? (
                                             <TableBody>
                                                 {members.map((item, i) => (
-                                                    <TableRow key={i} className="hover:bg-gray-50">
-                                                        <TableCell className="flex justify-center items-center">
-                                                            <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
-                                                        </TableCell>
-                                                        <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
-                                                        <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
-                                                        <TableCell className="w-[12%] text-base">{item.email}</TableCell>
-                                                        <TableCell className="w-[12%] text-base">{item.username}</TableCell>
-                                                        <TableCell className="w-[12%] text-base">{item.password}</TableCell>
-                                                        <TableCell className="w-[15%] text-center ">
-                                                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                                                <Link href="/testID/[id]" as={`/testID/${item._id}`}>
-                                                                    <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
-                                                                </Link>
-                                                                <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                                            </ButtonGroup>
+                                                    loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
+                                                        <TableRow key={item._id} className="hover:bg-gray-50">
+                                                            <TableCell className="flex justify-center items-center">
+                                                                <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                                                            </TableCell>
+                                                            <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
+                                                            <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
+                                                            <TableCell className="w-[12%] text-base">{item.email}</TableCell>
+                                                            <TableCell className="w-[12%] text-base">{item.username}</TableCell>
+                                                            <TableCell className="w-[12%] text-base">{item.password}</TableCell>
+                                                            <TableCell className="w-[15%] text-center ">
+                                                                <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
+                                                                    <Link href="/testID/[id]" as={`/testID/${item._id}`}>
+                                                                        <Button className="bg-[#303030] text-white hover:bg-amber-500">Edit</Button>
+                                                                    </Link>
+                                                                    <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                                                </ButtonGroup>
 
-                                                        </TableCell>
-                                                    </TableRow>
-
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
                                                 ))}
                                             </TableBody>
                                         ) : (
