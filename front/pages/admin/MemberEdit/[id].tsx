@@ -594,11 +594,11 @@ function MemberEdit({
                 }
 
                 // Delete the old image from storage
-                const oldImageRef = ref(storage, `member_images/${username}_${firstname}`)
-                await deleteObject(oldImageRef)
+                // const oldImageRef = ref(storage, `member_images/${username}_${firstname}`)
+                // await deleteObject(oldImageRef)
 
                 // Upload the new image
-                const storageRef = ref(storage, `member_images/${_id}`)
+                const storageRef = ref(storage, `member_images/${username}_${firstname}`)
                 const uploadTask = uploadBytesResumable(storageRef, memberImage)
 
                 uploadTask.on(
