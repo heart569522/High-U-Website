@@ -116,8 +116,8 @@ const AddMember_Form = () => {
                 throw new Error('File is required')
             }
 
-            // const name = image.name
-            const storageRef = ref(storage, `member_images/${username}_${firstname}`)
+            const imgName = image.name
+            const storageRef = ref(storage, `member_images/${imgName}`)
             const uploadTask = uploadBytesResumable(storageRef, image)
 
             uploadTask.on(

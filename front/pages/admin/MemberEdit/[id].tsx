@@ -594,11 +594,13 @@ function MemberEdit({
                 }
 
                 // Delete the old image from storage
-                // const oldImageRef = ref(storage, `member_images/${username}_${firstname}`)
+                // const oldImgName = memberImage.name
+                // const oldImageRef = ref(storage, `member_images/${oldImgName}`)
                 // await deleteObject(oldImageRef)
 
                 // Upload the new image
-                const storageRef = ref(storage, `member_images/${username}_${firstname}`)
+                const imgName = memberImage.name
+                const storageRef = ref(storage, `member_images/${imgName}`)
                 const uploadTask = uploadBytesResumable(storageRef, memberImage)
 
                 uploadTask.on(
@@ -634,10 +636,10 @@ function MemberEdit({
                         response = await response.json();
                         console.log(response)
                         setMessage("Member Edited Successfully!");
-                        window.location.href = '/admin/MemberManage'
+                        // window.location.href = '/admin/MemberManage'
                         setOpenAlert(true);
                         if (!response.ok) {
-                            throw new Error(await response.text())
+                            Error('no response')
                         }
                     }
                 )
