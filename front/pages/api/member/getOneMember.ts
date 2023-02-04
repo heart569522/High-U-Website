@@ -14,6 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             _id: new ObjectId(idValue)
         })
         res.status(200).json(member);
+        console.log(res)
 
     } catch(e: any) {
         console.error(e);

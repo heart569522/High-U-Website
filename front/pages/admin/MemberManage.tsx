@@ -159,7 +159,7 @@ export default function MemberManage(props: Props) {
                   {members?.length > 0 ? (
                     <TableBody>
                       {members.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
-                        loading ? (<Skeleton key={item._id} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
+                        loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
                           <TableRow key={item._id} className="hover:bg-gray-50">
                             <TableCell className="flex justify-center items-center">
                               <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
@@ -171,7 +171,7 @@ export default function MemberManage(props: Props) {
                             <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                             <TableCell className="w-[15%] text-center ">
                               <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                <Link href="/admin/MemberEdit/[id]" as={`/admin/MemberEdit/${item._id}`}>
+                                <Link href="./MemberEdit/[id]" as={`./MemberEdit/${item._id}`}>
                                   <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
                                 </Link>
                                 <Button onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
@@ -205,7 +205,7 @@ export default function MemberManage(props: Props) {
               <Hidden mdUp>
                 {members.map((item, i) => (
                   loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
-                    <Accordion key={i} className="shadow-md">
+                    <Accordion key={item._id} className="shadow-md">
                       <AccordionSummary>
                         <Typography className="font-semibold">{item.username}</Typography>
                       </AccordionSummary>
