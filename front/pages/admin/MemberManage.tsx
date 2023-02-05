@@ -26,6 +26,9 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { storage } from '../api/firebaseConfig';
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
+
 // IMPORT COMPONENT
 import DrawerBar from '../../components/Navigation/DrawerBar'
 
@@ -97,8 +100,8 @@ export default function MemberManage(props: Props) {
   };
 
   const handleDeleteMember = async (memberId: string) => {
-    try {
 
+    try {
       let response = await fetch("http://localhost:3000/api/member/deleteMember?id=" + memberId, {
         method: "POST",
         headers: {
@@ -106,8 +109,12 @@ export default function MemberManage(props: Props) {
           "Content-Type": "application/json"
         }
       })
+      // Delete the old image from storage
+      const imageRef = ref(storage, `member_images/${members}`)
+      await deleteObject(imageRef)
 
       response = await response.json();
+      console.log(response);
       window.location.href = '/admin/MemberManage'
 
     } catch (error) {
