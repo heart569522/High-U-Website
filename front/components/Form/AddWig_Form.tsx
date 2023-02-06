@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-// import { getWig, updateWig } from '../api/wigApi'
+import { storage } from '../../pages/api/firebaseConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import {
   Box,
   Typography,
@@ -22,7 +23,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../Navigation/DrawerBar';
-import Loading from '../Other/Loading';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -48,20 +48,26 @@ const AddWig_Form = () => {
     // Fetch data
     setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 700);
   }, [loading]);
 
-  const [isloading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter()
 
   const [title, setTitle] = useState('');
+  const [style, setStyle] = useState('');
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('');
   const [size, setSize] = useState('');
-  const [brand, setBrand] = useState('');
+  const [price, setPrice] = useState('');
+  const [type, setType] = useState('');
 
-  const [image, setImage] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0)
+  const [url, setUrl] = useState<string | null>(null)
+  const [mainImage, setMainImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const defaultImageUrl = 'https://i.pinimg.com/736x/85/6c/0c/856c0c237eec555ec901c7fd4a275ae3.jpg';
 
@@ -72,15 +78,15 @@ const AddWig_Form = () => {
     return () => URL.revokeObjectURL(previewUrl);
   }, [previewUrl]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files?.[0];
-    if (!image) {
-      setImage(null);
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const mainImage = e.target.files?.[0];
+    if (!mainImage) {
+      setMainImage(null);
       setPreviewUrl(null);
       return;
     }
-    setImage(e.target.files ? e.target.files[0] : null);
-    setPreviewUrl(URL.createObjectURL(image));
+    setMainImage(e.target.files ? e.target.files[0] : null);
+    setPreviewUrl(URL.createObjectURL(mainImage));
   }
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -91,44 +97,18 @@ const AddWig_Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    try {
-      const formData = new FormData()
-      formData.append('title', title)
-      formData.append('desc', desc)
-      formData.append('color', color)
-      formData.append('size', size)
-      formData.append('brand', brand)
-      if (image !== null) {
-        formData.append('image', image)
-      }
-      alert('Wig created successfully');
-      const response = await fetch('/api/wigs', {
-        method: 'POST',
-        body: formData,
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      // router.push('/WigManage');
-      // navigate to wig listing page
-    } catch (err) {
-      setError(err as Error)
-    } finally {
-      setIsLoading(false)
-    }
+    
   }
 
   const handleReset = () => {
     setTitle("");
     setDesc("");
     setColor("");
-    setBrand("");
+    setPrice("");
     setSize("");
-    setImage(null);
+    setMainImage(null);
     setPreviewUrl(null);
-    setError(null);
+    setError("");
   };
 
   return (
@@ -160,7 +140,7 @@ const AddWig_Form = () => {
                       style={{ display: "none", }}
                       id="upload-button"
                       type="file"
-                      onChange={handleImageChange}
+                      onChange={handleMainImageChange}
                     />
                     <img
                       src={previewUrl || defaultImageUrl}
@@ -239,15 +219,15 @@ const AddWig_Form = () => {
                 )}
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Price</Typography>
                     <TextField
                       type='text'
-                      value={brand}
+                      value={price}
                       fullWidth
-                      name='brand'
+                      name='price'
                       variant='outlined'
                       className="font-bold rounded pb-3"
-                      onChange={(e) => setBrand(e.target.value)}
+                      onChange={(e) => setPrice(e.target.value)}
                       onKeyDown={handleKeyPress}
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
