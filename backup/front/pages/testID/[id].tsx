@@ -118,7 +118,7 @@ function Edit({
 
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-    const [memberImage, setMemberImage] = useState(image);
+    const [memberImage, setMemberImage] = useState<File | null>(null);
     const [memberFirstname, setMemberFirstname] = useState(firstname);
     const [memberLastname, setMemberLastname] = useState(lastname);
     const [memberEmail, setMemberEmail] = useState(email);
@@ -138,23 +138,23 @@ function Edit({
     }, [loading]);
 
 
-    // useEffect(() => {
-    //     if (!previewUrl) {
-    //         return;
-    //     }
-    //     return () => URL.revokeObjectURL(previewUrl);
-    // }, [previewUrl]);
+    useEffect(() => {
+        if (!previewUrl) {
+            return;
+        }
+        return () => URL.revokeObjectURL(previewUrl);
+    }, [previewUrl]);
 
-    // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const image = e.target.files?.[0];
-    //     if (!image) {
-    //         setImage(null);
-    //         setPreviewUrl(null);
-    //         return;
-    //     }
-    //     setImage(e.target.files ? e.target.files[0] : null);
-    //     setPreviewUrl(URL.createObjectURL(image));
-    // }
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const image = e.target.files?.[0];
+        if (!image) {
+            setMemberImage(null);
+            setPreviewUrl(null);
+            return;
+        }
+        setMemberImage(e.target.files ? e.target.files[0] : null);
+        setPreviewUrl(URL.createObjectURL(image));
+    }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -192,7 +192,7 @@ function Edit({
 
     return (
         <ThemeProvider theme={theme}>
-            <Head><title>Member Wig | High U Administrator</title></Head>
+            <Head><title>Member Edit | High U Administrator</title></Head>
             <DrawerBar />
             <Box
                 component="main"
@@ -220,7 +220,7 @@ function Edit({
                                             style={{ display: "none", }}
                                             id="upload-button"
                                             type="file"
-                                        // onChange={handleImageChange}
+                                            onChange={handleImageChange}
                                         />
                                         <img
                                             src={previewUrl || image}
@@ -238,22 +238,6 @@ function Edit({
                                         </label>
                                     </center>
                                 )}
-                                <Grid item xs={12}>
-                                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Image Link</Typography>
-                                    <TextField
-                                        type='text'
-                                        value={memberImage ? memberImage : ""}
-                                        fullWidth
-                                        name='image'
-                                        variant='outlined'
-                                        className="font-bold rounded pb-3"
-                                        onChange={(e) => setMemberImage(e.target.value)}
-                                        inputProps={{ style: { color: "#303030" } }}
-                                        sx={{ color: '#303030' }}
-                                        required
-                                        focused
-                                    />
-                                </Grid>
                             </Grid>
                             <Grid item xs={12} md={8}>
                                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
