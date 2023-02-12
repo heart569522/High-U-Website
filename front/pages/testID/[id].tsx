@@ -192,7 +192,7 @@ function Edit({
 
     return (
         <ThemeProvider theme={theme}>
-            <Head><title>Member Wig | High U Administrator</title></Head>
+            <Head><title>Member Edit | High U Administrator</title></Head>
             <DrawerBar />
             <Box
                 component="main"

@@ -14,14 +14,13 @@ import {
   Skeleton,
   Snackbar,
   Alert,
-  AlertTitle
+  AlertTitle,
+  LinearProgress
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import DrawerBar from '../../components/Navigation/DrawerBar';
-import Loading from '../../components/Other/Loading';
-import axios from 'axios';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -42,7 +41,6 @@ const theme = createTheme({
 
 
 const add = () => {
-
   const [openAlert, setOpenAlert] = useState(false);
 
   const [message, setMessage] = useState('');
@@ -87,16 +85,17 @@ const add = () => {
         throw new Error('File is required')
       }
 
-      const name = image.name
       const storageRef = ref(storage, `member_images/${username}_${firstname}`)
       const uploadTask = uploadBytesResumable(storageRef, image)
 
       uploadTask.on(
         'state_changed',
         (snapshot: any) => {
+          
           setProgress(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           )
+          setOpenAlert(true);
         },
         (error: any) => {
           setError(error)
@@ -121,8 +120,8 @@ const add = () => {
           })
           console.log(response)
           handleReset();
-          setMessage("Member Added Successfully!");
           setOpenAlert(true);
+          setMessage("Member Added Successfully!");
           if (!response.ok) {
             throw new Error(await response.text())
           }
@@ -130,8 +129,8 @@ const add = () => {
       )
     } catch (error: any) {
       console.error(error);
-      setError("An error occurred while adding the member. Please try again later.");
       setOpenAlert(true);
+      setError("An error occurred while adding the member. Please try again later.");
     }
   }
 
@@ -170,20 +169,21 @@ const add = () => {
         <Toolbar />
         {message ?
           <Snackbar open={openAlert} autoHideDuration={3000}>
-            <Alert icon={false} onClose={handleCloseAlert} className="bg-green-700 text-white text-lg">
+            <Alert icon={false} onClose={handleCloseAlert} className="bg-green-700 text-white text-lg max-sm:text-base">
               {message}
             </Alert>
           </Snackbar>
           : null}
         {error ?
           <Snackbar open={openAlert} autoHideDuration={3000}>
-            <Alert icon={false} onClose={handleCloseAlert} className="bg-red-700 text-white text-lg">
+            <Alert icon={false} onClose={handleCloseAlert} className="bg-red-700 text-white text-lg max-sm:text-base">
               {error}
             </Alert>
           </Snackbar>
           : null}
 
         <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
+
           <Grid container>
             <Grid item xs={12}>
 
@@ -191,7 +191,6 @@ const add = () => {
                 <Typography className="text-[#303030] font-bold text-xl">
                   Add Member
                 </Typography>
-
               </Box>
 
 
@@ -338,105 +337,3 @@ const add = () => {
 }
 
 export default add
-
-// import React, { useState } from 'react'
-// import { storage } from '../api/firebaseConfig'
-// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-
-// const UploadForm: React.FC = () => {
-//   const [image, setImage] = useState<File>()
-//   const [username, setUsername] = useState('')
-//   const [password, setPassword] = useState('')
-//   const [progress, setProgress] = useState(0)
-//   const [error, setError] = useState<Error | null>(null)
-//   const [url, setUrl] = useState<string | null>(null)
-
-//   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setImage(e.target.files?.[0])
-//   }
-
-//   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setUsername(e.target.value)
-//   }
-
-//   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setPassword(e.target.value)
-//   }
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault()
-
-//     try {
-//       if (!image) {
-//         throw new Error('File is required')
-//       }
-
-//       const name = image.name
-//       const storageRef = ref(storage, `member_images/${username}_${name}`)
-//       const uploadTask = uploadBytesResumable(storageRef, image)
-
-//       uploadTask.on(
-//         'state_changed',
-//         (snapshot: any) => {
-//           setProgress(
-//             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-//           )
-//         },
-//         (error: any) => {
-//           setError(error)
-//         },
-//         async () => {
-//           const imageUrl = await getDownloadURL(uploadTask.snapshot.ref)
-//           setUrl(imageUrl)
-
-//           const response = await fetch('http://localhost:3000/api/member/addMember', {
-//             method: 'POST',
-//             headers: {
-//               'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//               username,
-//               password,
-//               image: imageUrl
-//             })
-//           })
-//           console.log(response)
-
-//           if (!response.ok) {
-//             throw new Error(await response.text())
-//           }
-//         }
-//       )
-//     } catch (error: any) {
-//       setError(error)
-//     }
-//   }
-
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input type="file" onChange={handleImageChange} />
-//       <input
-//         type="text"
-//         value={username}
-//         onChange={handleUsernameChange}
-//         placeholder="Username"
-//       />
-//       <input
-//         type="password"
-//         value={password}
-//         onChange={handlePasswordChange}
-//         placeholder="Password"
-//       />
-//       <button type="submit">Upload</button>
-//       {image && <p>{image.name}</p>}
-//       {error && <p>Error: {error.message}</p>}
-//       {progress > 0 && progress < 100 && (
-//         <p>Uploading... {progress}%</p>
-//       )}
-//       {url && <p>Image URL: {url}</p>}
-//     </form>
-//   )
-// }
-
-// export default UploadForm

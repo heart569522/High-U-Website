@@ -5,7 +5,7 @@ import Head from 'next/head'
 import DrawerBar from '../../components/Navigation/DrawerBar'
 import AddMember_Form from '../../components/Form/AddMember_Form'
 
-function AddWig() {
+function AddMember() {
   return (
     <div>
       <Head><title>Add Member | High U Administrator</title></Head>
@@ -15,4 +15,4 @@ function AddWig() {
   )
 }
 
-export default AddWig
+export default AddMember

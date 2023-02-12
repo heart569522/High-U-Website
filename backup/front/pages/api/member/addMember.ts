@@ -1,33 +1,32 @@
-import clientPromise from '../../../lib/mongodb';
-import { NextApiRequest, NextApiResponse } from 'next';
+import clientPromise from "../../../lib/mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
+  try {
+    const client = await clientPromise;
+    const db = client.db("high_u");
+    const { image, firstname, lastname, email, username, password } = req.body;
 
-        const client = await clientPromise;
-        const db = client.db("high_u");
-        const { 
-            image, 
-            firstname, 
-            lastname, 
-            email, 
-            username, 
-            password 
-        } = req.body;
+    const member = await db.collection("member").insertOne({
+      image,
+      firstname,
+      lastname,
+      email,
+      username,
+      password,
+      createdAt: new Date(Date.now()).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    });
 
-        const member = await db.collection("member").insertOne({
-            image, 
-            firstname, 
-            lastname, 
-            email, 
-            username, 
-            password
-        })
-
-        res.json(member);
-
-    } catch (e: any) {
-        console.error(e);
-        throw new Error(e).message;
-    }
-}
+    res.status(201).json(member);
+    console.log(res)
+  } catch (e: any) {
+    console.error(e);
+    throw new Error(e).message;
+  }
+};

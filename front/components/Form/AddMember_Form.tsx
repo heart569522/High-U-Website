@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-// import { getWig, updateWig } from '../api/wigApi'
+import { storage } from '../../pages/api/firebaseConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import {
     Box,
     Typography,
@@ -11,12 +12,14 @@ import {
     Button,
     TextField,
     Skeleton,
+    Snackbar,
+    Alert,
+    AlertTitle
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../Navigation/DrawerBar';
-import Loading from '../Other/Loading';
+import DrawerBar from '../../components/Navigation/DrawerBar';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -42,8 +45,10 @@ const AddMember_Form = () => {
         // Fetch data
         setTimeout(() => {
             setLoading(false);
-        }, 800);
+        }, 700);
     }, [loading]);
+
+    const [openAlert, setOpenAlert] = useState(false);
 
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
@@ -55,6 +60,8 @@ const AddMember_Form = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const [progress, setProgress] = useState(0)
+    const [url, setUrl] = useState<string | null>(null)
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const defaultImageUrl = 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg';
@@ -66,7 +73,7 @@ const AddMember_Form = () => {
         return () => URL.revokeObjectURL(previewUrl);
     }, [previewUrl]);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = (e: any) => {
         const image = e.target.files?.[0];
         if (!image) {
             setImage(null);
@@ -94,35 +101,66 @@ const AddMember_Form = () => {
         setError("");
     };
 
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenAlert(false);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
-        setError("")
+
         try {
-            const formData = new FormData()
-            formData.append('firstname', firstname)
-            formData.append('lastname', lastname)
-            formData.append('email', email)
-            formData.append('username', username)
-            formData.append('password', password)
-            if (image !== null) {
-                formData.append('image', image)
+            if (!image) {
+                throw new Error('File is required')
             }
 
-            let response = await fetch("http://locahost:3000/api/addMember", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    Accept: "application/json, text/plain, */*",
-                    "Content-Type": "application/json"
-                }
-            })
-            response = await response.json();
-            handleReset();
-            setMessage("Member Added Successfully!");
+            const imgName = image.name
+            const storageRef = ref(storage, `member_images/${imgName}`)
+            const uploadTask = uploadBytesResumable(storageRef, image)
 
-        } catch (errorMessage: any) {
-            setError(errorMessage);
+            uploadTask.on(
+                'state_changed',
+                (snapshot: any) => {
+                    setProgress(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    )
+                },
+                (error: any) => {
+                    setError(error)
+                },
+                async () => {
+                    const imageUrl = await getDownloadURL(uploadTask.snapshot.ref)
+                    setUrl(imageUrl)
+
+                    const response = await fetch('http://localhost:3000/api/member/addMember', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            firstname,
+                            lastname,
+                            email,
+                            username,
+                            password,
+                            image: imageUrl
+                        })
+                    })
+                    console.log(response)
+                    handleReset();
+                    setMessage("Member Added Successfully!");
+                    setOpenAlert(true);
+                    if (!response.ok) {
+                        throw new Error(await response.text())
+                    }
+                }
+            )
+        } catch (error: any) {
+            console.error(error);
+            setError("An error occurred while adding the member. Please try again later.");
+            setOpenAlert(true);
         }
     }
 
@@ -135,6 +173,20 @@ const AddMember_Form = () => {
                 sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
+                {message ?
+                    <Snackbar open={openAlert} autoHideDuration={3000}>
+                        <Alert icon={false} onClose={handleCloseAlert} className="bg-green-700 text-white text-lg max-sm:text-base">
+                            {message}
+                        </Alert>
+                    </Snackbar>
+                    : null}
+                {error ?
+                    <Snackbar open={openAlert} autoHideDuration={3000}>
+                        <Alert icon={false} onClose={handleCloseAlert} className="bg-red-700 text-white text-lg max-sm:text-base">
+                            {error}
+                        </Alert>
+                    </Snackbar>
+                    : null}
                 <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
                     <Grid container>
                         <Grid item xs={12}>
@@ -143,10 +195,7 @@ const AddMember_Form = () => {
                                     <Typography className="text-[#303030] font-bold text-xl">
                                         Add Member
                                     </Typography>
-                                    {error ? <Typography className="text-red-500 font-bold text-xl">{error}</Typography> : null}
-                                    {message ? <Typography className="text-green-700 font-bold text-xl">{message}</Typography> : null}
                                 </Box>
-
                             )}
                         </Grid>
                     </Grid>
