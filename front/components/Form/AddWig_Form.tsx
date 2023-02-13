@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 import DrawerBar from '../Navigation/DrawerBar';
@@ -364,13 +364,52 @@ const AddWig_Form = () => {
             <Grid item xs={12}>
               {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
                 <Typography className="text-[#303030] font-bold text-xl">
-                  Create Wig
+                  Add Wig
                 </Typography>
               )}
             </Grid>
           </Grid>
           <form onSubmit={handleSubmit} onReset={handleReset} className="pt-3">
             <Grid container spacing={1}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+                  <input
+                    ref={arImageInputRef}
+                    accept="image/*"
+                    style={{ display: "none", }}
+                    id="upload-button"
+                    type="file"
+                    // multiple
+                    onChange={handleArImageReset}
+                  />
+                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Wig AR Image</Typography>
+                  {previewArImage ? (
+                    <center>
+                      <img
+                        src={previewArImage || ''}
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
+                      />
+                      <Box className="text-center items-center justify-center flex flex-col">
+                        <Tooltip title="Reset Image">
+                          <IconButton onClick={handleArImageReset} className='text-gray-400 hover:text-red-400'>
+                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </center>
+                  ) : (
+                    <>
+                      <Box className="text-center items-center justify-center flex flex-col hover:opacity-70" onClick={openArImageDialog}>
+                        {messageArImage ? <Typography className="text-red-500 font-bold py-2" variant="subtitle1">{messageArImage}</Typography> : null}
+                        <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
+                        <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
+                        <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
+                        <Typography className="text-amber-500" variant="subtitle2">**Only PNG(Maximum 1080x1920px)</Typography>
+                      </Box>
+                    </>
+                  )}
+                </Box>
+              </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
                   <input
@@ -387,7 +426,7 @@ const AddWig_Form = () => {
                     <center>
                       <img
                         src={previewMainImage || ''}
-                        className="rounded-lg object-top object-cover h-auto w-80 py-2"
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
                       />
                       <Box className="text-center items-center justify-center flex flex-col">
                         <Tooltip title="Reset Image">
@@ -401,7 +440,7 @@ const AddWig_Form = () => {
                     <>
                       <Box className="text-center items-center justify-center flex flex-col hover:opacity-70" onClick={openMainImageDialog}>
                         {messageMainImage ? <Typography className="text-red-500 font-bold py-2" variant="subtitle1">{messageMainImage}</Typography> : null}
-                        <CloudUploadIcon className="text-gray-400 w-20 h-20" fontSize='large' />
+                        <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
                         <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">**PNG or JPG (Maximum 1080x1920px)</Typography>
@@ -426,7 +465,7 @@ const AddWig_Form = () => {
                     <center>
                       <img
                         src={previewSubImage1 || ''}
-                        className="rounded-lg object-top object-cover h-auto w-80 py-2"
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
                       />
                       <Box className="text-center items-center justify-center flex flex-col">
                         <Tooltip title="Reset Image">
@@ -440,7 +479,7 @@ const AddWig_Form = () => {
                     <>
                       <Box className="text-center items-center justify-center flex flex-col hover:opacity-70" onClick={openSubImage1Dialog}>
                         {messageSubImage1 ? <Typography className="text-red-500 font-bold py-2" variant="subtitle1">{messageSubImage1}</Typography> : null}
-                        <CloudUploadIcon className="text-gray-400 w-20 h-20" fontSize='large' />
+                        <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
                         <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">**PNG or JPG (Maximum 1080x1920px)</Typography>
@@ -465,7 +504,7 @@ const AddWig_Form = () => {
                     <center>
                       <img
                         src={previewSubImage2 || ''}
-                        className="rounded-lg object-top object-cover h-auto w-80 py-2"
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
                       />
                       <Box className="text-center items-center justify-center flex flex-col">
                         <Tooltip title="Reset Image">
@@ -479,7 +518,7 @@ const AddWig_Form = () => {
                     <>
                       <Box className="text-center items-center justify-center flex flex-col hover:opacity-70" onClick={openSubImage2Dialog}>
                         {messageSubImage2 ? <Typography className="text-red-500 font-bold py-2" variant="subtitle1">{messageSubImage2}</Typography> : null}
-                        <CloudUploadIcon className="text-gray-400 w-20 h-20" fontSize='large' />
+                        <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
                         <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">**PNG or JPG (Maximum 1080x1920px)</Typography>
@@ -504,7 +543,7 @@ const AddWig_Form = () => {
                     <center>
                       <img
                         src={previewSubImage3 || ''}
-                        className="rounded-lg object-top object-cover h-auto w-80 py-2"
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
                       />
                       <Box className="text-center items-center justify-center flex flex-col">
                         <Tooltip title="Reset Image">
@@ -518,7 +557,7 @@ const AddWig_Form = () => {
                     <>
                       <Box className="text-center items-center justify-center flex flex-col hover:opacity-70" onClick={openSubImage3Dialog}>
                         {messageSubImage3 ? <Typography className="text-red-500 font-bold py-2" variant="subtitle1">{messageSubImage3}</Typography> : null}
-                        <CloudUploadIcon className="text-gray-400 w-20 h-20" fontSize='large' />
+                        <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
                         <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">**PNG or JPG (Maximum 1080x1920px)</Typography>
@@ -529,8 +568,8 @@ const AddWig_Form = () => {
               </Grid>
             </Grid>
 
-            <Grid container className="flex items-center justify-center p-2">
-              <Grid xs={12} sm={6} md={4} className="p-1">
+            <Grid container spacing={1} className="flex items-center justify-center py-2">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography><TextField
@@ -549,7 +588,7 @@ const AddWig_Form = () => {
                   </>
                 )}
               </Grid>
-              <Grid xs={12} sm={6} md={4} className="p-1">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Style</Typography><TextField
@@ -568,7 +607,7 @@ const AddWig_Form = () => {
                   </>
                 )}
               </Grid>
-              <Grid xs={12} sm={6} md={4} className="p-1">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Type</Typography><TextField
@@ -587,7 +626,7 @@ const AddWig_Form = () => {
                   </>
                 )}
               </Grid>
-              <Grid xs={12} sm={6} md={4} className="p-1">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography><TextField
@@ -606,7 +645,7 @@ const AddWig_Form = () => {
                   </>
                 )}
               </Grid>
-              <Grid xs={12} sm={6} md={4} className="p-1">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography><TextField
@@ -625,26 +664,33 @@ const AddWig_Form = () => {
                   </>
                 )}
               </Grid>
-              <Grid xs={12} sm={6} md={4} className="p-1">
+              <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Price</Typography><TextField
-                      type='text'
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Price (฿)</Typography>
+                    <TextField
+                      type='number'
                       value={price}
                       fullWidth
                       name='price'
                       variant='outlined'
                       className="font-bold rounded pb-3"
-                      onChange={(e) => setPrice(e.target.value)}
+                      onChange={(e) => {
+                        const parsedValue = parseFloat(e.target.value);
+                        if (!isNaN(parsedValue) && parsedValue >= 0) {
+                          setPrice(parsedValue.toString());
+                        }
+                      }}
                       onKeyDown={handleKeyPress}
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused />
+                      focused
+                    />
                   </>
                 )}
               </Grid>
-              <Grid xs={12} className="p-1">
+              <Grid item xs={12}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography><TextField
@@ -666,9 +712,9 @@ const AddWig_Form = () => {
                 )}
               </Grid>
             </Grid>
-
+            <Divider />
             <Grid container spacing={1}>
-                
+
             </Grid>
           </form>
         </Box>
