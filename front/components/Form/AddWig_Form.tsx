@@ -19,7 +19,10 @@ import {
   Link,
   Skeleton,
   IconButton,
-  Tooltip
+  Tooltip,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -66,6 +69,10 @@ const AddWig_Form = () => {
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('');
   const [size, setSize] = useState('');
+  const [sizeLength, setSizeLength] = useState('');
+  const [sizeCircumference, setSizeCircumference] = useState('');
+  const [sizeEarToEar, setSizeEarToEar] = useState('');
+  const [sizeFrontToBack, setSizeFrontToBack] = useState('');
   const [price, setPrice] = useState('');
   const [type, setType] = useState('');
 
@@ -404,7 +411,7 @@ const AddWig_Form = () => {
                         <AddPhotoAlternateOutlinedIcon className="text-gray-400 w-20 h-20" fontSize='large' />
                         <Typography className="text-gray-500 font-bold" variant="subtitle1">Click to upload</Typography>
                         <Typography className="text-amber-500" variant="subtitle2">*Only Vertical Image</Typography>
-                        <Typography className="text-amber-500" variant="subtitle2">**Only PNG(Maximum 1080x1920px)</Typography>
+                        <Typography className="text-amber-500" variant="subtitle2">**Only PNG (Maximum 1080x1920px)</Typography>
                       </Box>
                     </>
                   )}
@@ -584,7 +591,8 @@ const AddWig_Form = () => {
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused />
+                    // focused 
+                    />
                   </>
                 )}
               </Grid>
@@ -603,7 +611,8 @@ const AddWig_Form = () => {
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused />
+                    // focused 
+                    />
                   </>
                 )}
               </Grid>
@@ -622,11 +631,12 @@ const AddWig_Form = () => {
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused />
+                    // focused 
+                    />
                   </>
                 )}
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography><TextField
@@ -641,30 +651,113 @@ const AddWig_Form = () => {
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused />
+                    // focused 
+                    />
                   </>
                 )}
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={6}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography><TextField
-                      type='text'
-                      value={size}
-                      fullWidth
-                      name='size'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setSize(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      required
-                      focused />
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Size (Inch)</Typography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={6} sm={3}>
+                        <TextField
+                          label="Length"
+                          color="primary"
+                          type='number'
+                          value={sizeLength}
+                          fullWidth
+                          name='sizeLength'
+                          variant='outlined'
+                          className="font-bold rounded pb-3"
+                          onChange={(e) => {
+                            const parsedValue = parseFloat(e.target.value);
+                            if (!isNaN(parsedValue) && parsedValue >= 0) {
+                              setSizeLength(parsedValue.toString());
+                            }
+                          }}
+                          onKeyDown={handleKeyPress}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        <TextField
+                          label="Circumference"
+                          color="primary"
+                          type='number'
+                          value={sizeCircumference}
+                          fullWidth
+                          name='sizeCircumference'
+                          variant='outlined'
+                          className="font-bold rounded pb-3"
+                          onChange={(e) => {
+                            const parsedValue = parseFloat(e.target.value);
+                            if (!isNaN(parsedValue) && parsedValue >= 0) {
+                              setSizeCircumference(parsedValue.toString());
+                            }
+                          }}
+                          onKeyDown={handleKeyPress}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        <TextField
+                          label="Ear to Ear"
+                          color="primary"
+                          type='number'
+                          value={sizeEarToEar}
+                          fullWidth
+                          name='sizeEarToEar'
+                          variant='outlined'
+                          className="font-bold rounded pb-3"
+                          onChange={(e) => {
+                            const parsedValue = parseFloat(e.target.value);
+                            if (!isNaN(parsedValue) && parsedValue >= 0) {
+                              setSizeEarToEar(parsedValue.toString());
+                            }
+                          }}
+                          onKeyDown={handleKeyPress}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={3}>
+                        <TextField
+                          label="Front to Back"
+                          color="primary"
+                          type='number'
+                          value={sizeFrontToBack}
+                          fullWidth
+                          name='sizeFrontToBack'
+                          variant='outlined'
+                          className="font-bold rounded pb-3"
+                          onChange={(e) => {
+                            const parsedValue = parseFloat(e.target.value);
+                            if (!isNaN(parsedValue) && parsedValue >= 0) {
+                              setSizeFrontToBack(parsedValue.toString());
+                            }
+                          }}
+                          onKeyDown={handleKeyPress}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          required
+                        />
+                      </Grid>
+                    </Grid>
                   </>
                 )}
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Price (฿)</Typography>
@@ -685,7 +778,7 @@ const AddWig_Form = () => {
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
                       required
-                      focused
+                    // focused
                     />
                   </>
                 )}
@@ -707,7 +800,8 @@ const AddWig_Form = () => {
                       multiline
                       maxRows={10}
                       required
-                      focused />
+                    // focused 
+                    />
                   </>
                 )}
               </Grid>
