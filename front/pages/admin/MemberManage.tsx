@@ -56,6 +56,7 @@ export async function getServerSideProps() {
   } catch (e) {
     console.error(e);
   }
+
 }
 
 const drawerWidth = 240;
