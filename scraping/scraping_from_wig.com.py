@@ -42,7 +42,7 @@ def main():
 
     # Create a directory with the name of the product
     folder_name = re.sub(r'\|', '', title).strip()
-    folder_path = os.path.join('./Downloads', folder_name)
+    folder_path = os.path.join('./scraping/Downloads', folder_name)
     os.makedirs(folder_path, exist_ok=True)
 
     # Download each image to the product folder
