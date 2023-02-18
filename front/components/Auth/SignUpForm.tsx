@@ -10,6 +10,7 @@ import {
     TextField,
     CssBaseline,
     Button,
+    ButtonGroup,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -42,6 +43,8 @@ export default function SignUpForm() {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [message, setMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleChange = (setState: (value: string) => void) => (
@@ -73,14 +76,6 @@ export default function SignUpForm() {
         }
     };
 
-    // const handleClickShowConfirmPassword = () => {
-    //   setShowConfirmPassword(!showConfirmPassword);
-    // };
-
-    // const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //   event.preventDefault();
-    // };
-
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === " ") {
             event.preventDefault();
@@ -97,11 +92,50 @@ export default function SignUpForm() {
         setError(null);
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        alert(username)
-        alert(password)
+    const checkPasswordsMatch = (): boolean => {
+        return password === confirmPassword;
     };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!checkPasswordsMatch()) {
+            setErrorMessage("Passwords do not match");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstname,
+                    lastname,
+                    email,
+                    username,
+                    password
+                })
+            })
+            console.log(response)
+
+            if (response.ok) {
+                handleReset()
+                setMessage("Sign Up Successfully!");
+
+                setTimeout(() => {
+                    window.location.href = '/user/SignIn'
+                }, 1000); // 1 second delay before navigating to sign in page
+            } else {
+                throw new Error(await response.text())
+            }
+        } catch (error: any) {
+            console.error(error)
+            setErrorMessage("Sign Up Error, Try again later.");
+        }
+    }
+
 
     const handleMenuItemClick = (path: string) => {
         router.push(path)
@@ -113,21 +147,31 @@ export default function SignUpForm() {
             <Box className="bg-[#948975] h-full w-full bg-cover fixed">
                 <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
                     <Container component="main" maxWidth="sm">
-                        <CssBaseline />
-                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="flip-left">
+                        {/* <CssBaseline /> */}
+                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="fade-zoom-in">
                             <Typography component="h1" variant="h5" color="primary" className="font-bold">
                                 High U - Sign Up
                             </Typography>
+                            {message ?
+                                <Typography variant="subtitle1" className="font-bold text-green-700">
+                                    {message}
+                                </Typography>
+                                : null}
+                            {errorMessage ?
+                                <Typography variant="subtitle1" className="font-bold text-red-500">
+                                    {errorMessage}
+                                </Typography>
+                                : null}
                             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             autoComplete="given-name"
-                                            name="firstName"
+                                            name="firstname"
                                             value={firstname}
                                             required
                                             fullWidth
-                                            id="firstName"
+                                            id="firstname"
                                             label="First Name"
                                             autoFocus
                                             onChange={handleChange(setFirstname)}
@@ -139,9 +183,9 @@ export default function SignUpForm() {
                                             required
                                             fullWidth
                                             value={lastname}
-                                            id="lastName"
+                                            id="lastname"
                                             label="Last Name"
-                                            name="lastName"
+                                            name="lastname"
                                             autoComplete="family-name"
                                             onChange={handleChange(setLastname)}
                                             onKeyPress={handleKeyPress}
@@ -149,21 +193,10 @@ export default function SignUpForm() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            label="Username"
-                                            value={username}
-                                            id="username"
-                                            name="username"
-                                            onChange={handleChange(setUsername)}
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                            autoComplete="username"
-                                            onKeyPress={handleKeyPress}
-                                        />
-                                        <TextField
                                             required
                                             fullWidth
                                             value={email}
+                                            type="email"
                                             id="email"
                                             label="Email Address"
                                             name="email"
@@ -174,12 +207,24 @@ export default function SignUpForm() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            label="Username"
+                                            value={username}
+                                            id="username"
+                                            name="username"
+                                            onChange={handleChange(setUsername)}
+                                            required
+                                            fullWidth
+                                            autoComplete="username"
+                                            onKeyPress={handleKeyPress}
+                                        />
+                                        <TextField
                                             margin="normal"
                                             required
                                             name="password"
                                             label="Password"
                                             value={password}
                                             id="password"
+                                            type="password"
                                             autoComplete="current-password"
                                             onChange={handlePasswordChange}
                                             variant="outlined"
@@ -193,54 +238,50 @@ export default function SignUpForm() {
                                             value={confirmPassword}
                                             id="confirmPassword"
                                             onChange={handleConfirmPasswordChange}
-                                            // type={showConfirmPassword ? 'text' : 'password'}
-                                            type={password}
+                                            type="password"
                                             variant="outlined"
                                             onKeyPress={handleKeyPress}
                                             fullWidth
                                             error={Boolean(error)}
                                             helperText={error}
-                                        // InputProps={{
-                                        //     endAdornment: (
-                                        //         <IconButton
-                                        //             aria-label="toggle confirm password visibility"
-                                        //             onClick={handleClickShowConfirmPassword}
-                                        //             onMouseDown={handleMouseDownConfirmPassword}
-                                        //         >
-                                        //             {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                                        //         </IconButton>
-                                        //     ),
-                                        // }}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button
-                                            type="submit"
-                                            fullWidth
-                                            variant="contained"
-                                            className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
-                                        >
-                                            Sign Up
-                                        </Button>
-                                        <Button
-                                            type="reset"
-                                            fullWidth
-                                            variant="outlined"
-                                            onClick={handleReset}
-                                            className="text-red-500 border-red-500 hover:border-red-700 hover:text-red-700 mt-3 mb-2 font-bold"
-                                        >
-                                            Reset
-                                        </Button>
+                                        <ButtonGroup fullWidth className='flex flex-col'>
+                                            <Button
+                                                type="submit"
+                                                fullWidth
+                                                variant="contained"
+                                                className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
+                                            >
+                                                Sign&nbsp;Up
+                                            </Button>
+                                            <Button
+                                                type="reset"
+                                                fullWidth
+                                                variant="outlined"
+                                                onClick={handleReset}
+                                                className="text-red-500 border-red-500 hover:border-red-700 hover:text-red-700 mt-3 mb-2 font-bold"
+                                            >
+                                                Reset
+                                            </Button>
+                                        </ButtonGroup>
                                     </Grid>
                                 </Grid>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <Link onClick={() => handleMenuItemClick('/user/SignIn')} className="cursor-pointer" variant="body2" color="secondary">
+                                        <Link
+                                            onClick={() => handleMenuItemClick('/user/SignIn')}
+                                            className="cursor-pointer"
+                                            variant="body2"
+                                            color="secondary"
+                                        >
                                             {"Already have an account? Sign in"}
                                         </Link>
                                     </Grid>
                                 </Grid>
                             </Box>
+
                         </Box>
                     </Container>
                 </Box>
