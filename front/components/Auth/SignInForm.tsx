@@ -12,7 +12,6 @@ import {
     Button,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const theme = createTheme({
     typography: {
@@ -76,7 +75,7 @@ const SignInForm = React.memo(() => {
                 <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
                     <Container component="main" maxWidth="sm">
                         <CssBaseline />
-                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="flip-right">
+                        <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="fade-zoom-in">
                             <Typography component="h1" variant="h5" color="primary" className="font-bold">
                                 High U - Member
                             </Typography>
@@ -104,21 +103,9 @@ const SignInForm = React.memo(() => {
                                     autoComplete="current-password"
                                     onChange={handlePasswordChange}
                                     onKeyPress={handleKeyPress}
-                                    // type={showPassword ? 'text' : 'password'}
                                     type='password'
                                     variant="outlined"
                                     fullWidth
-                                    // InputProps={{
-                                    //     endAdornment: (
-                                    //         <IconButton
-                                    //             aria-label="toggle password visibility"
-                                    //             onClick={handleClickShowPassword}
-                                    //             onMouseDown={handleMouseDownPassword}
-                                    //         >
-                                    //             {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    //         </IconButton>
-                                    //     ),
-                                    // }}
                                 />
                                 <Button
                                     type="submit"

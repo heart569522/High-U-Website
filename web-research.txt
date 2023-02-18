@@ -1,2 +1,6 @@
 https://wilshirewigs.com/how-measure-your-wig-size
 https://www.wigs.com/
+
+CIRCUMFERENCE = side*2 (ต้องเยอะสุด)
+EAR TO EAR	= crown
+FRONT TO BACK
