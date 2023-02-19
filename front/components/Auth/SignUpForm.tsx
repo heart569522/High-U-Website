@@ -13,7 +13,7 @@ import {
     ButtonGroup,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { image } from '@tensorflow/tfjs';
 
 const theme = createTheme({
     typography: {
@@ -35,14 +35,15 @@ const theme = createTheme({
 
 export default function SignUpForm() {
     const router = useRouter()
+    const defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg';
 
+    const [image, setImage] = useState(defaultImage);
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -90,6 +91,8 @@ export default function SignUpForm() {
         setPassword("");
         setConfirmPassword("");
         setError(null);
+        setErrorMessage(null);
+        setMessage(null);
     };
 
     const checkPasswordsMatch = (): boolean => {
@@ -97,7 +100,7 @@ export default function SignUpForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!checkPasswordsMatch()) {
             setErrorMessage("Passwords do not match");
@@ -105,37 +108,37 @@ export default function SignUpForm() {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/signup', {
+            const response = await fetch('http://localhost:3000/api/auth/user_signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    image,
                     firstname,
                     lastname,
                     email,
                     username,
                     password
                 })
-            })
-            console.log(response)
+            });
 
             if (response.ok) {
-                handleReset()
+                handleReset();
                 setMessage("Sign Up Successfully!");
-
+                // Navigate to sign in page after a delay
                 setTimeout(() => {
-                    window.location.href = '/user/SignIn'
-                }, 1000); // 1 second delay before navigating to sign in page
+                    window.location.href = '/user/SignIn';
+                }, 1500);
+
             } else {
-                throw new Error(await response.text())
+                throw new Error(await response.text());
             }
         } catch (error: any) {
-            console.error(error)
+            console.error(error);
             setErrorMessage("Sign Up Error, Try again later.");
         }
     }
-
 
     const handleMenuItemClick = (path: string) => {
         router.push(path)
@@ -165,6 +168,14 @@ export default function SignUpForm() {
                             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={12} sm={6}>
+                                        <input
+                                            name="image"
+                                            id='image'
+                                            value={image}
+                                            disabled
+                                            type="hidden"
+                                            onChange={handleChange(setImage)}
+                                        />
                                         <TextField
                                             autoComplete="given-name"
                                             name="firstname"
@@ -251,8 +262,8 @@ export default function SignUpForm() {
                                             <Button
                                                 type="submit"
                                                 fullWidth
-                                                variant="contained"
-                                                className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
+                                                // variant="contained"
+                                                className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold text-white"
                                             >
                                                 Sign&nbsp;Up
                                             </Button>
