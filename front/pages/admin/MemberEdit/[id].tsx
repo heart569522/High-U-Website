@@ -178,9 +178,9 @@ function MemberEdit({
                 }
 
                 // Delete the old image from storage
-                const oldImgUrl = memberImage.name
-                const oldImageRef = ref(storage, `member_images/${oldImgUrl}`);
-                await deleteObject(oldImageRef)
+                // const oldImgUrl = memberImage.name
+                // const oldImageRef = ref(storage, `member_images/${oldImgUrl}`);
+                // await deleteObject(oldImageRef)
 
                 // Upload the new image
                 const imgName = memberImage.name

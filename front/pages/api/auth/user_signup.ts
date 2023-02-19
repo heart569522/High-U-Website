@@ -5,9 +5,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client = await clientPromise;
     const db = client.db("high_u");
-    const { firstname, lastname, email, username, password } = req.body;
+    const { image, firstname, lastname, email, username, password } = req.body;
 
     const member = await db.collection("member").insertOne({
+      image,
       firstname,
       lastname,
       email,
