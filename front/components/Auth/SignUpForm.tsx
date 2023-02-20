@@ -8,12 +8,10 @@ import {
     Grid,
     Link,
     TextField,
-    CssBaseline,
     Button,
     ButtonGroup,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { image } from '@tensorflow/tfjs';
 
 const theme = createTheme({
     typography: {
@@ -30,7 +28,6 @@ const theme = createTheme({
         }
     },
 });
-
 
 
 export default function SignUpForm() {
@@ -127,9 +124,9 @@ export default function SignUpForm() {
                 handleReset();
                 setMessage("Sign Up Successfully!");
                 // Navigate to sign in page after a delay
-                setTimeout(() => {
-                    window.location.href = '/user/SignIn';
-                }, 1500);
+                // setTimeout(() => {
+                //     window.location.href = '/user/SignIn';
+                // }, 1500);
 
             } else {
                 throw new Error(await response.text());
