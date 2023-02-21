@@ -1,62 +1,31 @@
-// "use client"
-
-// import * as React from 'react';
-// import { useState, useEffect } from 'react';
-// import { useRouter } from 'next/router'
-// import { path } from 'animejs'
-
-// // IMPORT COMPONENT
-// import SplashScreen from '../components/Other/SplashScreen';
-// import Navbar from "../components/Navigation/Navigation"
-// import HomeBackground from "../components/Home/HomeBackground"
-// import HomeContent from "../components/Home/HomeContent"
-// import Footer from "../components/Footer/Footer"
-
-// export default function index() {
-//   const router = useRouter()
-//   const isHome = router.pathname === "/"
-//   const [isLoading, setIsLoading] = useState(isHome)
-
-//   useEffect(() => {
-//     if (isLoading) return
-//   }, [isLoading])
-
-//   return (
-//     <>
-//       {isLoading && isHome ? (
-//         <SplashScreen finishLoading={() => setIsLoading(false)} />
-//       ) : (
-//         <>
-//           <Navbar />
-//           <HomeBackground />
-//           <HomeContent />
-//           <Footer />
-//         </>
-//       )}
-//     </>
-
-//   )
-// }
-
-import * as React from 'react';
-
-// IMPORT COMPONENT
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import SplashScreen from '../components/Other/SplashScreen';
-import Navbar from "../components/Navigation/Navigation"
-import HomeBackground from "../components/Home/HomeBackground"
-import HomeContent from "../components/Home/HomeContent"
-import Footer from "../components/Footer/Footer"
+import Navbar from "../components/Navigation/Navigation";
+import HomeBackground from "../components/Home/HomeBackground";
+import HomeContent from "../components/Home/HomeContent";
+import Footer from "../components/Footer/Footer";
 
-export default function index() {
+export default function Index() {
+  const router = useRouter();
+  const [isHome, setIsHome] = useState(false);
 
+  useEffect(() => {
+    setIsHome(router.pathname === '/');
+  }, [router.pathname]);
 
   return (
     <>
-      <Navbar />
-      <HomeBackground />
-      <HomeContent />
-      <Footer />
+      {isHome ? (
+        <SplashScreen finishLoading={() => setIsHome(false)} />
+      ) : (
+        <>
+          <Navbar />
+          <HomeBackground />
+          <HomeContent />
+          <Footer />
+        </>
+      )}
     </>
-
-  )
+  );
 }
