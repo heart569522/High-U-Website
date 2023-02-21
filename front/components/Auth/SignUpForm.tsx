@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import DOMPurify from 'dompurify';
 import { useRouter } from 'next/router'
 import {
     IconButton,
@@ -46,7 +47,7 @@ export default function SignUpForm() {
     const [error, setError] = useState<string | null>(null);
 
     const handleChange = (setState: (value: string) => void) => (
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         setState(event.target.value);
     };
@@ -105,20 +106,27 @@ export default function SignUpForm() {
         }
 
         try {
+            const sanitizedImage = DOMPurify.sanitize(image);
+            const sanitizedFirstname = DOMPurify.sanitize(firstname);
+            const sanitizedLastname = DOMPurify.sanitize(lastname);
+            const sanitizedEmail = DOMPurify.sanitize(email);
+            const sanitizedUsername = DOMPurify.sanitize(username);
+            const sanitizedPassword = DOMPurify.sanitize(password);
+
             const response = await fetch('http://localhost:3000/api/auth/user_signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    image,
-                    firstname,
-                    lastname,
-                    email,
-                    username,
-                    password
-                })
-            });
+                    image: sanitizedImage,
+                    firstname: sanitizedFirstname,
+                    lastname: sanitizedLastname,
+                    email: sanitizedEmail,
+                    username: sanitizedUsername,
+                    password: sanitizedPassword,
+                }),
+            }); console.log(image, firstname, lastname, email, username, password)
 
             if (response.ok) {
                 handleReset();
