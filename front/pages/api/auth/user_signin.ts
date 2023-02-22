@@ -25,6 +25,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
 
+        res.status(200).json({ message: "Sign-in successful" });
+
     } catch (e: any) {
         console.error(e);
         throw new Error(e).message;
