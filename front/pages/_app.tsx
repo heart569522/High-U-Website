@@ -6,7 +6,6 @@ import '../styles/globals.css'
 import '../styles/lodingStyle.css'
 import '../styles/globals_admin.css'
 import '@tremor/react/dist/esm/tremor.css'
-import '../pages/test/dist/hexagon_style.css'
 
 import type { AppProps } from 'next/app'
 

@@ -34,23 +34,12 @@ const SignInForm = React.memo(() => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
 
-    const handleUsernameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setUsername(event.target.value);
-    }, []);
-
-    const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    }, []);
-
-    const handleClickShowPassword = useCallback(() => {
-        setShowPassword(!showPassword);
-    }, [showPassword]);
-
-    const handleMouseDownPassword = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    }, []);
+    const handleChange = (setState: (value: string) => void) => (
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        setState(event.target.value);
+    };
 
     const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
         if (event.key === ' ') {
@@ -58,11 +47,32 @@ const SignInForm = React.memo(() => {
         }
     }, []);
 
-    const handleLogin = useCallback((event: FormEvent) => {
+    const handleLogin = useCallback(async (event: FormEvent) => {
         event.preventDefault();
-        alert(username);
-        alert(password);
-    }, [username, password]);
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/user_signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            console.log(response);
+            
+
+            if (response.ok) {
+                
+                router.push('/');
+            } else {
+                throw new Error('Login failed. Please check your credentials and try again.');
+            }
+        } catch (e: any) {
+            console.error(e);
+            alert(e.message);
+        }
+    }, [username, password, router]);
+
 
     const handleMenuItemClick = (path: string) => {
         router.push(path)
@@ -85,7 +95,7 @@ const SignInForm = React.memo(() => {
                                     value={username}
                                     id="username"
                                     name="username"
-                                    onChange={handleUsernameChange}
+                                    onChange={handleChange(setUsername)}
                                     onKeyPress={handleKeyPress}
                                     margin="normal"
                                     required
@@ -101,7 +111,7 @@ const SignInForm = React.memo(() => {
                                     value={password}
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={handlePasswordChange}
+                                    onChange={handleChange(setPassword)}
                                     onKeyPress={handleKeyPress}
                                     type='password'
                                     variant="outlined"
