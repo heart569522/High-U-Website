@@ -1,56 +1,69 @@
-import NextAuth from "next-auth"
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
-import clientPromise from "../../../lib/mongodb"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth from "next-auth";
+import { v4 as uuidv4 } from "uuid";
+import CredentialsProvider from "next-auth/providers/credentials";
+import clientPromise from "../../../lib/mongodb";
 
 export default NextAuth({
-  pages: {
-    signIn: '/user/SignIn'
-  },
-  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-
-        const res = await fetch("http://localhost:3000/api/auth/user_signin", {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" }
-        })
-        const data = await res.json()
-
-        // If no error and we have user data, return it
-        if (data.status == 'ok') {
-          return data.user
+        if (!credentials) {
+          return null;
         }
-        // Return null if user data could not be retrieved
-        return null
-      }
-    })
+
+        try {
+          const client = await clientPromise;
+          const db = client.db("high_u");
+          const collection = db.collection("member");
+          const user = await collection.findOne({ email: credentials.email });
+          if (user && user.password === credentials.password) {
+            console.log("User authenticated successfully.");
+            return {
+              id: user._id.toString(),
+              name: user.username,
+              email: user.email,
+              image: user.image,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              password: user.password,
+            };
+          } else {
+            console.log("Invalid email or password.");
+            return null;
+          }
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      },
+    }),
   ],
-  secret: "LlKq6ZtYbr+hTC073mAmAh9/h2HwMfsFo4hrfCx5mLg=",
-  // callbacks: {
-  //   async jwt({ token, user, account }) {
-  //     // Persist the OAuth access_token to the token right after signin
-  //     console.log(user);
-      
-  //     if (account) {
-  //       token.accessToken = account.access_token
-  //       token.user = user
-  //     }
-  //     return token
-  //   },
-  //   async session({ session, token, user }) {
-  //     // Send properties to the client, like an access_token from a provider.
-  //     session.accessToken = token.accessToken
-  //     session.user = token.user
-  //     return session
-  //   }
-  // }
-})
+  callbacks: {
+    async jwt({ token, user }) {
+      // Add access token and expiration time to the token object
+      console.log("jwt: Original Token:", token);
+      if (user) {
+        token.accessToken = uuidv4();
+        token.exp = Math.floor(Date.now() / 1000) + 60 * 60; // Token will expire in 1 hour
+        console.log("jwt: New Token:", token);
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Add access token to the session object
+      console.log("session: Session:", session);
+      if (token && token.accessToken) {
+        session.accessToken = token.accessToken;
+
+        console.log("session: New Session:", session);
+      }
+      return session;
+    },
+  },
+});

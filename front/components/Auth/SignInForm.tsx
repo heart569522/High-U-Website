@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { signIn } from 'next-auth/react';
+import { signIn, SignInResponse } from 'next-auth/react';
 
 const theme = createTheme({
     typography: {
@@ -53,22 +53,17 @@ const SignInForm = React.memo(() => {
         event.preventDefault();
 
         try {
-            const response = await signIn('credentials', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ redirect: false, email, password })
-            });
-            console.log(response);
-            
-            return router.push('/');
-            // if (response.ok) {
-                
-            //     router.push('/');
-            // } else {
-            //     throw new Error('Login failed. Please check your credentials and try again.');
-            // }
+            const result: SignInResponse = await signIn('credentials', {
+                redirect: false,
+                email,
+                password
+              }) as SignInResponse;
+
+            if (result.error) {
+                throw new Error('Login failed. Please check your credentials and try again.');
+            } else {
+                router.push('/');
+            }
         } catch (e: any) {
             console.error(e);
             alert(e.message);

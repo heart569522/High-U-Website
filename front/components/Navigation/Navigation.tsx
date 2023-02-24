@@ -16,7 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { createTheme, ThemeProvider, styled, alpha } from '@mui/material/styles';
 import { useRouter } from 'next/router'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
@@ -322,12 +322,14 @@ export default function Navbar() {
                         </IconButton>
                       </Tooltip>
                     </Box>
-
-                    {/* PROFILE MENU */}
                     <Box className="flex items-center justify-end">
+                      <Typography className='text-[#F0CA83]'>Hi : {session.user.firstname}</Typography>
+                    </Box>
+                    {/* PROFILE MENU */}
+                    <Box className="flex items-center justify-end ml-3">
                       <Tooltip title="Profile">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt="" src={session.user?.image || undefined} />
+                          <Avatar alt="" src={session.user.image || undefined} />
                         </IconButton>
                       </Tooltip>
                       <Menu
