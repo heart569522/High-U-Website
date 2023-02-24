@@ -322,9 +322,9 @@ export default function Navbar() {
                         </IconButton>
                       </Tooltip>
                     </Box>
-                    <Box className="flex items-center justify-end">
+                    {/* <Box className="flex items-center justify-end">
                       <Typography className='text-[#F0CA83]'>Hi : {session.user.firstname}</Typography>
-                    </Box>
+                    </Box> */}
                     {/* PROFILE MENU */}
                     <Box className="flex items-center justify-end ml-3">
                       <Tooltip title="Profile">
