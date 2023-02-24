@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { signIn } from 'next-auth/react';
+
 const theme = createTheme({
     typography: {
         fontFamily: [
@@ -32,7 +34,7 @@ const theme = createTheme({
 const SignInForm = React.memo(() => {
     const router = useRouter()
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleChange = (setState: (value: string) => void) => (
@@ -51,27 +53,27 @@ const SignInForm = React.memo(() => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/api/auth/user_signin', {
+            const response = await signIn('credentials', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ redirect: false, email, password })
             });
             console.log(response);
             
-
-            if (response.ok) {
+            return router.push('/');
+            // if (response.ok) {
                 
-                router.push('/');
-            } else {
-                throw new Error('Login failed. Please check your credentials and try again.');
-            }
+            //     router.push('/');
+            // } else {
+            //     throw new Error('Login failed. Please check your credentials and try again.');
+            // }
         } catch (e: any) {
             console.error(e);
             alert(e.message);
         }
-    }, [username, password, router]);
+    }, [email, password, router]);
 
 
     const handleMenuItemClick = (path: string) => {
@@ -91,16 +93,17 @@ const SignInForm = React.memo(() => {
                             </Typography>
                             <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
                                 <TextField
-                                    label="Username"
-                                    value={username}
-                                    id="username"
-                                    name="username"
-                                    onChange={handleChange(setUsername)}
+                                    label="Email"
+                                    value={email}
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    onChange={handleChange(setEmail)}
                                     onKeyPress={handleKeyPress}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    autoComplete="username"
+                                    autoComplete="email"
                                     autoFocus
                                 />
                                 <TextField

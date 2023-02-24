@@ -132,9 +132,9 @@ export default function SignUpForm() {
                 handleReset();
                 setMessage("Sign Up Successfully!");
                 // Navigate to sign in page after a delay
-                // setTimeout(() => {
-                //     window.location.href = '/user/SignIn';
-                // }, 1500);
+                setTimeout(() => {
+                    window.location.href = '/user/SignIn';
+                }, 1500);
 
             } else {
                 throw new Error(await response.text());
@@ -209,20 +209,6 @@ export default function SignUpForm() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            required
-                                            fullWidth
-                                            value={email}
-                                            type="email"
-                                            id="email"
-                                            label="Email Address"
-                                            name="email"
-                                            autoComplete="email"
-                                            onChange={handleChange(setEmail)}
-                                            onKeyPress={handleKeyPress}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
                                             label="Username"
                                             value={username}
                                             id="username"
@@ -233,8 +219,24 @@ export default function SignUpForm() {
                                             autoComplete="username"
                                             onKeyPress={handleKeyPress}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <TextField
-                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            value={email}
+                                            type="email"
+                                            id="email"
+                                            label="Email Address"
+                                            name="email"
+                                            autoComplete="email"
+                                            variant="outlined"
+                                            onChange={handleChange(setEmail)}
+                                            onKeyPress={handleKeyPress}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
                                             required
                                             name="password"
                                             label="Password"
@@ -247,6 +249,8 @@ export default function SignUpForm() {
                                             fullWidth
                                             onKeyPress={handleKeyPress}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <TextField
                                             required
                                             name="confirmPassword"

@@ -16,11 +16,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { createTheme, ThemeProvider, styled, alpha } from '@mui/material/styles';
 import { useRouter } from 'next/router'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 // Import Components
 import NavbarLikeProfile from './NavbarLikeProfile';
 import NavbarSignInUpButton from './NavbarSignInUpButton';
-import { Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText, Tooltip } from '@mui/material';
+import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 
 // Create Theme
 const theme = createTheme({
@@ -96,8 +98,11 @@ HideOnScroll.propTypes = {
 const drawerWidth = 240;
 
 export default function Navbar() {
+  const { data: session } = useSession()
+
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -112,6 +117,15 @@ export default function Navbar() {
   const handleMenuItemClick = (path: string) => {
     router.push(path)
   }
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }} className="bg-[#303030] h-screen">
@@ -130,21 +144,21 @@ export default function Navbar() {
       >
         HIGH-U
       </Typography>
-      <Divider className="bg-[#f0ca83]"/>
+      <Divider className="bg-[#f0ca83]" />
       <List>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/')}>
-            <ListItemText primary="Home" className="text-[#f0ca83]"/>
+            <ListItemText primary="Home" className="text-[#f0ca83]" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/Wig')}>
-            <ListItemText primary="Wig" className="text-[#f0ca83]"/>
+            <ListItemText primary="Wig" className="text-[#f0ca83]" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
           <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/TryAR')}>
-            <ListItemText primary="TryAR" className="text-[#f0ca83]"/>
+            <ListItemText primary="TryAR" className="text-[#f0ca83]" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -297,8 +311,61 @@ export default function Navbar() {
                   />
                 </Search>
                 {/* If Login OR Non-Login */}
-                {/* <NavbarLikeProfile /> */}
-                <NavbarSignInUpButton />
+
+                {session?.user ?
+                  <Box className='flex justify-end items-center'>
+                    {/* LIKE MENU */}
+                    <Box sx={{ paddingLeft: 1 }}>
+                      <Tooltip title="Favorites">
+                        <IconButton onClick={() => handleMenuItemClick('/user/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
+                          <FavoriteTwoToneIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+
+                    {/* PROFILE MENU */}
+                    <Box className="flex items-center justify-end">
+                      <Tooltip title="Profile">
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                          <Avatar alt="" src={session.user?.image || undefined} />
+                        </IconButton>
+                      </Tooltip>
+                      <Menu
+                        sx={{ mt: '45px', }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                      >
+                        <Link onClick={() => handleMenuItemClick('/user/Profile')} underline="none" >
+                          <MenuItem onClick={handleCloseUserMenu}>
+                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Profile</Typography>
+                          </MenuItem>
+                        </Link>
+                        <Divider />
+                        <Link onClick={() => signOut()} underline="none" >
+                          <MenuItem >
+                            <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Sign Out</Typography>
+                          </MenuItem>
+                        </Link>
+                      </Menu>
+                    </Box>
+                  </Box>
+
+                  :
+                  <NavbarSignInUpButton />
+                }
+
+
               </Box>
             </Toolbar>
           </Container>

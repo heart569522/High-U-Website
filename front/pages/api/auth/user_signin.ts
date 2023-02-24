@@ -7,19 +7,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const client = await clientPromise;
         const db = client.db("high_u");
 
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        // Look up the user in the database by their username
-        const user = await db.collection("member").findOne({ username });
+        // Look up the user in the database by their email
+        const member = await db.collection("member").findOne({ email });
 
-        if (!user) {
-            // User with the given username not found
-            res.status(401).json({ message: "Incorrect username." });
+        if (!member) {
+            // User with the given email not found
+            res.status(401).json({ message: "Incorrect email." });
             return;
         }
 
          // Compare the given password with the password stored in the database
-         if (user.password !== password) {
+         if (member.password !== password) {
             // Passwords don't match
             res.status(401).json({ message: "Incorrect password." });
             return;
