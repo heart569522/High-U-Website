@@ -5,15 +5,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client = await clientPromise;
     const db = client.db("high_u");
-    const { image, firstname, lastname, email, username, password } = req.body;
-
-    const member = await db.collection("member").insertOne({
+    const {
       image,
       firstname,
       lastname,
       email,
       username,
-      password,
+      password
+    } = req.body;
+
+    const member = await db.collection("member").insertOne({
+      image,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      username: username,
+      password: password,
       createdAt: new Date(Date.now()).toLocaleString("en-GB", {
         day: "2-digit",
         month: "2-digit",
@@ -24,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     res.status(201).json(member);
-    console.log(res)
+    console.log(res);
   } catch (e: any) {
     console.error(e);
     throw new Error(e).message;

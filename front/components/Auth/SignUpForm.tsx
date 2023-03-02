@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import DOMPurify from 'dompurify';
 import { useRouter } from 'next/router'
 import {
     IconButton,
@@ -8,12 +9,10 @@ import {
     Grid,
     Link,
     TextField,
-    CssBaseline,
     Button,
     ButtonGroup,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { image } from '@tensorflow/tfjs';
 
 const theme = createTheme({
     typography: {
@@ -32,7 +31,6 @@ const theme = createTheme({
 });
 
 
-
 export default function SignUpForm() {
     const router = useRouter()
     const defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg';
@@ -49,7 +47,7 @@ export default function SignUpForm() {
     const [error, setError] = useState<string | null>(null);
 
     const handleChange = (setState: (value: string) => void) => (
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         setState(event.target.value);
     };
@@ -108,20 +106,27 @@ export default function SignUpForm() {
         }
 
         try {
+            const sanitizedImage = DOMPurify.sanitize(image);
+            const sanitizedFirstname = DOMPurify.sanitize(firstname);
+            const sanitizedLastname = DOMPurify.sanitize(lastname);
+            const sanitizedEmail = DOMPurify.sanitize(email);
+            const sanitizedUsername = DOMPurify.sanitize(username);
+            const sanitizedPassword = DOMPurify.sanitize(password);
+
             const response = await fetch('http://localhost:3000/api/auth/user_signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    image,
-                    firstname,
-                    lastname,
-                    email,
-                    username,
-                    password
-                })
-            });
+                    image: sanitizedImage,
+                    firstname: sanitizedFirstname,
+                    lastname: sanitizedLastname,
+                    email: sanitizedEmail,
+                    username: sanitizedUsername,
+                    password: sanitizedPassword,
+                }),
+            }); console.log(image, firstname, lastname, email, username, password)
 
             if (response.ok) {
                 handleReset();
@@ -204,20 +209,6 @@ export default function SignUpForm() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            required
-                                            fullWidth
-                                            value={email}
-                                            type="email"
-                                            id="email"
-                                            label="Email Address"
-                                            name="email"
-                                            autoComplete="email"
-                                            onChange={handleChange(setEmail)}
-                                            onKeyPress={handleKeyPress}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
                                             label="Username"
                                             value={username}
                                             id="username"
@@ -228,8 +219,24 @@ export default function SignUpForm() {
                                             autoComplete="username"
                                             onKeyPress={handleKeyPress}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <TextField
-                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            value={email}
+                                            type="email"
+                                            id="email"
+                                            label="Email Address"
+                                            name="email"
+                                            autoComplete="email"
+                                            variant="outlined"
+                                            onChange={handleChange(setEmail)}
+                                            onKeyPress={handleKeyPress}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
                                             required
                                             name="password"
                                             label="Password"
@@ -242,6 +249,8 @@ export default function SignUpForm() {
                                             fullWidth
                                             onKeyPress={handleKeyPress}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <TextField
                                             required
                                             name="confirmPassword"

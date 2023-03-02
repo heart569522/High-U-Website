@@ -1,20 +1,31 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import SplashScreen from '../components/Other/SplashScreen';
+import Navbar from "../components/Navigation/Navigation";
+import HomeBackground from "../components/Home/HomeBackground";
+import HomeContent from "../components/Home/HomeContent";
+import Footer from "../components/Footer/Footer";
 
-// IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
-import Footer from "../components/Footer/Footer"
+export default function Index() {
+  const router = useRouter();
+  const [isHome, setIsHome] = useState(false);
 
-// IMPORT PAGE
-import Home from "./user/Home"
-
-export default function index() {
+  useEffect(() => {
+    setIsHome(router.pathname === '/');
+  }, [router.pathname]);
 
   return (
-    <div>
-        <Navbar />
-        <Home />
-        <Footer />
-    </div>
-
-  )
+    <>
+      {isHome ? (
+        <SplashScreen finishLoading={() => setIsHome(false)} />
+      ) : (
+        <>
+          <Navbar />
+          <HomeBackground />
+          <HomeContent />
+          <Footer />
+        </>
+      )}
+    </>
+  );
 }

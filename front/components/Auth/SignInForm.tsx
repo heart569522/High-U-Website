@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { signIn, SignInResponse } from 'next-auth/react';
+
 const theme = createTheme({
     typography: {
         fontFamily: [
@@ -32,25 +34,14 @@ const theme = createTheme({
 const SignInForm = React.memo(() => {
     const router = useRouter()
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
 
-    const handleUsernameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setUsername(event.target.value);
-    }, []);
-
-    const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    }, []);
-
-    const handleClickShowPassword = useCallback(() => {
-        setShowPassword(!showPassword);
-    }, [showPassword]);
-
-    const handleMouseDownPassword = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    }, []);
+    const handleChange = (setState: (value: string) => void) => (
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        setState(event.target.value);
+    };
 
     const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
         if (event.key === ' ') {
@@ -58,11 +49,27 @@ const SignInForm = React.memo(() => {
         }
     }, []);
 
-    const handleLogin = useCallback((event: FormEvent) => {
+    const handleLogin = useCallback(async (event: FormEvent) => {
         event.preventDefault();
-        alert(username);
-        alert(password);
-    }, [username, password]);
+
+        try {
+            const result: SignInResponse = await signIn('credentials', {
+                redirect: false,
+                email,
+                password
+              }) as SignInResponse;
+
+            if (result.error) {
+                throw new Error('Login failed. Please check your credentials and try again.');
+            } else {
+                router.push('/');
+            }
+        } catch (e: any) {
+            console.error(e);
+            alert(e.message);
+        }
+    }, [email, password, router]);
+
 
     const handleMenuItemClick = (path: string) => {
         router.push(path)
@@ -81,16 +88,17 @@ const SignInForm = React.memo(() => {
                             </Typography>
                             <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
                                 <TextField
-                                    label="Username"
-                                    value={username}
-                                    id="username"
-                                    name="username"
-                                    onChange={handleUsernameChange}
+                                    label="Email"
+                                    value={email}
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    onChange={handleChange(setEmail)}
                                     onKeyPress={handleKeyPress}
                                     margin="normal"
                                     required
                                     fullWidth
-                                    autoComplete="username"
+                                    autoComplete="email"
                                     autoFocus
                                 />
                                 <TextField
@@ -101,7 +109,7 @@ const SignInForm = React.memo(() => {
                                     value={password}
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={handlePasswordChange}
+                                    onChange={handleChange(setPassword)}
                                     onKeyPress={handleKeyPress}
                                     type='password'
                                     variant="outlined"
