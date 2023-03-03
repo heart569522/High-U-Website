@@ -1,4 +1,4 @@
-import Member_Data from '../../helper/Member_Data.json';
+import Member_Data from '../../../helper/Member_Data.json';
 
 interface Member {
     id: number;
