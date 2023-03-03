@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getWig, updateWig } from '../../api/wigApi'
+import { getWig, updateWig } from '../../api/old/wigApi'
 import {
   Box,
   Typography,
