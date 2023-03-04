@@ -1,45 +1,19 @@
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-// import { getWig, updateWig } from '../api/wigApi'
+
+import { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Typography,
   Toolbar,
   Grid,
-  Hidden,
-  ButtonGroup,
-  Button,
-  Modal,
-  Divider,
-  TextField,
-  FormControl,
-  FormHelperText,
-  Avatar,
-  Link,
-  Skeleton
+  Skeleton,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 import DrawerBar from '../Navigation/DrawerBar';
-import Loading from '../Other/Loading';
 
 const drawerWidth = 240;
-const theme = createTheme({
-  typography: {
-    fontFamily: [
-      'Prompt, sans-serif'
-    ].join(','),
-  },
-  palette: {
-    primary: {
-      main: "#303030",
-    },
-    secondary: {
-      main: "#F0CA83"
-    }
-  },
-});
 
 const AddWig_Form = () => {
   const [loading, setLoading] = useState(true);
@@ -48,91 +22,148 @@ const AddWig_Form = () => {
     // Fetch data
     setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 700);
   }, [loading]);
 
-  const [isloading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const router = useRouter()
+  const [mainImage, setMainImage] = useState<File | null>(null);
+  const [subImage1, setSubImage1] = useState<File | null>(null);
+  const [arImage, setArImage] = useState<File | null>(null);
 
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  const [color, setColor] = useState('');
-  const [size, setSize] = useState('');
-  const [brand, setBrand] = useState('');
-
-  const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const defaultImageUrl = 'https://i.pinimg.com/736x/85/6c/0c/856c0c237eec555ec901c7fd4a275ae3.jpg';
+  const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
+  const [previewSubImage1, setPreviewSubImage1] = useState<string | null>(null);
+  const [previewArImage, setPreviewArImage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!previewUrl) {
+    if (!previewMainImage) {
       return;
     }
-    return () => URL.revokeObjectURL(previewUrl);
-  }, [previewUrl]);
+    return () => URL.revokeObjectURL(previewMainImage);
+  }, [previewMainImage]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files?.[0];
-    if (!image) {
-      setImage(null);
-      setPreviewUrl(null);
+  useEffect(() => {
+    if (!previewSubImage1) {
       return;
     }
-    setImage(e.target.files ? e.target.files[0] : null);
-    setPreviewUrl(URL.createObjectURL(image));
-  }
+    return () => URL.revokeObjectURL(previewSubImage1);
+  }, [previewSubImage1]);
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === " ") {
-      event.preventDefault();
+  useEffect(() => {
+    if (!previewArImage) {
+      return;
+    }
+    return () => URL.revokeObjectURL(previewArImage);
+  }, [previewArImage]);
+
+  const handleMainImageReset = () => {
+    setMainImage(null);
+    setPreviewMainImage(null);
+  };
+
+  const handleSubImage1Reset = () => {
+    setSubImage1(null);
+    setPreviewSubImage1(null);
+  };
+
+  const handleArImageReset = () => {
+    setArImage(null);
+    setPreviewArImage(null);
+  };
+
+  const mainImageInputRef = useRef<HTMLInputElement>(null);
+  const subImage1InputRef = useRef<HTMLInputElement>(null);
+  const arImageInputRef = useRef<HTMLInputElement>(null);
+
+  const openMainImageDialog = () => {
+    if (mainImageInputRef.current) {
+      mainImageInputRef.current.click();
     }
   };
+
+  const openSubImage1Dialog = () => {
+    if (subImage1InputRef.current) {
+      subImage1InputRef.current.click();
+    }
+  };
+
+
+  const openArImageDialog = () => {
+    if (arImageInputRef.current) {
+      arImageInputRef.current.click();
+    }
+  };
+
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const mainImage = e.target.files?.[0];
+    if (!mainImage) {
+      setMainImage(null);
+      setPreviewMainImage(null);
+      return;
+    }
+
+    const isValidType = mainImage.type === "image/jpeg" || mainImage.type === "image/png";
+    if (!isValidType) {
+      // Show an error message for invalid file type
+      setMainImage(null);
+      setPreviewMainImage(null);
+      return;
+    }
+
+    const image = new Image();
+    image.src = URL.createObjectURL(mainImage);
+    image.onload = () => {
+      if (image.width > 1080 || image.height > 1920) {
+        // Show an error message for image size too small
+        setMainImage(null);
+        setPreviewMainImage(null);
+        return;
+      }
+
+      URL.revokeObjectURL(image.src);
+      setMainImage(mainImage);
+      setPreviewMainImage(URL.createObjectURL(mainImage));
+    };
+  };
+
+  const handleSubImage1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const subImage1 = e.target.files?.[0];
+    if (!subImage1) {
+      setSubImage1(null);
+      setPreviewSubImage1(null);
+      return;
+    }
+
+    const isValidType = subImage1.type === "image/jpeg" || subImage1.type === "image/png";
+    if (!isValidType) {
+      // Show an error message for invalid file type
+      setSubImage1(null);
+      setPreviewSubImage1(null);
+      return;
+    }
+
+    const image = new Image();
+    image.src = URL.createObjectURL(subImage1);
+    image.onload = () => {
+      if (image.width > 1080 || image.height > 1920) {
+        // Show an error message for image size too small
+        setSubImage1(null);
+        setPreviewSubImage1(null);
+        return;
+      }
+
+      URL.revokeObjectURL(image.src);
+      setSubImage1(subImage1);
+      setPreviewSubImage1(URL.createObjectURL(subImage1));
+    };
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    try {
-      const formData = new FormData()
-      formData.append('title', title)
-      formData.append('desc', desc)
-      formData.append('color', color)
-      formData.append('size', size)
-      formData.append('brand', brand)
-      if (image !== null) {
-        formData.append('image', image)
-      }
-      alert('Wig created successfully');
-      const response = await fetch('/api/wigs', {
-        method: 'POST',
-        body: formData,
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      // router.push('/WigManage');
-      // navigate to wig listing page
-    } catch (err) {
-      setError(err as Error)
-    } finally {
-      setIsLoading(false)
-    }
+
   }
 
-  const handleReset = () => {
-    setTitle("");
-    setDesc("");
-    setColor("");
-    setBrand("");
-    setSize("");
-    setImage(null);
-    setPreviewUrl(null);
-    setError(null);
-  };
-
   return (
-    <ThemeProvider theme={theme}>
+    <div>
       <DrawerBar />
       <Box
         component="main"
@@ -145,162 +176,120 @@ const AddWig_Form = () => {
             <Grid item xs={12}>
               {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
                 <Typography className="text-[#303030] font-bold text-xl">
-                  Create Wig
+                  Add Wig
                 </Typography>
               )}
             </Grid>
           </Grid>
-          <form onSubmit={handleSubmit} onReset={handleReset} className="pt-3">
-            <Grid container className="pt-3" spacing={3}>
-              <Grid item xs={12} md={4}>
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-72 rounded-md" />) : (
-                  <center>
-                    <input
-                      accept="image/*"
-                      style={{ display: "none", }}
-                      id="upload-button"
-                      type="file"
-                      onChange={handleImageChange}
-                    />
-                    <img
-                      src={previewUrl || defaultImageUrl}
-                      className="rounded-lg object-top object-cover h-auto w-96"
-                    />
-                    <label htmlFor="upload-button">
-                      <Button
-                        variant='contained'
-                        className="bg-[#F0CA83] text-[#303030] font-bold mb-2 hover:bg-[#f3b94d] mt-3"
-                        component="span"
-                        startIcon={<AddAPhotoIcon />}
-                      >
-                        Add Image
-                      </Button>
-                    </label>
-                  </center>
-                )}
+          <form onSubmit={handleSubmit} className="pt-3">
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+                  <input
+                    ref={arImageInputRef}
+                    accept="image/*"
+                    style={{ display: "none", }}
+                    id="upload-button"
+                    type="file"
+                    // multiple
+                    onChange={handleArImageReset}
+                  />
+                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Wig AR Image</Typography>
+                  {previewArImage ? (
+                    <center>
+                      <img
+                        src={previewArImage || ''}
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
+                      />
+                      <Box className="text-center items-center justify-center flex flex-col">
+                        <Tooltip title="Reset Image">
+                          <IconButton onClick={handleArImageReset} className='text-gray-400 hover:text-red-400'>
+                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </center>
+                  ) : (
+                    <>
+
+                    </>
+                  )}
+                </Box>
               </Grid>
-              <Grid item xs={12} md={8}>
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
-                  <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
-                    <TextField
-                      type='text'
-                      value={title}
-                      fullWidth
-                      name='title'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setTitle(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      required
-                      focused
-                    />
-                  </Grid>
-                )}
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
-                  <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
-                    <TextField
-                      type='text'
-                      value={color}
-                      fullWidth
-                      name='color'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setColor(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      required
-                      focused
-                    />
-                  </Grid>
-                )}
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
-                  <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography>
-                    <TextField
-                      type='text'
-                      value={size}
-                      fullWidth
-                      name='size'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setSize(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      required
-                      focused
-                    />
-                  </Grid>
-                )}
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
-                  <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
-                    <TextField
-                      type='text'
-                      value={brand}
-                      fullWidth
-                      name='brand'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setBrand(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      required
-                      focused
-                    />
-                  </Grid>
-                )}
-                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
-                  <Grid item xs={12}>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography>
-                    <TextField
-                      type='text'
-                      value={desc}
-                      fullWidth
-                      name='desc'
-                      variant='outlined'
-                      className="font-bold rounded pb-3"
-                      onChange={(e) => setDesc(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      inputProps={{ style: { color: "#303030" } }}
-                      sx={{ color: '#303030' }}
-                      multiline
-                      maxRows={5}
-                      required
-                      focused
-                    />
-                  </Grid>
-                )}
-                <Grid item xs={12}>
-                  <Hidden mdDown>
-                    {loading ? (<Skeleton animation="wave" variant="rectangular" sx={{ float: 'right' }} className="w-1/5 justify-end h-10 my-1 rounded-md" />) : (
-                      <ButtonGroup variant="contained" className="gap-1" sx={{ float: 'right' }} aria-label="contained button group">
-                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
-                        <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
-                      </ButtonGroup>
-                    )}
-                  </Hidden>
-                  <Hidden mdUp>
-                    {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 my-1 rounded-md" />) : (
-                      <ButtonGroup variant="contained" className="gap-1 my-3" fullWidth aria-label="contained button group">
-                        <Button type='submit' className="bg-[#303030] text-white hover:bg-emerald-600">OK</Button>
-                        <Button type='reset' className="bg-[#303030] text-white hover:bg-red-500">Reset</Button>
-                      </ButtonGroup>
-                    )}
-                  </Hidden>
-                </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+                  <input
+                    ref={mainImageInputRef}
+                    accept="image/*"
+                    style={{ display: "none", }}
+                    id="upload-button"
+                    type="file"
+                    // multiple
+                    onChange={handleMainImageChange}
+                  />
+                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Main Image</Typography>
+                  {previewMainImage ? (
+                    <center>
+                      <img
+                        src={previewMainImage || ''}
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
+                      />
+                      <Box className="text-center items-center justify-center flex flex-col">
+                        <Tooltip title="Reset Image">
+                          <IconButton onClick={handleMainImageReset} className='text-gray-400 hover:text-red-400'>
+                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </center>
+                  ) : (
+                    <>
+
+                    </>
+                  )}
+                </Box>
               </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
+                  <input
+                    ref={subImage1InputRef}
+                    accept="image/*"
+                    style={{ display: "none", }}
+                    id="upload-button"
+                    type="file"
+                    // multiple
+                    onChange={handleSubImage1Change}
+                  />
+                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Sub Image 1</Typography>
+                  {previewSubImage1 ? (
+                    <center>
+                      <img
+                        src={previewSubImage1 || ''}
+                        className="rounded-lg object-contain h-[400px] w-80 py-2"
+                      />
+                      <Box className="text-center items-center justify-center flex flex-col">
+                        <Tooltip title="Reset Image">
+                          <IconButton onClick={handleSubImage1Reset} className='text-gray-400 hover:text-red-400'>
+                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </center>
+                  ) : (
+                    <>
+
+                    </>
+                  )}
+                </Box>
+              </Grid>
+
             </Grid>
+
+
           </form>
         </Box>
       </Box>
-    </ThemeProvider>
+    </div>
 
   )
 }

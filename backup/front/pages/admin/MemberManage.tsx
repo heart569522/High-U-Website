@@ -31,7 +31,6 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebas
 
 // IMPORT COMPONENT
 import DrawerBar from '../../components/Navigation/DrawerBar'
-import EmptyWig from '../../components/Other/EmptyWig'
 
 type Props = {
   members: [Member]
@@ -57,6 +56,7 @@ export async function getServerSideProps() {
   } catch (e) {
     console.error(e);
   }
+
 }
 
 const drawerWidth = 240;
@@ -273,7 +273,7 @@ export default function MemberManage(props: Props) {
                             <Typography id="modal-modal-title" className="text-lg text-red-500 font-bold">
                               Confirm Delete
                             </Typography>
-                            <Typography id="modal-modal-description" className="text-base text-red-500" >
+                            <Typography id="modal-modal-description" className="text-base italic text-red-500" >
                               Are you sure you want to delete this member?
                             </Typography>
                             <ButtonGroup fullWidth variant="contained" sx={{ mt: 2 }} aria-label="contained button group">

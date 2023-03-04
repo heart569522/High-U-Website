@@ -1,4 +1,4 @@
-import Wig_Product from '../../helper/Wig_Product.json';
+import Wig_Product from '../../../helper/Wig_Product.json';
 
 interface Wig {
   id: number;
