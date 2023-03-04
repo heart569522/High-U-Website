@@ -1,13 +1,31 @@
+# FROM node:18.12.1
+
+# WORKDIR /usr/src/app/test-web-docker
+
+# COPY . .
+
+# WORKDIR /usr/src/app/test-web-docker/front
+
+# RUN npm install --force
+
+# COPY .next ./.next
+
+# EXPOSE 3000
+# CMD ["npm", "start"]
+
 FROM node:18.12.1
 
-WORKDIR /usr/src/app/High-U-Website
+WORKDIR /usr/src/app/test-dockerrr/front
 
-RUN git clone https://github.com/heart569522/High-U-Website.git .
-
-WORKDIR /usr/src/app/High-U-Website/front
+COPY package*.json ./
 
 RUN npm install --force
-RUN npm run build
+
+COPY . .
+
+COPY .next ./.next
 
 EXPOSE 3000
+
 CMD ["npm", "start"]
+
