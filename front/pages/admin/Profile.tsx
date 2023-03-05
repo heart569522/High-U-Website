@@ -14,6 +14,7 @@ import {
 import ChangePassword_Profile_admin from '../../components/Other/ChangePassword_Profile_admin';
 import EditProfile_Profile_admin from '../../components/Other/EditProfile_Profile_admin';
 import MyDetail_Profile_admin from '../../components/Other/MyDetail_Profile_admin';
+import Image from 'next/image';
 
 
 const drawerWidth = 240;
@@ -60,7 +61,7 @@ export default function Profile() {
                             </Grid>
                             <Grid item xs={12} md={12} className="flex items-center justify-center">
                                 <Box className="bg-slate-100 p-2 rounded-lg">
-                                    <img src="https://www.nicepng.com/png/detail/263-2635962_png-file-svg-admin-icon-png.png" className="w-44 h-auto rounded-lg" alt="" />
+                                    <Image src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584" width={176} height={176} className="w-44 h-auto rounded-lg" alt="profile-image" />
                                 </Box>
                             </Grid>
                             <Grid item>

@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-const SignInForm = React.memo(() => {
+export const SignInForm = React.memo(() => {
     const router = useRouter()
 
     const [email, setEmail] = useState('');
@@ -142,4 +142,4 @@ const SignInForm = React.memo(() => {
 }
 )
 
-export default SignInForm;
+SignInForm.displayName = 'SignInForm';

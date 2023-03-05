@@ -2,7 +2,7 @@ import clientPromise from "../../../lib/mongodb";
 import { ObjectId } from "mongodb"
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const deleteMember = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
 
     const client = await clientPromise;
@@ -21,3 +21,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error(e).message;
   }
 }
+
+export default deleteMember;

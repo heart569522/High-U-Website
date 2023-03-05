@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../lib/mongodb";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const userSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         const client = await clientPromise;
@@ -32,3 +32,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         throw new Error(e).message;
     }
 };
+
+export default userSignIn

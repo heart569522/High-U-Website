@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-const SignIn = React.memo(() => {
+export const SignIn = React.memo(() => {
     const router = useRouter()
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -128,4 +128,4 @@ const SignIn = React.memo(() => {
 }
 )
 
-export default SignIn;
+SignIn.displayName = 'SignIn';
