@@ -12,7 +12,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@firebase/app": "^0.9.1",
-    "@mui/icons-material": "^5.10.16",
+    "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.114",
     "@mui/material": "^5.11.11",
     "@mui/styled-engine-sc": "^5.10.16",

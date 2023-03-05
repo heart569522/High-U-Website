@@ -24,8 +24,6 @@ import {
     Skeleton,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MUIDataTable from "mui-datatables";
-
 import AR_Data from '../../helper/AR_Data.json';
 
 const drawerWidth = 240;

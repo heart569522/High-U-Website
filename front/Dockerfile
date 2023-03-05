@@ -4,7 +4,7 @@ WORKDIR /usr/src/app/test-myweb
 
 COPY . .
 
-RUN npm install --force
+RUN npm install
 RUN npm run build
 
 EXPOSE 3000
