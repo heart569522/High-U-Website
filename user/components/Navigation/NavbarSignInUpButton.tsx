@@ -25,14 +25,14 @@ function NavbarSignInUpButton() {
                         },
                         fontWeight: 'bold'
                     }}
-                    onClick={() => handleMenuItemClick('/user/SignIn')}
+                    onClick={() => handleMenuItemClick('/SignIn')}
                     variant="outlined"
                 >
                     signin
                 </Button>
                 <Button
                     className="font-bold bg-[#F0CA83] hover:bg-[#cf9d40]"
-                    onClick={() => handleMenuItemClick('/user/SignUp')}
+                    onClick={() => handleMenuItemClick('/SignUp')}
                     variant="contained"
                 >
                     signup

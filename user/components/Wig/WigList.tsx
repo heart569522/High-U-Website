@@ -195,7 +195,7 @@ function WigList() {
                                 }).map((item, i) => (
                                     <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
                                         {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-96 rounded-md" />) : (
-                                            <Link href="/user/WigProduct">
+                                            <Link href="/WigProduct">
                                                 <Card variant="outlined" sx={{ maxWidth: 320 }}>
                                                     <CardActionArea>
                                                         <CardMedia

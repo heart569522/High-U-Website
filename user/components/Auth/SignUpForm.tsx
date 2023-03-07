@@ -133,7 +133,7 @@ export default function SignUpForm() {
                 setMessage("Sign Up Successfully!");
                 // Navigate to sign in page after a delay
                 setTimeout(() => {
-                    window.location.href = '/user/SignIn';
+                    window.location.href = '/SignIn';
                 }, 1500);
 
             } else {
@@ -291,7 +291,7 @@ export default function SignUpForm() {
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
                                         <Link
-                                            onClick={() => handleMenuItemClick('/user/SignIn')}
+                                            onClick={() => handleMenuItemClick('/SignIn')}
                                             className="cursor-pointer"
                                             variant="body2"
                                             color="secondary"
