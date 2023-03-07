@@ -19,7 +19,7 @@ export default function App({ Component, pageProps: {session, ...pageProps} }: A
 
   return (
     <SessionProvider session={session}>
-      <title>High U Hair Wigs</title>
+      <title>High U | Administrator</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
       <link rel="icon" href="/favicon.ico" />
       <Component {...pageProps} />

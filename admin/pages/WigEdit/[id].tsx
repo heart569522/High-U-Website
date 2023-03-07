@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getAR, updateAR } from '../../api/old/arApi'
+import { getWig, updateWig } from '../api/old/wigApi'
 import {
   Box,
   Typography,
@@ -15,8 +15,8 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../../../components/Navigation/DrawerBar';
-import Loading from '../../../components/Other/Loading';
+import DrawerBar from '../../components/Navigation/DrawerBar';
+import Loading from '../../components/Other/Loading';
 import Head from 'next/head';
 
 const drawerWidth = 240;
@@ -36,21 +36,25 @@ const theme = createTheme({
   },
 });
 
-interface AR {
+interface Wig {
   id: number;
   image: string;
   title: string;
+  desc: string;
   color: string;
-  use: number;
+  size: string;
+  brand: string;
 }
 
-const AREdit = () => {
-  const [ar, setAR] = useState<AR>({
+const WigEdit = () => {
+  const [wig, setWig] = useState<Wig>({
     id: 0,
     image: '',
     title: '',
+    desc: '',
     color: '',
-    use: 0,
+    size: '',
+    brand: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -67,30 +71,33 @@ const AREdit = () => {
   const router = useRouter()
 
   const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
   const [editColor, setEditColor] = useState('');
+  const [editSize, setEditSize] = useState('');
+  const [editBrand, setEditBrand] = useState('');
 
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    const fetchAR = async () => {
+    const fetchWig = async () => {
       setIsLoading(true);
       try {
         const id = typeof router.query.id === 'string' ? Number(router.query.id) : undefined;
         if (!id) {
-          window.location.href = '/admin/ARManage'
+          window.location.href = '/admin/WigManage'
           return;
         }
-        const ar = await getAR(id as number);
-        setAR(ar as AR);
+        const wig = await getWig(id as number);
+        setWig(wig as Wig);
         setIsLoading(false);
       } catch (err) {
         setError(err as Error);
         setIsLoading(false);
       }
     };
-    fetchAR();
+    fetchWig();
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -128,11 +135,14 @@ const AREdit = () => {
       const formData = new FormData();
       if (image) formData.append('image', new Blob([image]), image.name);
       formData.append('title', editTitle);
+      formData.append('desc', editDesc);
       formData.append('color', editColor);
-      // await updateAR(ar.id, formData);
+      formData.append('size', editSize);
+      formData.append('brand', editBrand);
+      // await updateWig(wig.id, formData);
 
-      alert('AR updated successfully');
-      router.push('/admin/ARManage');
+      alert('Wig updated successfully');
+      router.push('/admin/WigManage');
     } catch (err) {
       setError(err as Error);
     }
@@ -145,13 +155,13 @@ const AREdit = () => {
   //   setEditBrand('');
   //   setEditSize('');
   //   setImage(null);
-  //   setPreviewUrl(member.image);
+  //   setPreviewUrl(wig.image);
   //   setError(null);
   // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setAR({ ...ar, [name]: value });
+    setWig({ ...wig, [name]: value });
   };
 
   if (isLoading) {
@@ -164,7 +174,7 @@ const AREdit = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Head><title>Edit AR | High U Administrator</title></Head>
+      <Head><title>Edit Wig | High U Administrator</title></Head>
       <DrawerBar />
       <Box
         component="main"
@@ -177,7 +187,7 @@ const AREdit = () => {
             <Grid item xs={12}>
               {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
                 <Typography className="text-[#303030] font-bold text-xl">
-                  AR Manage
+                  Wigs Manage
                 </Typography>
               )}
             </Grid>
@@ -195,7 +205,7 @@ const AREdit = () => {
                       onChange={handleImageChange}
                     />
                     <img
-                      src={previewUrl || ar.image}
+                      src={previewUrl || wig.image}
                       className="rounded-lg object-top object-cover h-auto w-96"
                     />
                     <label htmlFor="upload-button">
@@ -217,7 +227,7 @@ const AREdit = () => {
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
                     <TextField
                       type='text'
-                      value={ar.title}
+                      value={wig.title}
                       fullWidth
                       name='title'
                       variant='outlined'
@@ -235,7 +245,7 @@ const AREdit = () => {
                     <Typography className="text-[#303030] font-bold pb-2 text-lg">Color</Typography>
                     <TextField
                       type='text'
-                      value={ar.color}
+                      value={wig.color}
                       fullWidth
                       name='color'
                       variant='outlined'
@@ -243,6 +253,62 @@ const AREdit = () => {
                       onChange={handleInputChange}
                       inputProps={{ style: { color: "#303030" } }}
                       sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Size</Typography>
+                    <TextField
+                      type='text'
+                      value={wig.size}
+                      fullWidth
+                      name='size'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Brand</Typography>
+                    <TextField
+                      type='text'
+                      value={wig.brand}
+                      fullWidth
+                      name='brand'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      required
+                      focused
+                    />
+                  </Grid>
+                )}
+                {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
+                  <Grid item xs={12}>
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Description</Typography>
+                    <TextField
+                      type='text'
+                      value={wig.desc}
+                      fullWidth
+                      name='desc'
+                      variant='outlined'
+                      className="font-bold rounded pb-3"
+                      onChange={handleInputChange}
+                      inputProps={{ style: { color: "#303030" } }}
+                      sx={{ color: '#303030' }}
+                      multiline
+                      maxRows={5}
                       required
                       focused
                     />
@@ -276,4 +342,4 @@ const AREdit = () => {
   )
 }
 
-export default AREdit
+export default WigEdit

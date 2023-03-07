@@ -121,7 +121,7 @@ export default function MemberManage(props: Props) {
 
       response = await response.json();
       console.log(response);
-      window.location.href = '/admin/MemberManage'
+      window.location.href = './MemberManage'
 
     } catch (error) {
       console.log("An error occured while deleting ", error);
@@ -147,7 +147,7 @@ export default function MemberManage(props: Props) {
                 </Typography>
               )}
               {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                <Link href="/admin/AddMember">
+                <Link href="./AddMember">
                   <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add&nbsp;Member</Button>
                 </Link>
               )}
@@ -184,7 +184,7 @@ export default function MemberManage(props: Props) {
                             <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                             <TableCell className="w-[15%] text-center ">
                               <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                <Link href="./MemberEdit/[id]" as={`./MemberEdit/${item._id}`}>
+                                <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
                                   <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
                                 </Link>
                                 <Button onClick={handleOpenModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
@@ -248,8 +248,8 @@ export default function MemberManage(props: Props) {
                       <AccordionSummary>
                         <Typography className="font-semibold">{item.username}</Typography>
                       </AccordionSummary>
-                      <AccordionDetails className="w-52 h-auto">
-                        <img src={item.image} alt={item.username} />
+                      <AccordionDetails className="flex justify-center items-center w-full h-auto">
+                        <Image src={item.image} alt={item.username} width={200} height={200} className="rounded-lg object-cover w-[80%]" />
                       </AccordionDetails>
                       <AccordionDetails className="bg-gray-50">
                         <Typography>Firstname: {item.firstname}</Typography><br />

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getAR, updateAR } from '../../api/old/arApi'
+import { getAR, updateAR } from '../api/old/arApi'
 import {
   Box,
   Typography,
@@ -15,8 +15,8 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../../../components/Navigation/DrawerBar';
-import Loading from '../../../components/Other/Loading';
+import DrawerBar from '../../components/Navigation/DrawerBar';
+import Loading from '../../components/Other/Loading';
 import Head from 'next/head';
 
 const drawerWidth = 240;

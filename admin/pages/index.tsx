@@ -1,31 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import SplashScreen from '../components/Other/SplashScreen';
-import Navbar from "../components/Navigation/Navigation";
-import HomeBackground from "../components/Home/HomeBackground";
-import HomeContent from "../components/Home/HomeContent";
-import Footer from "../components/Footer/Footer";
+import * as React from 'react';
+import Head from 'next/head';
 
-export default function Index() {
-  const router = useRouter();
-  const [isHome, setIsHome] = useState(false);
+// IMPORT PAGE
+import { SignIn } from "./SignIn"
 
-  useEffect(() => {
-    setIsHome(router.pathname === '/');
-  }, [router.pathname]);
+export default function index() {
 
   return (
-    <>
-      {isHome ? (
-        <SplashScreen finishLoading={() => setIsHome(false)} />
-      ) : (
-        <>
-          <Navbar />
-          <HomeBackground />
-          <HomeContent />
-          <Footer />
-        </>
-      )}
-    </>
-  );
+    <div>
+        <Head><title>SignIn | High U Administrator</title></Head>
+        <SignIn />
+    </div>
+
+  )
 }

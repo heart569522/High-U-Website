@@ -27,11 +27,11 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { storage } from '../api/firebaseConfig';
+import { storage } from './api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 
 // IMPORT COMPONENT
-import DrawerBar from '../../components/Navigation/DrawerBar'
+import DrawerBar from '../components/Navigation/DrawerBar'
 
 type Props = {
   members: [Member]

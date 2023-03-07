@@ -2,8 +2,8 @@ import Head from 'next/head'
 import React from 'react'
 
 // IMPORT COMPONENT
-import DrawerBar from '../../components/Navigation/DrawerBar'
-import WigManage_Table from '../../components/Table/WigManage_Table'
+import DrawerBar from '../components/Navigation/DrawerBar'
+import WigManage_Table from '../components/Table/WigManage_Table'
 
 // IMPORT PAGE
 

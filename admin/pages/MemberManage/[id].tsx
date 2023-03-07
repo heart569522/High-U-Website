@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { storage } from '../../api/firebaseConfig';
+import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 
 import { useRouter } from 'next/router'
@@ -11,7 +11,7 @@ import { Box, Toolbar, Grid, Skeleton, Typography, Button, TextField, Hidden, Bu
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import DrawerBar from '../../../components/Navigation/DrawerBar';
+import DrawerBar from '../../components/Navigation/DrawerBar';
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -217,7 +217,7 @@ function MemberEdit({ member: { _id, image, firstname, lastname, email, username
                         response = await response.json();
                         console.log(response)
                         setMessage("Member Edited Successfully!");
-                        // window.location.href = '/admin/MemberManage'
+                        // window.location.href = './MemberManage'
                         setOpenAlert(true);
                         if (!response.ok) {
                             Error('no response')
