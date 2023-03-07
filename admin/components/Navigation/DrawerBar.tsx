@@ -85,31 +85,31 @@ export default function DrawerBar() {
       {/* <Divider /> */}
       <List>
         <ListItem key="Dashboard" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/Dashboard')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./Dashboard')}>
             <DashboardIcon className="mr-3" />
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Wigs Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/WigManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./WigManage')}>
             <Face3Icon className="mr-3" />
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="AR Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/ARManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./ARManage')}>
             <AspectRatioIcon className="mr-3" />
             <ListItemText primary="AR Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Member Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/MemberManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./MemberManage')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Member Manage" />
           </ListItemButton>
         </ListItem>
         {/* <ListItem key="Test" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('/admin/test')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./test')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Test" />
           </ListItemButton>
@@ -162,7 +162,7 @@ export default function DrawerBar() {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Link onClick={() => handleMenuItemClick('/admin/Profile')} underline="none" >
+                  <Link onClick={() => handleMenuItemClick('./Profile')} underline="none" >
                     <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Profile</Typography>
                   </Link>
                 </MenuItem>

@@ -34,8 +34,8 @@ a {
   }
 
   body {
-    color: rgb(255, 255, 255);
-    background: #252525;
+    color: rgb(var(--foreground-rgb));
+    background: rgb(226 232 240);
   }
 }
 
