@@ -61,10 +61,10 @@ const AddMember_Form = () => {
     const [password, setPassword] = useState('');
 
     const [progress, setProgress] = useState(0)
+    const [url, setUrl] = useState<string | null>(null)
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const defaultImageUrl = 'https://static.vecteezy.com/system/resources/previews/002/318/271/original/user-profile-icon-free-vector.jpg';
-    const [url, setUrl] = useState<string | null>(null)
 
     useEffect(() => {
         if (!previewUrl) {

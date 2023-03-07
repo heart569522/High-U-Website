@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Link from 'next/link';
+import Link from 'next/link'
+import Image from 'next/image'
 import {
   Table,
   TableBody,
@@ -174,7 +175,7 @@ export default function MemberManage(props: Props) {
                         loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
                           <TableRow key={item._id} className="hover:bg-gray-50">
                             <TableCell className="flex justify-center items-center">
-                              <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                              <Image src={item.image} alt={item.username} width={160} height={160} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
                             </TableCell>
                             <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
                             <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>

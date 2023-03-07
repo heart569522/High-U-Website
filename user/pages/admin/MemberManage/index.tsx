@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Link from 'next/link';
+import Link from 'next/link'
+import Image from 'next/image'
 import {
   Table,
   TableBody,
@@ -26,11 +27,11 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { storage } from '../api/firebaseConfig';
+import { storage } from '../../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 
 // IMPORT COMPONENT
-import DrawerBar from '../../components/Navigation/DrawerBar'
+import DrawerBar from '../../../components/Navigation/DrawerBar'
 
 type Props = {
   members: [Member]
@@ -174,7 +175,7 @@ export default function MemberManage(props: Props) {
                         loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
                           <TableRow key={item._id} className="hover:bg-gray-50">
                             <TableCell className="flex justify-center items-center">
-                              <img src={item.image} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
+                              <Image src={item.image} alt={item.username} width={160} height={160} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
                             </TableCell>
                             <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
                             <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
@@ -183,7 +184,7 @@ export default function MemberManage(props: Props) {
                             <TableCell className="w-[12%] text-base">{item.password}</TableCell>
                             <TableCell className="w-[15%] text-center ">
                               <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                <Link href="./MemberEdit/[id]" as={`./MemberEdit/${item._id}`}>
+                                <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
                                   <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
                                 </Link>
                                 <Button onClick={handleOpenModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
@@ -247,8 +248,8 @@ export default function MemberManage(props: Props) {
                       <AccordionSummary>
                         <Typography className="font-semibold">{item.username}</Typography>
                       </AccordionSummary>
-                      <AccordionDetails className="w-52 h-auto">
-                        <img src={item.image} alt={item.username} />
+                      <AccordionDetails className="flex justify-center items-center w-full h-auto">
+                        <Image src={item.image} alt={item.username} width={200} height={200} className="rounded-lg object-cover w-[80%]" />
                       </AccordionDetails>
                       <AccordionDetails className="bg-gray-50">
                         <Typography>Firstname: {item.firstname}</Typography><br />

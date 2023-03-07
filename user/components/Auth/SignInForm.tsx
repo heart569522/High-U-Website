@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-const SignInForm = React.memo(() => {
+export const SignInForm = React.memo(() => {
     const router = useRouter()
 
     const [email, setEmail] = useState('');
@@ -125,7 +125,7 @@ const SignInForm = React.memo(() => {
                                 </Button>
                                 <Grid container>
                                     <Grid item>
-                                        <Link onClick={() => handleMenuItemClick('/user/SignUp')} className="cursor-pointer" variant="body2" color="secondary">
+                                        <Link onClick={() => handleMenuItemClick('/SignUp')} className="cursor-pointer" variant="body2" color="secondary">
                                             {"Don't have an account? SignUp"}
                                         </Link>
                                     </Grid>
@@ -142,4 +142,4 @@ const SignInForm = React.memo(() => {
 }
 )
 
-export default SignInForm;
+SignInForm.displayName = 'SignInForm';

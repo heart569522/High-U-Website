@@ -152,12 +152,12 @@ export default function Navbar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/Wig')}>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/Wig')}>
             <ListItemText primary="Wig" className="text-[#f0ca83]" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/user/TryAR')}>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleMenuItemClick('/TryAR')}>
             <ListItemText primary="TryAR" className="text-[#f0ca83]" />
           </ListItemButton>
         </ListItem>
@@ -258,7 +258,7 @@ export default function Navbar() {
                     Home
                   </Box>
                 </Link>
-                <Link onClick={() => handleMenuItemClick('/user/Wig')} className="cursor-pointer" underline='none'>
+                <Link onClick={() => handleMenuItemClick('/Wig')} className="cursor-pointer" underline='none'>
                   <Box
                     sx={{
                       px: 2,
@@ -275,7 +275,7 @@ export default function Navbar() {
                     Wig
                   </Box>
                 </Link>
-                <Link onClick={() => handleMenuItemClick('/user/TryAR')} className="cursor-pointer" underline='none'>
+                <Link onClick={() => handleMenuItemClick('/TryAR')} className="cursor-pointer" underline='none'>
                   <Box
                     sx={{
                       px: 2,
@@ -317,7 +317,7 @@ export default function Navbar() {
                     {/* LIKE MENU */}
                     <Box sx={{ paddingLeft: 1 }}>
                       <Tooltip title="Favorites">
-                        <IconButton onClick={() => handleMenuItemClick('/user/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
+                        <IconButton onClick={() => handleMenuItemClick('/Favorite')} size="large" aria-label="" sx={{ color: '#F0CA83', }}>
                           <FavoriteTwoToneIcon />
                         </IconButton>
                       </Tooltip>
@@ -348,7 +348,7 @@ export default function Navbar() {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                       >
-                        <Link onClick={() => handleMenuItemClick('/user/Profile')} underline="none" >
+                        <Link onClick={() => handleMenuItemClick('/Profile')} underline="none" >
                           <MenuItem onClick={handleCloseUserMenu}>
                             <Typography sx={{ fontFamily: 'Prompt, sans-serif', color: "black" }} textAlign="center">Profile</Typography>
                           </MenuItem>

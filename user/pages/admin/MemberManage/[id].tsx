@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import { storage } from '../../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 
@@ -57,9 +58,7 @@ type ResponseFromServer = {
     password: string;
 }
 
-export async function getStaticProps({
-    params
-}: GetStaticPropsContext<PageParams>): Promise<GetStaticPropsResult<ContentPageProps>> {
+export async function getStaticProps({ params }: GetStaticPropsContext<PageParams>): Promise<GetStaticPropsResult<ContentPageProps>> {
     try {
 
         let response = await fetch("http://localhost:3000/api/member/getOneMember?id=" + params?.id)
@@ -114,9 +113,7 @@ export async function getStaticPaths() {
     }
 }
 
-function MemberEdit({
-    member: { _id, image, firstname, lastname, email, username, password }
-}: ContentPageProps) {
+function MemberEdit({ member: { _id, image, firstname, lastname, email, username, password }}: ContentPageProps) {
 
     const [openAlert, setOpenAlert] = useState(false);
     const [error, setError] = useState("");
@@ -281,8 +278,11 @@ function MemberEdit({
                                             type="file"
                                             onChange={handleImageChange}
                                         />
-                                        <img
+                                        <Image
                                             src={previewUrl || image}
+                                            alt={username}
+                                            width={384}
+                                            height={384}
                                             className="rounded-lg object-top object-cover h-auto w-96"
                                         />
                                         <label htmlFor="upload-button">
