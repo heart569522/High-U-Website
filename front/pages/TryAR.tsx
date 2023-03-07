@@ -26,9 +26,9 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Webcam from 'react-webcam';
 
 // IMPORT COMPONENT
-import Navbar from "../../components/Navigation/Navigation"
+import Navbar from "../components/Navigation/Navigation"
 
-import AR_Data from '../../helper/AR_Data.json';
+import AR_Data from '../helper/AR_Data.json';
 import Head from 'next/head';
 
 const theme = createTheme({

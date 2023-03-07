@@ -22,11 +22,11 @@ import {
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import Navbar from "../../components/Navigation/Navigation"
-import UserHeader from '../../components/Auth/UserHeader';
-import EmptyARImage from '../../components/Other/EmptyARImage';
+import Navbar from "../components/Navigation/Navigation"
+import UserHeader from '../components/Auth/UserHeader';
+import EmptyARImage from '../components/Other/EmptyARImage';
 
-import Wig_Product from '../../helper/Wig_Product.json';
+import Wig_Product from '../helper/Wig_Product.json';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 
