@@ -1,45 +1,52 @@
-import clientPromise from '../../../lib/mongodb';
-import { ObjectId } from "mongodb"
-import { NextApiRequest, NextApiResponse } from 'next';
+import { ObjectId } from "mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
+import clientPromise from "../../../lib/mongodb";
 
-const updateMmmber = async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
+const updateMember = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { id } = req.query;
+    const { image, firstname, lastname, email, username, password } = req.body;
 
-        const client = await clientPromise;
-        const db = client.db("high_u");
-        const { id } = req.query;
-        const { image, firstname, lastname, email, username, password } = req.body;
-
-        const idValue = Array.isArray(id) ? id[0] : id;
-        const member = await db.collection("member").updateOne(
-            {
-                _id: new ObjectId(idValue)
-            },
-            {
-                $set: {
-                    image: image,
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    username: username,
-                    password: password,
-                    updatedAt: new Date(Date.now()).toLocaleString("en-GB", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    })
-                }
-            }
-        )
-
-        res.status(200).json(member);
-
-    } catch (e: any) {
-        console.error(e);
-        throw new Error(e).message;
+    if (!id) {
+      return res.status(400).json({ message: "Member ID is required" });
     }
-}
 
-export default updateMmmber
+    const client = await clientPromise;
+    const db = client.db("high_u");
+
+    const idValue = Array.isArray(id) ? id[0] : id;
+    const member = await db.collection("member").updateOne(
+      {
+        _id: new ObjectId(idValue),
+      },
+      {
+        $set: {
+          image: image,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          username: username,
+          password: password,
+          updatedAt: new Date(Date.now()).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      }
+    );
+
+    if (!member.modifiedCount) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+    
+    res.status(200).json({ message: "Member updated successfully" });
+  } catch (e: any) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export default updateMember;
