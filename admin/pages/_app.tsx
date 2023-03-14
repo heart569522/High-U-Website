@@ -6,10 +6,11 @@ import 'aos/dist/aos.css';
 import '../styles/globals.css'
 import '../styles/lodingStyle.css'
 import '@tremor/react/dist/esm/tremor.css'
+import Layout from '@/components/Layout';
 
 import type { AppProps } from 'next/app'
 
-export default function App({ Component, pageProps: {session, ...pageProps} }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
     AOS.init({
       duration: 1250
@@ -22,7 +23,9 @@ export default function App({ Component, pageProps: {session, ...pageProps} }: A
       <title>High U | Administrator</title>
       <meta content="width=device-width, initial-scale=1" name="viewport" />
       <link rel="icon" href="/favicon.ico" />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   )
 }

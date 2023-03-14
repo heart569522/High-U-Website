@@ -261,7 +261,6 @@ function MemberEdit({ member: { _id, image, firstname, lastname, email, username
     return (
         <ThemeProvider theme={theme}>
             <Head><title>Member Edit | High U Administrator</title></Head>
-            <DrawerBar />
             <Box
                 component="main"
                 className="h-full p-5 ml-[240px] max-[899px]:ml-0"

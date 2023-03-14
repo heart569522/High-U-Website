@@ -31,9 +31,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 
-// IMPORT COMPONENT
-import DrawerBar from '../../components/Navigation/DrawerBar'
-
 type Props = {
   members: [Member]
 }
@@ -132,7 +129,7 @@ export default function MemberManage(props: Props) {
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
-      <DrawerBar />
+      {/* <DrawerBar /> */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <CircularProgress />
