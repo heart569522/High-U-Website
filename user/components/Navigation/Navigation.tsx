@@ -98,7 +98,7 @@ HideOnScroll.propTypes = {
 const drawerWidth = 240;
 
 export default function Navbar() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession();
 
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = React.useState(false);

@@ -29,9 +29,6 @@ export default NextAuth({
               name: user.username,
               email: user.email,
               image: user.image,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              password: user.password,
             };
           } else {
             console.log("Invalid email or password.");
