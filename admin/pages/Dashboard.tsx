@@ -12,7 +12,6 @@ import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 
 // IMPORT COMPONENT
-import DrawerBar from '../components/Navigation/DrawerBar';
 import WebsiteView_AreaChart from '../components/Chart/WebsiteView_AreaChart';
 import TopFiveWigView_DonutChart from '../components/Chart/TopFiveWigView_DonutChart';
 import TopFiveWigView_List from '../components/Chart/TopFiveWigView_List';
@@ -44,7 +43,6 @@ function Dashboard() {
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Dashboard | High U Administrator</title></Head>
-      <DrawerBar />
       <Box
         component="main"
         className="bg-slate-200 h-screen p-5 ml-[240px] max-[899px]:ml-0"

@@ -5,14 +5,17 @@ import {
   TextField
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#303030",
+      main: "#F0CA83",
     },
     secondary: {
-      main: "#303030",
+      main: "#F08383",
     },
   },
   typography: {
@@ -20,74 +23,90 @@ const theme = createTheme({
       'Prompt, sans-serif'
     ].join(','),
   },
-
 });
 
+type User = {
+  _id: string;
+  image: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  username: string;
+  password: string;
+}
 
-export default function MyDetail_Profile_admin() {
+export async function getServerSideProps() {
+  const res = await fetch('http://localhost:3000/api/user_profile/getUserProfile')
+  const data: User = await res.json()
+
+  return {
+    props: {
+      data,
+    },
+  }
+}
+
+export default function MyDetail_Profile({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(data);
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography className="text-[#303030] font-bold pb-2">Firstname</Typography>
+          <Typography className="text-[#F0CA83] font-bold pb-2">Firstname</Typography>
           <TextField
             type='text'
-            defaultValue='admin'
             fullWidth
+            defaultValue={data.firstname}
             name='firstname'
             variant='outlined'
-            className="font-bold rounded bg-[#303030]"
+            className="bg-[#F0ca83] font-bold rounded"
             inputProps={{
               readOnly: true,
-              style: { color: "#FFF" }
             }}
             focused
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography className="text-[#303030] font-bold pb-2">Lastname</Typography>
+          <Typography className="text-[#F0CA83] font-bold pb-2">Lastname</Typography>
           <TextField
             type='text'
-            defaultValue='test'
+            defaultValue='Alonzo'
             fullWidth
             name='lastname'
             variant='outlined'
-            className="font-bold rounded bg-[#303030]"
+            className="bg-[#F0ca83] font-bold rounded"
             inputProps={{
               readOnly: true,
-              style: { color: "#FFF" }
             }}
             focused
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography className="text-[#303030] font-bold pb-2">Username</Typography>
+          <Typography className="text-[#F0CA83] font-bold pb-2">Username</Typography>
           <TextField
             type='text'
-            defaultValue='admin'
+            defaultValue='mtalonz123'
             fullWidth
             name='username'
             variant='outlined'
-            className="font-bold rounded bg-[#303030]"
+            className="bg-[#F0ca83] font-bold rounded"
             inputProps={{
               readOnly: true,
-              style: { color: "#FFF" }
             }}
             focused
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography className="text-[#303030] font-bold pb-2">Email Address</Typography>
+          <Typography className="text-[#F0CA83] font-bold pb-2">Email Address</Typography>
           <TextField
             type='email'
-            defaultValue='admin@hu.com'
+            defaultValue='mt-alz@gmail.com'
             fullWidth
             name='email'
             variant='outlined'
-            className="font-bold rounded bg-[#303030]"
+            className="bg-[#F0ca83] font-bold rounded"
             inputProps={{
               readOnly: true,
-              style: { color: "#FFF" }
             }}
             focused
           />

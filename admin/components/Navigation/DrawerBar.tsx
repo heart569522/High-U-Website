@@ -85,25 +85,25 @@ export default function DrawerBar() {
       {/* <Divider /> */}
       <List>
         <ListItem key="Dashboard" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./Dashboard')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../Dashboard')}>
             <DashboardIcon className="mr-3" />
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Wigs Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./WigManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../WigManage')}>
             <Face3Icon className="mr-3" />
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="AR Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./ARManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../ARManage')}>
             <AspectRatioIcon className="mr-3" />
             <ListItemText primary="AR Manage" />
           </ListItemButton>
         </ListItem>
         <ListItem key="Member Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./MemberManage')}>
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../MemberManage')}>
             <GroupsIcon className="mr-3" />
             <ListItemText primary="Member Manage" />
           </ListItemButton>

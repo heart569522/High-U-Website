@@ -1,14 +1,6 @@
 import React from 'react'
 import {
     Box,
-    Typography,
-    Toolbar,
-    Grid,
-    Hidden,
-    ButtonGroup,
-    Button,
-    Modal,
-    Divider,
 } from "@mui/material";
 
 function Loading() {
@@ -31,8 +23,6 @@ function Loading() {
                 <div className="text" data-text="Loading..."></div>
             </div>
         </Box>
-
-
     )
 }
 

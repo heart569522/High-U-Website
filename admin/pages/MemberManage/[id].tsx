@@ -61,7 +61,7 @@ type ResponseFromServer = {
 export async function getStaticProps({ params }: GetStaticPropsContext<PageParams>): Promise<GetStaticPropsResult<ContentPageProps>> {
     try {
 
-        let response = await fetch("http://localhost:3000/api/member/getOneMember?id=" + params?.id)
+        let response = await fetch("http://localhost:8000/api/member/getOneMember?id=" + params?.id)
 
         let responseFromServer: ResponseFromServer = await response.json()
 
@@ -97,7 +97,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
 }
 
 export async function getStaticPaths() {
-    let members = await fetch("http://localhost:3000/api/member/getAllMember");
+    let members = await fetch("http://localhost:8000/api/member/getAllMember");
 
     let memberFromServer: [Member] = await members.json();
 
@@ -113,7 +113,7 @@ export async function getStaticPaths() {
     }
 }
 
-function MemberEdit({ member: { _id, image, firstname, lastname, email, username, password }}: ContentPageProps) {
+function MemberEdit({ member: { _id, image, firstname, lastname, email, username, password } }: ContentPageProps) {
 
     const [openAlert, setOpenAlert] = useState(false);
     const [error, setError] = useState("");
@@ -170,72 +170,97 @@ function MemberEdit({ member: { _id, image, firstname, lastname, email, username
 
         if (firstname && lastname && email && username && password) {
             try {
-                if (!memberImage) {
-                    throw new Error('File is required')
-                }
+                let imageUrl = image; // use existing image URL by default
 
-                // Delete the old image from storage
-                // const oldImgUrl = memberImage.name
-                // const oldImageRef = ref(storage, `member_images/${oldImgUrl}`);
-                // await deleteObject(oldImageRef)
+                if (memberImage) {
+                    // Upload the new image
+                    const imgName = memberImage.name
+                    const storageRef = ref(storage, `member_images/${imgName}`)
+                    const uploadTask = uploadBytesResumable(storageRef, memberImage)
 
-                // Upload the new image
-                const imgName = memberImage.name
-                const storageRef = ref(storage, `member_images/${imgName}`)
-                const uploadTask = uploadBytesResumable(storageRef, memberImage)
+                    uploadTask.on(
+                        'state_changed',
+                        (snapshot: any) => {
+                            setProgress(
+                                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            )
+                        },
+                        (error: any) => {
+                            setError(error)
+                        },
+                        async () => {
+                            imageUrl = await getDownloadURL(uploadTask.snapshot.ref)
+                            setUrl(imageUrl)
 
-                uploadTask.on(
-                    'state_changed',
-                    (snapshot: any) => {
-                        setProgress(
-                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        )
-                    },
-                    (error: any) => {
-                        setError(error)
-                    },
-                    async () => {
-                        const imageUrl = await getDownloadURL(uploadTask.snapshot.ref)
-                        setUrl(imageUrl)
-
-                        let response = await fetch("http://localhost:3000/api/member/updateMember?id=" + _id, {
-                            method: 'POST',
-                            headers: {
-                                Accept: "application/json, text/plain, */*",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                image: imageUrl,
-                                firstname: memberFirstname,
-                                lastname: memberLastname,
-                                email: memberEmail,
-                                username: memberUsername,
-                                password: memberPassword
+                            // Update the member with the new image URL
+                            let response = await fetch("http://localhost:8000/api/member/updateMember?id=" + _id, {
+                                method: 'POST',
+                                headers: {
+                                    Accept: "application/json, text/plain, */*",
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    image: imageUrl,
+                                    firstname: memberFirstname,
+                                    lastname: memberLastname,
+                                    email: memberEmail,
+                                    username: memberUsername,
+                                    password: memberPassword
+                                })
                             })
-                        })
 
-                        response = await response.json();
-                        console.log(response)
-                        setMessage("Member Edited Successfully!");
-                        // window.location.href = './MemberManage'
-                        setOpenAlert(true);
-                        if (!response.ok) {
-                            Error('no response')
+                            response = await response.json();
+                            console.log(response)
+                            setMessage("Member Edited Successfully!");
+                            window.location.href = '../MemberManage'
+                            setOpenAlert(true);
+                            if (!response.ok) {
+                                Error('no response')
+                            }
                         }
+                    )
+                } else {
+                    // Update the member without changing the image URL
+                    let response = await fetch("http://localhost:8000/api/member/updateMember?id=" + _id, {
+                        method: 'POST',
+                        headers: {
+                            Accept: "application/json, text/plain, */*",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            image: imageUrl,
+                            firstname: memberFirstname,
+                            lastname: memberLastname,
+                            email: memberEmail,
+                            username: memberUsername,
+                            password: memberPassword
+                        })
+                    })
+
+                    response = await response.json();
+                    console.log(response)
+                    setMessage("Member Edited Successfully!");
+                    window.location.href = '../MemberManage'
+                    setOpenAlert(true);
+                    if (!response.ok) {
+                        Error('no response')
                     }
-                )
+                }
             } catch (error: any) {
                 console.error(error)
                 setError("An error occurred while updating the member. Please try again later.");
                 setOpenAlert(true);
             }
+        } else {
+            setError("Please complete all fields.");
+            setOpenAlert(true);
         }
     }
+
 
     return (
         <ThemeProvider theme={theme}>
             <Head><title>Member Edit | High U Administrator</title></Head>
-            <DrawerBar />
             <Box
                 component="main"
                 className="h-full p-5 ml-[240px] max-[899px]:ml-0"

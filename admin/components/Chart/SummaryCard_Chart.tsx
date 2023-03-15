@@ -61,7 +61,7 @@ export default function SummaryCard_Chart() {
                                 <Metric>{totalWigs}</Metric>
                             </Block>
                             <Tooltip title="View Detail">
-                                <Link href="/admin/WigManage">
+                                <Link href="/WigManage">
                                     <Button
                                         icon={OutboundIcon}
                                         iconPosition="right"
@@ -90,7 +90,7 @@ export default function SummaryCard_Chart() {
                                 <Metric>{totalMembers}</Metric>
                             </Block>
                             <Tooltip title="View Detail">
-                                <Link href="/admin/MemberList">
+                                <Link href="/MemberManage">
                                     <Button
                                         // text="View Details"
                                         icon={OutboundIcon}

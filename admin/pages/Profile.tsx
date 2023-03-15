@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import DrawerBar from '../components/Navigation/DrawerBar'
 import { Box, Toolbar, Grid, Typography, Button, Tab, Container } from '@mui/material';
 import Link from 'next/link';
 import {
@@ -45,7 +44,6 @@ export default function Profile() {
         <ThemeProvider theme={theme}>
             <Head><title>Profile | High U Administrator</title></Head>
             <Container maxWidth="xl">
-                <DrawerBar />
                 <Box
                     component="main"
                     className="h-full p-5 ml-[240px] max-[899px]:ml-0"
