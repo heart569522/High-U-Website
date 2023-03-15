@@ -40,7 +40,6 @@ interface User {
   email: string;
   username: string;
   password: string;
-  createdAt: string;
 }
 
 const theme = createTheme({
@@ -78,8 +77,6 @@ export default function Profile() {
   const handleMenuChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-
-
 
   return (
     <div>
