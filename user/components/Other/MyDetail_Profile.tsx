@@ -5,6 +5,9 @@ import {
   TextField
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 const theme = createTheme({
   palette: {
@@ -20,11 +23,20 @@ const theme = createTheme({
       'Prompt, sans-serif'
     ].join(','),
   },
-
 });
 
+type User = {
+  _id: string;
+  image: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  username: string;
+  password: string;
+}
 
 export default function MyDetail_Profile() {
+  
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={4}>
@@ -32,8 +44,8 @@ export default function MyDetail_Profile() {
           <Typography className="text-[#F0CA83] font-bold pb-2">Firstname</Typography>
           <TextField
             type='text'
-            defaultValue='Matther'
             fullWidth
+            defaultValue={"test"}
             name='firstname'
             variant='outlined'
             className="bg-[#F0ca83] font-bold rounded"
