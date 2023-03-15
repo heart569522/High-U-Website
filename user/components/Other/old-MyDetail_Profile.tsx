@@ -35,8 +35,19 @@ type User = {
   password: string;
 }
 
-export default function MyDetail_Profile() {
-  
+export async function getServerSideProps() {
+  const res = await fetch('http://localhost:3000/api/user_profile/getUserProfile')
+  const data: User = await res.json()
+
+  return {
+    props: {
+      data,
+    },
+  }
+}
+
+export default function MyDetail_Profile({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(data);
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={4}>
@@ -45,7 +56,7 @@ export default function MyDetail_Profile() {
           <TextField
             type='text'
             fullWidth
-            defaultValue={"test"}
+            defaultValue={data.firstname}
             name='firstname'
             variant='outlined'
             className="bg-[#F0ca83] font-bold rounded"
