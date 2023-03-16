@@ -2,7 +2,7 @@ import { getSession  } from "next-auth/react"
 import clientPromise from '../../../lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const getUserProfile = async (req: NextApiRequest, res: NextApiResponse) => {
+const getUserData = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req });
 
     if (!session) {
@@ -22,4 +22,4 @@ const getUserProfile = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 }
 
-export default getUserProfile
+export default getUserData
