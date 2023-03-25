@@ -33,7 +33,7 @@ const theme = createTheme({
 
 export default function SignUpForm() {
     const router = useRouter()
-    const defaultImage = 'https://icon-library.com/images/default-user-icon/default-user-icon-8.jpg';
+    const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
 
     const [image, setImage] = useState(defaultImage);
     const [firstname, setFirstname] = useState('');

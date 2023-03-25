@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 
 // IMPORT COMPONENT
-import AddWig_Form from '../components/Form/AddWig_Form'
+import AddWig_Form from '../components/Form/AddWig_Form-old'
 
 function AddWig() {
   return (
