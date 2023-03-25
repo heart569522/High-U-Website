@@ -9,6 +9,7 @@ import '@tremor/react/dist/esm/tremor.css'
 import Layout from '@/components/Layout';
 
 import type { AppProps } from 'next/app'
+import index from '.';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
@@ -17,6 +18,18 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     }),
       AOS.refresh();
   }, []);
+
+  // Render the Component directly if it is the index page
+  if (Component === index) {
+    return (
+      <SessionProvider session={session}>
+        <title>High U | Administrator</title>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="icon" href="/favicon.ico" />
+        <Component {...pageProps} />
+      </SessionProvider>
+    );
+  }
 
   return (
     <SessionProvider session={session}>
