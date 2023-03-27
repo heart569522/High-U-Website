@@ -29,6 +29,7 @@ import EmptyARImage from '../components/Other/EmptyARImage';
 import Wig_Product from '../helper/Wig_Product.json';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { getSession, GetSessionParams } from 'next-auth/react';
 
 const theme = createTheme({
     palette: {
@@ -125,4 +126,23 @@ export default function Favorite() {
 
         </div>
     );
+}
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+    const session = await getSession(context)
+
+    // If the user doesn't have an active session, redirect to the login page
+    if (!session) {
+        return {
+            redirect: {
+                destination: './',
+                permanent: false,
+            },
+        }
+    }
+
+    // If the user has an active session, render the protected page
+    return {
+        props: { session },
+    }
 }

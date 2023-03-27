@@ -29,11 +29,13 @@ import Head from 'next/head';
 import { storage } from './api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import Image from 'next/image';
+import { getSession, GetSessionParams } from 'next-auth/react';
 
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
-import ChangePassword_Profile from '../components/Other/ChangePassword_Profile';
+import ChangePassword_Profile from '../components/Other/old-ChangePassword_Profile';
 
 
 interface User {
@@ -109,17 +111,11 @@ export default function Profile() {
     setPreviewUrl(URL.createObjectURL(image));
   }
 
-  const handleChange = (setState: (value: string) => void) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setState(event.target.value);
-  };
-
-  const handleSubmit = async (e: any) => {
+  const handleUpdateProfile = async (e: any) => {
     e.preventDefault();
 
     try {
-      let imageUrl = editImage || ""; // use existing image URL by default
+      let imageUrl = url || user?.image || ""; // use existing image URL by default
 
       if (editImage) {
         // Upload the new image
@@ -200,6 +196,82 @@ export default function Profile() {
     }
   }
 
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setNewPassword(value);
+
+    if (value !== confirmPassword) {
+      setPasswordError("The Passwords do not atch.");
+    } else {
+      setPasswordError(null);
+    }
+  };
+
+  const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setConfirmPassword(value);
+
+    if (value !== newPassword) {
+      setPasswordError("The Passwords do not match.");
+    } else {
+      setPasswordError(null);
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+  };
+
+  const handleReset = () => {
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setPasswordError(null);
+  };
+
+  const handleUpdatePassword = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      // Call the API to update the user's password
+      const response = await fetch("http://localhost:3000/api/user_data/updateUserPassword?id=" + user?._id, {
+        method: 'POST',
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword
+        })
+      });
+
+      // Check the response from the server
+      const data = await response.json();
+      if (response.ok) {
+        // Password updated successfully
+        console.log(data);
+        // setMessage("Password updated successfully!");
+        window.location.href = './Profile';
+      } else {
+        // Error updating password
+        console.log(data);
+        // setError(data.error);
+      }
+    } catch (error) {
+      console.error(error);
+      // setError("Error updating password");
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -287,13 +359,14 @@ export default function Profile() {
               </TabPanel>
               <TabPanel value="2" data-aos="fade-up">
                 {/* <EditProfile_Profile /> */}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleUpdateProfile}>
                   <Grid container spacing={4}>
                     <Grid item xs={12} sm={6}>
                       <Typography className="text-[#F0CA83] font-bold pb-2">Firstname</Typography>
                       <TextField
                         type='text'
                         defaultValue={user?.firstname || ''}
+                        // value={editFirstname}
                         fullWidth
                         name='editFirstname'
                         variant='outlined'
@@ -370,8 +443,11 @@ export default function Profile() {
                           Edit Image
                         </Button>
                       </label>
-                      <Avatar
-                        src={previewUrl || user?.image}
+                      <Image
+                        src={previewUrl || user?.image || ""}
+                        width={96}
+                        height={96}
+                        alt={user?.username || ""}
                         className="w-24 h-24 ml-5 rounded-full max-sm:mx-auto"
                       />
                     </Grid>
@@ -395,7 +471,87 @@ export default function Profile() {
                 </form>
               </TabPanel>
               <TabPanel value="3" data-aos="fade-up">
-                <ChangePassword_Profile />
+                {/* <ChangePassword_Profile /> */}
+                <form onSubmit={handleUpdatePassword} onReset={handleReset}>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <Typography className="text-[#F0CA83] font-bold pb-2">Current Password</Typography>
+                      <TextField
+                        type='text'
+                        fullWidth
+                        name='current-password'
+                        value={currentPassword}
+                        variant='outlined'
+                        className="font-bold rounded"
+                        focused
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        inputProps={{ style: { color: "#F0CA83" } }}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography className="text-[#F0CA83] font-bold pb-2">New Password</Typography>
+                      <TextField
+                        type='text'
+                        fullWidth
+                        name='new-password'
+                        value={newPassword}
+                        variant='outlined'
+                        className="font-bold rounded"
+                        focused
+                        onChange={handlePasswordChange}
+                        onKeyPress={handleKeyPress}
+                        inputProps={{ style: { color: "#F0CA83" } }}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography className="text-[#F0CA83] font-bold pb-2">Confirm Password</Typography>
+                      <TextField
+                        type='password'
+                        fullWidth
+                        name='confirm-password'
+                        value={confirmPassword}
+                        variant='outlined'
+                        className="font-bold rounded"
+                        focused
+                        onChange={handleConfirmPasswordChange}
+                        onKeyPress={handleKeyPress}
+                        error={Boolean(passwordError)}
+                        helperText={passwordError}
+                        inputProps={{
+                          style: { color: "#F0CA83" }
+                        }}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} className="flex items-center justify-center">
+                      <Button
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        className="bg-[#F0CA83] font-bold mx-1 mb-2 hover:bg-[#f3b94d] max-sm:w-full"
+                        disabled={isUpdating}
+                      >
+                        {isUpdating ? (
+                          <CircularProgress size={24} />
+                        ) : (
+                          "Update"
+                        )}
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="large"
+                        type="reset"
+                        onClick={handleReset}
+                        className="border-[#F0CA83] font-bold mx-1 mb-2 hover:border-[#f3b94d] max-sm:w-full"
+                      >
+                        Reset
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
               </TabPanel>
               <hr data-aos="fade-zoom-in" className="w-full h-[1px] rounded border-0 bg-[#886828] mt-3"></hr>
             </TabContext>
@@ -404,4 +560,23 @@ export default function Profile() {
       </Paper>
     </ThemeProvider>
   );
+}
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+  const session = await getSession(context)
+  
+  // If the user doesn't have an active session, redirect to the login page
+  if (!session) {
+    return {
+      redirect: {
+        destination: './',
+        permanent: false,
+      },
+    }
+  }
+
+  // If the user has an active session, render the protected page
+  return {
+    props: { session },
+  }
 }

@@ -7,25 +7,25 @@ import HomeContent from "../components/Home/HomeContent";
 import Footer from "../components/Footer/Footer";
 
 export default function Index() {
-  const router = useRouter();
-  const [isHome, setIsHome] = useState(false);
+  // const router = useRouter();
+  // const [isHome, setIsHome] = useState(false);
 
-  useEffect(() => {
-    setIsHome(router.pathname === '/');
-  }, [router.pathname]);
+  // useEffect(() => {
+  //   setIsHome(router.pathname === '/');
+  // }, [router.pathname]);
 
   return (
-    <>
-      {isHome ? (
-        <SplashScreen finishLoading={() => setIsHome(false)} />
-      ) : (
+    // <>
+    //   {isHome ? (
+    //     <SplashScreen finishLoading={() => setIsHome(false)} />
+    //   ) : (
         <>
           <Navbar />
           <HomeBackground />
           <HomeContent />
           <Footer />
         </>
-      )}
-    </>
+    //   )}
+    // </>
   );
 }
