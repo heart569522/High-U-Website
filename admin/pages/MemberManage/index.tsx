@@ -126,6 +126,7 @@ export default function MemberManage(props: Props) {
       console.log("An error occured while deleting ", error);
     }
   }
+  
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
@@ -152,7 +153,7 @@ export default function MemberManage(props: Props) {
                     </Typography>
                   )}
                   {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                    <Link href="./AddMember">
+                    <Link href="./MemberManage/AddMember">
                       <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add&nbsp;Member</Button>
                     </Link>
                   )}
