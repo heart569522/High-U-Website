@@ -1,14 +1,23 @@
 [
     {
-        "id": 1,
-        "image": "https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369",
+        "ar_image": "",
+        "main_image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2F1.jpg?alt=media&token=b001732c-4d89-4663-aeba-d457cad9c9f6",
+        "sub_image": [
+            "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F6.jpg?alt=media&token=477f6254-ac45-4abe-93b1-78a0d3583890",
+            "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F7.jpg?alt=media&token=71f92af8-038e-4a88-b60a-232a8d3aa09b",
+            "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F8.jpg?alt=media&token=6ae37fb6-52c9-4ad6-b6b3-a7baa8a90ed8",
+            "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F9.jpg?alt=media&token=d630ebf5-5c98-4db4-a390-0eb232665260"
+        ],
         "title": "Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)",
-        "desc": "CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
+        "style": "",
+        "type": "Human Hair",
         "color": "Blondes",
-        "size": "Long",
-        "brand": "Ellen Wille",
+        "size": ["32", "22", "12", "11.5"],
+        "price": "115000",
+        "desc": "CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
         "view": 21,
-        "favorite": 6 
+        "favorite": 6,
+        "use": 12
     },
     {
         "id": 2,

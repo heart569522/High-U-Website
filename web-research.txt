@@ -3,4 +3,4 @@ https://www.wigs.com/
 
 CIRCUMFERENCE = side*2 (ต้องเยอะสุด)
 EAR TO EAR	= crown
-FRONT TO BACK
+FRONT TO BACK - nape
