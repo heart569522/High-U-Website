@@ -54,7 +54,7 @@ export async function getServerSideProps() {
     }
   } catch (e) {
     console.error(e);
-  } 
+  }
   return {
     props: {}
   };
@@ -85,13 +85,13 @@ export default function MemberManage(props: Props) {
   useEffect(() => {
     // Fetch data
     // setTimeout(() => {
-      setIsLoading(false);
+    setIsLoading(false);
     // }, 800);
   }, [loading]);
 
   const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenDeleteModal = () => setOpenModal(true);
+  const handleCloseDeleteModal = () => setOpenModal(false);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -126,11 +126,10 @@ export default function MemberManage(props: Props) {
       console.log("An error occured while deleting ", error);
     }
   }
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
-      {/* <DrawerBar /> */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <CircularProgress />
@@ -193,24 +192,24 @@ export default function MemberManage(props: Props) {
                                     <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
                                       <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
                                     </Link>
-                                    <Button onClick={handleOpenModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
+                                    <Button onClick={handleOpenDeleteModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
                                   </ButtonGroup>
                                   <Modal
                                     open={openModal}
-                                    onClose={handleCloseModal}
+                                    onClose={handleCloseDeleteModal}
                                     aria-labelledby="modal-modal-title"
                                     aria-describedby="modal-modal-description"
                                   >
                                     <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-slate-100 rounded-lg shadow-lg p-4">
-                                      <Typography id="modal-modal-title" className="text-lg text-red-500 font-bold">
+                                      <Typography id="modal-modal-title" className="text-lg text-black font-bold">
                                         Confirm Delete
                                       </Typography>
-                                      <Typography id="modal-modal-description" className="text-base text-red-500" >
+                                      <Typography id="modal-modal-description" className="text-base text-black" >
                                         Are you sure you want to delete this member?
                                       </Typography>
                                       <ButtonGroup fullWidth variant="contained" sx={{ mt: 2 }} aria-label="contained button group">
-                                        <Button type="submit" onClick={() => handleDeleteMember(item._id as string)} className="bg-[#b3b3b3] text-white hover:bg-red-500">Delete</Button>
-                                        <Button onClick={handleCloseModal} className="bg-[#b3b3b3] text-white hover:bg-[#3d3d3d]">Cancel</Button>
+                                        <Button type="submit" onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
+                                        <Button onClick={handleCloseDeleteModal} className="bg-[#303030] text-white hover:bg-[#3d3d3d]">Cancel</Button>
                                       </ButtonGroup>
                                     </Box>
                                   </Modal>
@@ -265,14 +264,14 @@ export default function MemberManage(props: Props) {
                           </AccordionDetails>
                           <AccordionActions>
                             <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                              <Link href="/testID/[id]" as={`/testID/${item._id}`}>
+                              <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
                                 <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
                               </Link>
-                              <Button onClick={handleOpenModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
+                              <Button onClick={handleOpenDeleteModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
                             </ButtonGroup>
                             <Modal
                               open={openModal}
-                              onClose={handleCloseModal}
+                              onClose={handleCloseDeleteModal}
                               aria-labelledby="modal-modal-title"
                               aria-describedby="modal-modal-description"
                             >
@@ -285,7 +284,7 @@ export default function MemberManage(props: Props) {
                                 </Typography>
                                 <ButtonGroup fullWidth variant="contained" sx={{ mt: 2 }} aria-label="contained button group">
                                   <Button type="submit" onClick={() => handleDeleteMember(item._id as string)} className="bg-[#b3b3b3] text-white hover:bg-red-500">Delete</Button>
-                                  <Button onClick={handleCloseModal} className="bg-[#b3b3b3] text-white hover:bg-[#3d3d3d]">Cancel</Button>
+                                  <Button onClick={handleCloseDeleteModal} className="bg-[#b3b3b3] text-white hover:bg-[#3d3d3d]">Cancel</Button>
                                 </ButtonGroup>
                               </Box>
                             </Modal>
