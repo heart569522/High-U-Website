@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, ButtonGroup, CircularProgress, Divider, Grid, Hidden, Modal, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Toolbar, Tooltip, Typography } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, ButtonGroup, CircularProgress, Divider, Grid, Hidden, Modal, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Toolbar, Tooltip, Typography } from '@mui/material';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -191,12 +191,12 @@ export default function WigManage(props: Props) {
                                         <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
                                           <Grid container spacing={2}>
                                             <Grid item md={6}>
-                                              <Tooltip title="Main&nbsp;Image">
+                                              <Tooltip arrow title="Main&nbsp;Image">
                                                 <Image src={item.main_image} alt="main_image" width={200} height={200} className="w-full rounded-md object-cover" />
                                               </Tooltip>
                                             </Grid>
                                             <Grid item md={6}>
-                                              <Tooltip title="AR&nbsp;Image">
+                                              <Tooltip arrow title="AR&nbsp;Image">
                                                 <Image src={item.ar_image || defaultARImage} alt="main_image" width={200} height={200} className="w-full rounded-md object-cover" />
                                               </Tooltip>
                                             </Grid>
@@ -211,10 +211,10 @@ export default function WigManage(props: Props) {
                                                 navigation={true}
                                                 modules={[Navigation]}
                                               >
-                                                {item.sub_image.map((image, index) => (
-                                                  <SwiperSlide key={index}>
-                                                    <Tooltip title={"Sub Image " + (index+1)}>
-                                                      <Image src={image} alt={`sub_image_${index}`} width={200} height={200} className="w-full rounded-md object-cover" />
+                                                {item.sub_image.map((image, i) => (
+                                                  <SwiperSlide key={i}>
+                                                    <Tooltip arrow title={"Sub Image " + (i + 1)}>
+                                                      <Image src={image} alt={`sub_image_${i}`} width={200} height={200} className="w-full rounded-md object-cover" />
                                                     </Tooltip>
                                                   </SwiperSlide>
                                                 ))}
@@ -224,27 +224,159 @@ export default function WigManage(props: Props) {
                                         </Box>
                                       </Grid>
                                       <Grid item sm={12} md={6} className="text-[#303030]">
-                                        <Typography className="text-4xl font-bold max-lg:text-xl">{item.title}</Typography>
+                                        <Typography className="text-2xl font-bold max-lg:text-lg">{item.title}</Typography>
                                         <Divider className="my-2 border-[#303030]" />
-                                        <Typography className="text-lg italic text-[#696969] max-lg:text-sm">{item.desc}</Typography>
-                                        <Hidden mdDown>
-                                          <br />
-                                        </Hidden>
-                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                          <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">BRAND : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Ellen Wille</div>
-                                        </div>
-                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                          <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">COLOR : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Blondes</div>
-                                        </div>
-                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                          <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">SIZE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;Long</div>
-                                        </div>
-                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                          <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">VIEW : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;21</div>
-                                        </div>
-                                        <div className='flex my-5 max-lg:my-2 max-md:my-0'>
-                                          <div className="text-3xl font-bold max-lg:text-xl max-md:text-lg">FAVORITE : </div><div className='text-3xl max-lg:text-xl max-md:text-lg'>&nbsp;6</div>
-                                        </div>
+                                        <Typography className="text-base text-[#696969] max-lg:text-sm">{item.desc}</Typography>
+                                        <Grid container spacing={2} className="py-2">
+                                          <Grid item md={4}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Style</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.style}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={4}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Type</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.type}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={4}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Color</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.color}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={12}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Size (Inch)</Typography>
+                                            <Grid container spacing={2}>
+                                              <Grid item md={3}>
+                                                <TextField
+                                                  type='text'
+                                                  label="Length"
+                                                  value={item.size[0]}
+                                                  fullWidth
+                                                  variant='filled'
+                                                  className="font-bold rounded text-[#303030]"
+                                                  inputProps={{
+                                                    readOnly: true,
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item md={3}>
+                                                <TextField
+                                                  type='text'
+                                                  label="Circumference"
+                                                  value={item.size[1]}
+                                                  fullWidth
+                                                  variant='filled'
+                                                  className="font-bold rounded text-[#303030]"
+                                                  inputProps={{
+                                                    readOnly: true,
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item md={3}>
+                                                <TextField
+                                                  type='text'
+                                                  label="Ear-to-Ear"
+                                                  value={item.size[2]}
+                                                  fullWidth
+                                                  variant='filled'
+                                                  className="font-bold rounded text-[#303030]"
+                                                  inputProps={{
+                                                    readOnly: true,
+                                                  }}
+                                                />
+                                              </Grid>
+                                              <Grid item md={3}>
+                                                <TextField
+                                                  type='text'
+                                                  label="Front-to-Back"
+                                                  value={item.size[3]}
+                                                  fullWidth
+                                                  variant='filled'
+                                                  className="font-bold rounded text-[#303030]"
+                                                  inputProps={{
+                                                    readOnly: true,
+                                                  }}
+                                                />
+                                              </Grid>
+                                            </Grid>
+                                          </Grid>
+                                          <Grid item md={3}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Price(฿)</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.price}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={3}>
+                                            <Typography className="text-[#303030] font-bold pb-1">View</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.view}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={3}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Favorite</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.favorite}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                          <Grid item md={3}>
+                                            <Typography className="text-[#303030] font-bold pb-1">Try&nbsp;AR</Typography>
+                                            <TextField
+                                              type='text'
+                                              fullWidth
+                                              value={item.use}
+                                              variant='filled'
+                                              className="font-bold rounded text-[#303030]"
+                                              inputProps={{
+                                                readOnly: true,
+                                              }}
+                                            />
+                                          </Grid>
+                                        </Grid>
                                         <Hidden mdUp>
                                           <ButtonGroup variant="contained" className="mt-3 flex-none justify-end" fullWidth aria-label="contained button group">
                                             <Button className="text-white bg-amber-500">Edit</Button>
