@@ -1,32 +1,32 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
+import MaterialReactTable, {
+  type MaterialReactTableProps,
+  type MRT_Cell,
+  type MRT_ColumnDef,
+  type MRT_Row,
+} from 'material-react-table';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableHead,
-  TableRow,
   Box,
   Typography,
   Toolbar,
   Grid,
-  Hidden,
-  Accordion,
-  AccordionActions,
-  AccordionSummary,
-  AccordionDetails,
-  ButtonGroup,
   Button,
-  Modal,
-  Divider,
-  Skeleton,
-  CircularProgress
+  Tooltip,
+  IconButton,
+  Dialog,
+  TextField,
+  DialogTitle,
+  DialogContent,
+  Stack,
+  DialogActions,
+  Avatar,
+  Input
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Delete, Edit } from '@mui/icons-material';
 
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
@@ -78,229 +78,371 @@ const theme = createTheme({
 });
 
 export default function MemberManage(props: Props) {
-  const [members, setMembers] = useState<[Member]>(props.members);
-  console.log("Number of Members: ", members.length)
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [tableData, setTableData] = useState<[Member]>(props.members);
+  const [validationErrors, setValidationErrors] = useState<{
+    [cellId: string]: string;
+  }>({});
 
-  const [loading, setIsLoading] = useState(true);
-  useEffect(() => {
-    // Fetch data
-    // setTimeout(() => {
-    setIsLoading(false);
-    // }, 800);
-  }, [loading]);
-
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenDeleteModal = () => setOpenModal(true);
-  const handleCloseDeleteModal = () => setOpenModal(false);
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+  const handleCreateNewRow = (values: Member) => {
+    tableData.push(values);
+    setTableData([...tableData]);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] =
+    async ({ exitEditingMode, row, values }) => {
+      if (!Object.keys(validationErrors).length) {
+        tableData[row.index] = values;
+        //send/receive api updates here, then refetch or update local table data for re-render
+        setTableData([...tableData]);
+        exitEditingMode(); //required to exit editing mode and close modal
+      }
+    };
+
+  const handleCancelRowEdits = () => {
+    setValidationErrors({});
   };
+
+  const handleDeleteRow = useCallback(
+    async (row: MRT_Row<Member>) => {
+      if (!confirm(`Are you sure you want to delete ${row.getValue('firstname')}`)) {
+        return;
+      }
+
+      try {
+        await handleDeleteMember(row.original._id);
+        // Refetch or update local table data for re-render
+        tableData.splice(row.index, 1);
+        setTableData([...tableData]);
+      } catch (error) {
+        console.error(error);
+        // Handle error here
+      }
+    },
+    [tableData],
+  );
 
   const handleDeleteMember = async (memberId: string) => {
     try {
       let response = await fetch("http://localhost:8000/api/member/deleteMember?id=" + memberId, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json"
         }
       })
-      // Delete the old image from storage
-      // const imageRef = ref(storage, `member_images/${members}`)
-      // await deleteObject(imageRef)
-
       response = await response.json();
       console.log(response);
-      window.location.href = './MemberManage'
-
     } catch (error) {
       console.log("An error occured while deleting ", error);
     }
   }
 
+  const getCommonEditTextFieldProps = useCallback(
+    (
+      cell: MRT_Cell<Member>,
+    ): MRT_ColumnDef<Member>['muiTableBodyCellEditTextFieldProps'] => {
+      return {
+        error: !!validationErrors[cell.id],
+        helperText: validationErrors[cell.id],
+        onBlur: (event) => {
+          const isValid =
+            cell.column.id === 'email'
+              ? validateEmail(event.target.value)
+              : validateRequired(event.target.value);
+          if (!isValid) {
+            //set validation error for cell if invalid
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: `${cell.column.columnDef.header} is required`,
+            });
+          } else {
+            //remove validation error for cell if valid
+            delete validationErrors[cell.id];
+            setValidationErrors({
+              ...validationErrors,
+            });
+          }
+        },
+      };
+    },
+    [validationErrors],
+  );
+
+  const columns = useMemo<MRT_ColumnDef<Member>[]>(
+    () => [
+      {
+        accessorKey: 'image', //id is still required when using accessorFn instead of accessorKey
+        header: 'Image',
+        size: 10,
+        Cell: ({ renderedCellValue, row }) => (
+          <Box className="flex">
+            <Image
+              alt="avatar"
+              height={30}
+              width={30}
+              src={row.original.image}
+              className="object-cover w-10 h-10 rounded-full"
+            />
+            {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
+            {/* <span>{renderedCellValue}</span> */}
+          </Box>
+        ),
+      },
+      {
+        accessorKey: 'firstname',
+        header: 'First Name',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'lastname',
+        header: 'Last Name',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'email',
+        header: 'Email',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: 'email',
+        }),
+      },
+      {
+        accessorKey: 'username',
+        header: 'Username',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'password',
+        header: 'Password',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+    ],
+    [getCommonEditTextFieldProps],
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <CircularProgress />
+      <Box
+        component="main"
+        className="h-full p-5 ml-[240px] max-[899px]:ml-0"
+        sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+      >
+        <Head><title>Member Manage | High U</title></Head>
+        <Toolbar />
+        <Box className="bg-white w-full h-full rounded-xl p-5 shadow-md max-[899px]:pb-3">
+          <Grid item xs={12} md={12} className="flex items-center  max-md:mb-3">
+            <Typography className="text-[#303030] font-bold text-2xl pb-2 max-[450px]:text-lg">
+              Member&nbsp;Manage
+            </Typography>
+          </Grid>
+          <>
+            <MaterialReactTable
+              displayColumnDefOptions={{
+                'mrt-row-actions': {
+                  muiTableHeadCellProps: {
+                    align: 'center',
+                  },
+                  muiTableBodyCellProps: {
+                    align: 'center',
+                  }
+                },
+                'mrt-row-numbers': {
+                  muiTableHeadCellProps: {
+                    align: 'center',
+                  },
+                  muiTableBodyCellProps: {
+                    align: 'center',
+                  }
+                },
+              }}
+              columns={columns}
+              data={tableData}
+              editingMode="modal" //default
+              enableEditing
+              enableRowNumbers
+              // enableRowSelection
+              onEditingRowSave={handleSaveRowEdits}
+              onEditingRowCancel={handleCancelRowEdits}
+              renderRowActions={({ row, table }) => (
+                <Box className="flex justify-center">
+                  <Tooltip arrow placement="left" title="Edit">
+                    <IconButton className="hover:text-amber-500" onClick={() => table.setEditingRow(row)}>
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow placement="right" title="Delete">
+                    <IconButton className="hover:text-red-500" onClick={() => handleDeleteRow(row)}>
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              )}
+              renderTopToolbarCustomActions={() => (
+                <Button
+                  className="bg-[#303030] hover:bg-[#666666] text-white"
+                  onClick={() => setCreateModalOpen(true)}
+                  variant="contained"
+                >
+                  Create New Member
+                </Button>
+              )}
+            />
+            <CreateNewAccountModal
+              columns={columns}
+              open={createModalOpen}
+              onClose={() => setCreateModalOpen(false)}
+              onSubmit={handleCreateNewRow}
+            />
+          </>
         </Box>
-      ) : (
-        <>
-          <Box
-            component="main"
-            className="h-full p-5 ml-[240px] max-[899px]:ml-0"
-            sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
-          >
-            <Head><title>Member Manage | High U</title></Head>
-            <Toolbar />
-            <Box className="bg-white w-full h-full rounded-xl pt-5 px-5 shadow-md max-[899px]:pb-3">
-              <Grid container>
-                <Grid item xs={12} md={12} className="flex items-center justify-between max-md:mb-3">
-                  {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                    <Typography className="text-[#303030] font-bold text-2xl max-[450px]:text-lg">
-                      Member&nbsp;Manage
-                    </Typography>
-                  )}
-                  {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                    <Link href="./MemberManage/AddMember">
-                      <Button className="text-white font-bold px-5 text-center shadow bg-[#303030] hover:bg-[#555555]">Add&nbsp;Member</Button>
-                    </Link>
-                  )}
-                </Grid>
-                <Hidden mdDown >
-                  <TableContainer className="mt-3 rounded-md">
-                    <Table>
-                      {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-12 rounded-md" />) : (
-                        <TableHead>
-                          <TableRow className=" bg-[#F0CA83]">
-                            <TableCell className="w-[25%] text-lg text-center font-bold">Image</TableCell>
-                            <TableCell className="w-[12%] text-lg font-bold">Firstname</TableCell>
-                            <TableCell className="w-[12%] text-lg font-bold">Lastname</TableCell>
-                            <TableCell className="w-[12%] text-lg font-bold">Email</TableCell>
-                            <TableCell className="w-[12%] text-lg font-bold">Username</TableCell>
-                            <TableCell className="w-[12%] text-lg font-bold">Password</TableCell>
-                            <TableCell className="w-[15%] text-lg text-center font-bold">Settings</TableCell>
-                          </TableRow>
-                        </TableHead>
-                      )}
-
-                      {members?.length > 0 ? (
-                        <TableBody>
-                          {members.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, i) => (
-                            loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-28 my-4 rounded-md" />) : (
-                              <TableRow key={item._id} className="hover:bg-gray-50">
-                                <TableCell className="flex justify-center items-center">
-                                  <Image src={item.image} alt={item.username} width={160} height={160} className="object-top rounded-lg object-cover h-40 w-40 max-xl:h-36 max-xl:w-36 max-[1075px]:h-32 max-[1000px]:h-24" />
-                                </TableCell>
-                                <TableCell className="w-[12%] text-base">{item.firstname}</TableCell>
-                                <TableCell className="w-[12%] text-base">{item.lastname}</TableCell>
-                                <TableCell className="w-[12%] text-base">{item.email}</TableCell>
-                                <TableCell className="w-[12%] text-base">{item.username}</TableCell>
-                                <TableCell className="w-[12%] text-base">{item.password}</TableCell>
-                                <TableCell className="w-[15%] text-center ">
-                                  <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                                    <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
-                                      <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
-                                    </Link>
-                                    <Button onClick={handleOpenDeleteModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
-                                  </ButtonGroup>
-                                  <Modal
-                                    open={openModal}
-                                    onClose={handleCloseDeleteModal}
-                                    aria-labelledby="modal-modal-title"
-                                    aria-describedby="modal-modal-description"
-                                  >
-                                    <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-slate-100 rounded-lg shadow-lg p-4">
-                                      <Typography id="modal-modal-title" className="text-lg text-black font-bold">
-                                        Confirm Delete
-                                      </Typography>
-                                      <Typography id="modal-modal-description" className="text-base text-black" >
-                                        Are you sure you want to delete this member?
-                                      </Typography>
-                                      <ButtonGroup fullWidth variant="contained" sx={{ mt: 2 }} aria-label="contained button group">
-                                        <Button type="submit" onClick={() => handleDeleteMember(item._id as string)} className="bg-[#303030] text-white hover:bg-red-500">Delete</Button>
-                                        <Button onClick={handleCloseDeleteModal} className="bg-[#303030] text-white hover:bg-[#3d3d3d]">Cancel</Button>
-                                      </ButtonGroup>
-                                    </Box>
-                                  </Modal>
-                                </TableCell>
-                              </TableRow>
-                            )
-                          ))}
-                        </TableBody>
-                      ) : (
-                        loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-12 my-4 rounded-md" />) : (
-                          <TableBody>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                            <TableCell className="text-base text-center">-</TableCell>
-                          </TableBody>
-                        )
-                      )}
-                    </Table>
-                  </TableContainer>
-                  {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-2xl mb-2 rounded-md" />) : (
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25, 50]}
-                      component="div"
-                      count={members.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  )}
-                </Hidden>
-                <Grid item xs={12}>
-                  <Hidden mdUp>
-                    {members.map((item, i) => (
-                      loading ? (<Skeleton key={i} animation="wave" variant="rectangular" className="w-full h-10 my-2 rounded-md" />) : (
-                        <Accordion key={item._id} className="shadow-md">
-                          <AccordionSummary>
-                            <Typography className="font-semibold">{item.username}</Typography>
-                          </AccordionSummary>
-                          <AccordionDetails className="flex justify-center items-center w-full h-auto">
-                            <Image src={item.image} alt={item.username} width={200} height={200} className="rounded-lg object-cover w-[80%]" />
-                          </AccordionDetails>
-                          <AccordionDetails className="bg-gray-50">
-                            <Typography>Firstname: {item.firstname}</Typography><br />
-                            <Typography>Lastname: {item.lastname}</Typography><br />
-                            <Typography>Email: {item.email}</Typography><br />
-                            <Typography>Password: {item.password}</Typography>
-                          </AccordionDetails>
-                          <AccordionActions>
-                            <ButtonGroup variant="contained" className="gap-1" aria-label="contained button group">
-                              <Link href="./MemberManage/[id]" as={`./MemberManage/${item._id}`}>
-                                <Button className="bg-[#303030] text-white hover:bg-[#575757]">Edit</Button>
-                              </Link>
-                              <Button onClick={handleOpenDeleteModal} className="bg-[#303030] text-white hover:bg-[#575757]">Delete</Button>
-                            </ButtonGroup>
-                            <Modal
-                              open={openModal}
-                              onClose={handleCloseDeleteModal}
-                              aria-labelledby="modal-modal-title"
-                              aria-describedby="modal-modal-description"
-                            >
-                              <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-slate-100 rounded-lg shadow-lg p-4">
-                                <Typography id="modal-modal-title" className="text-lg text-red-500 font-bold">
-                                  Confirm Delete
-                                </Typography>
-                                <Typography id="modal-modal-description" className="text-base italic text-red-500" >
-                                  Are you sure you want to delete this member?
-                                </Typography>
-                                <ButtonGroup fullWidth variant="contained" sx={{ mt: 2 }} aria-label="contained button group">
-                                  <Button type="submit" onClick={() => handleDeleteMember(item._id as string)} className="bg-[#b3b3b3] text-white hover:bg-red-500">Delete</Button>
-                                  <Button onClick={handleCloseDeleteModal} className="bg-[#b3b3b3] text-white hover:bg-[#3d3d3d]">Cancel</Button>
-                                </ButtonGroup>
-                              </Box>
-                            </Modal>
-                          </AccordionActions>
-                        </Accordion>
-                      )
-                    ))}
-                  </Hidden>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </>
-      )}
-
+      </Box>
     </ThemeProvider>
   )
 }
+
+interface CreateModalProps {
+  columns: MRT_ColumnDef<Member>[];
+  onClose: () => void;
+  onSubmit: (values: Member) => void;
+  open: boolean;
+}
+
+//example of creating a mui dialog modal for creating new rows
+export const CreateNewAccountModal = ({
+  open,
+  columns,
+  onClose,
+  onSubmit,
+}: CreateModalProps) => {
+  const [values, setValues] = useState<any>(() =>
+    columns.reduce((acc, column) => {
+      acc[column.accessorKey ?? ''] = '';
+      return acc;
+    }, {} as any),
+  );
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const formData = { ...values, image: defaultImage };
+      const response = await fetch('http://localhost:8000/api/member/addMember', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      console.log(response);
+      // setMessage('Member Added Successfully!');
+      // setOpenAlert(true);
+      onSubmit(values);
+      onClose();
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+    } catch (error: any) {
+      console.error(error);
+      // setError('An error occurred while adding the member. Please try again later.');
+      // setOpenAlert(true);
+    }
+  };
+
+  const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
+
+  return (
+    <Dialog open={open}>
+      <form onSubmit={handleSubmit}>
+        <DialogTitle textAlign="center">Create New Member</DialogTitle>
+        <DialogContent>
+          <Stack
+            sx={{
+              width: '100%',
+              minWidth: { xs: '300px', sm: '360px', md: '400px' },
+              gap: '1.5rem',
+            }}
+          >
+            {columns.map((column) => {
+              if (column.accessorKey === 'image') {
+                return (
+                  <input
+                    key={column.accessorKey}
+                    disabled
+                    type="hidden"
+                    name={column.accessorKey}
+                    id={column.accessorKey}
+                    value={defaultImage}
+                  />
+                );
+              }
+              if (column.accessorKey === 'email') {
+                return (
+                  <TextField
+                    required
+                    type="email"
+                    key={column.accessorKey}
+                    label={column.header}
+                    name={column.accessorKey}
+                    value={values[column.accessorKey ?? '']}
+                    onKeyDown={handleKeyPress}
+                    onChange={(e) =>
+                      setValues({ ...values, [e.target.name]: e.target.value })
+                    }
+                  />
+                );
+              }
+              return (
+                <TextField
+                  required
+                  type="text"
+                  key={column.accessorKey}
+                  label={column.header}
+                  name={column.accessorKey}
+                  value={values[column.accessorKey ?? '']}
+                  onKeyDown={handleKeyPress}
+                  onChange={(e) =>
+                    setValues({ ...values, [e.target.name]: e.target.value })
+                  }
+                />
+              );
+            })}
+          </Stack>
+
+        </DialogContent>
+        <DialogActions sx={{ p: '1.25rem' }}>
+          <Button className="text-[#303030]" onClick={onClose}>Cancel</Button>
+          <Button className="bg-[#666666] hover:bg-[#303030] text-white" type="submit" variant="contained">
+            Create
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+};
+
+const validateRequired = (value: string) => !!value.length;
+const validateEmail = (email: string) =>
+  !!email.length &&
+  email
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+
 
