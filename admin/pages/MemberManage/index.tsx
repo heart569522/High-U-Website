@@ -27,6 +27,8 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { ExportToCsv } from 'export-to-csv';
 
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
@@ -252,6 +254,26 @@ export default function MemberManage(props: Props) {
     [getCommonEditTextFieldProps],
   );
 
+  const csvOptions = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalSeparator: '.',
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
+
+  const csvExporter = new ExportToCsv(csvOptions);
+
+  const handleExportRows = (rows: MRT_Row<Member>[]) => {
+    csvExporter.generateCsv(rows.map((row) => row.original));
+  };
+
+  const handleExportData = () => {
+    csvExporter.generateCsv(tableData);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
@@ -296,6 +318,8 @@ export default function MemberManage(props: Props) {
               enableGlobalFilterModes
               enableEditing
               enableRowNumbers
+              enableRowSelection
+              positionToolbarAlertBanner="bottom"
               onEditingRowSave={handleSaveRowEdits}
               onEditingRowCancel={handleCancelRowEdits}
               renderRowActions={({ row, table }) => (
@@ -312,14 +336,61 @@ export default function MemberManage(props: Props) {
                   </Tooltip>
                 </Box>
               )}
-              renderTopToolbarCustomActions={() => (
-                <Button
-                  className="bg-[#303030] hover:bg-[#666666] text-white"
-                  onClick={() => setCreateModalOpen(true)}
-                  variant="contained"
+              renderTopToolbarCustomActions={({ table }) => (
+                <Box
+                  sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
                 >
-                  Create New Member
-                </Button>
+                  <Button
+                    className="bg-[#303030] hover:bg-[#666666] text-white"
+                    onClick={() => setCreateModalOpen(true)}
+                    variant="contained"
+                  >
+                    Create New Member
+                  </Button>
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                    onClick={handleExportData}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export All Data
+                  </Button>
+                  {/* <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={table.getPrePaginationRowModel().rows.length === 0}
+                    //export all rows, including from the next page, (still respects filtering and sorting)
+                    onClick={() =>
+                      handleExportRows(table.getPrePaginationRowModel().rows)
+                    }
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export All Rows
+                  </Button>
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={table.getRowModel().rows.length === 0}
+                    //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+                    onClick={() => handleExportRows(table.getRowModel().rows)}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export Page Rows
+                  </Button> */}
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={
+                      !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+                    }
+                    //only export selected rows
+                    onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export Selected Rows
+                  </Button>
+                </Box>
               )}
             />
             <CreateNewAccountModal
