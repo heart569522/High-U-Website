@@ -30,6 +30,7 @@ import { Delete, Edit } from '@mui/icons-material';
 
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
+import { useRouter } from 'next/router';
 
 type Props = {
   members: [Member]
@@ -56,7 +57,7 @@ export async function getServerSideProps() {
     console.error(e);
   }
   return {
-    props: {}
+    props: { members: [] },
   };
 }
 
@@ -79,25 +80,40 @@ const theme = createTheme({
 
 export default function MemberManage(props: Props) {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState<[Member]>(props.members);
+  const [tableData, setTableData] = useState<Member[]>(props.members);
   const [validationErrors, setValidationErrors] = useState<{
     [cellId: string]: string;
   }>({});
+  const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
 
   const handleCreateNewRow = (values: Member) => {
-    tableData.push(values);
-    setTableData([...tableData]);
+    const lastRowId = tableData[tableData.length - 1]._id;
+    const newRow = { ...values, image: defaultImage, _id: lastRowId };
+    setTableData([...tableData, newRow]);
   };
 
-  const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] =
-    async ({ exitEditingMode, row, values }) => {
-      if (!Object.keys(validationErrors).length) {
+  const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/member/updateMember?id=" + values._id, {
+        method: 'POST',
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(values)
+      });
+      console.log(response);
+      if (response.ok) {
         tableData[row.index] = values;
-        //send/receive api updates here, then refetch or update local table data for re-render
         setTableData([...tableData]);
-        exitEditingMode(); //required to exit editing mode and close modal
+        exitEditingMode();
+      } else {
+        throw new Error(await response.text());
       }
-    };
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
 
   const handleCancelRowEdits = () => {
     setValidationErrors({});
@@ -172,10 +188,19 @@ export default function MemberManage(props: Props) {
   const columns = useMemo<MRT_ColumnDef<Member>[]>(
     () => [
       {
-        accessorKey: 'image', //id is still required when using accessorFn instead of accessorKey
+        accessorKey: '_id',
+        header: 'ID',
+        enableColumnOrdering: false,
+        enableEditing: false, //disable editing on this column
+        enableSorting: false,
+        size: 80,
+      },
+      {
+        accessorKey: 'image',
         header: 'Image',
+        enableEditing: false,
         size: 10,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ row }) => (
           <Box className="flex">
             <Image
               alt="avatar"
@@ -184,8 +209,6 @@ export default function MemberManage(props: Props) {
               src={row.original.image}
               className="object-cover w-10 h-10 rounded-full"
             />
-            {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
-            {/* <span>{renderedCellValue}</span> */}
           </Box>
         ),
       },
@@ -267,10 +290,12 @@ export default function MemberManage(props: Props) {
               }}
               columns={columns}
               data={tableData}
-              editingMode="modal" //default
+              editingMode="modal"
+              initialState={{ columnVisibility: { _id: false } }}
+              // enableColumnVirtualization
+              enableGlobalFilterModes
               enableEditing
               enableRowNumbers
-              // enableRowSelection
               onEditingRowSave={handleSaveRowEdits}
               onEditingRowCancel={handleCancelRowEdits}
               renderRowActions={({ row, table }) => (
@@ -352,6 +377,7 @@ export const CreateNewAccountModal = ({
       console.log(response);
       // setMessage('Member Added Successfully!');
       // setOpenAlert(true);
+
       onSubmit(values);
       onClose();
       if (!response.ok) {
@@ -379,6 +405,15 @@ export const CreateNewAccountModal = ({
             }}
           >
             {columns.map((column) => {
+              if (column.accessorKey === '_id') {
+                return (
+                  <input
+                    key={column.accessorKey}
+                    disabled
+                    type="hidden"
+                  />
+                );
+              }
               if (column.accessorKey === 'image') {
                 return (
                   <input

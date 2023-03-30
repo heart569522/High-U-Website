@@ -194,7 +194,7 @@ function MemberEdit({ member: { _id, image, firstname, lastname, email, username
 
                             // Update the member with the new image URL
                             let response = await fetch("http://localhost:8000/api/member/updateMember?id=" + _id, {
-                                method: 'POST',
+                                method: 'PUT',
                                 headers: {
                                     Accept: "application/json, text/plain, */*",
                                     "Content-Type": "application/json"
