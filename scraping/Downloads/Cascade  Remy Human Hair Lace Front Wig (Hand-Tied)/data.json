@@ -1,20 +1,18 @@
 {
     "ar_image": "",
-    "main_image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2F1.jpg?alt=media&token=b001732c-4d89-4663-aeba-d457cad9c9f6",
+    "main_image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FWinner%20Petite%20%20Synthetic%20Wig%20(Basic%20Cap)%2F1.jpg?alt=media&token=529191f4-198b-4dce-9f8e-ae9886360e40",
     "sub_image": [
-        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F6.jpg?alt=media&token=477f6254-ac45-4abe-93b1-78a0d3583890",
-        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F7.jpg?alt=media&token=71f92af8-038e-4a88-b60a-232a8d3aa09b",
-        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F8.jpg?alt=media&token=6ae37fb6-52c9-4ad6-b6b3-a7baa8a90ed8",
-        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FCascade%20%20Remy%20Human%20Hair%20Lace%20Front%20Wig%20(Hand-Tied)%2Fsub_image%2F9.jpg?alt=media&token=d630ebf5-5c98-4db4-a390-0eb232665260"
+        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FWinner%20Petite%20%20Synthetic%20Wig%20(Basic%20Cap)%2Fsub_image%2F6.jpg?alt=media&token=e94389f7-8d19-41f3-8075-f25eafd2bca6",
+        "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/wig_images%2FWinner%20Petite%20%20Synthetic%20Wig%20(Basic%20Cap)%2Fsub_image%2F7.jpg?alt=media&token=34696c09-14c0-4113-85d1-040192e7233d"
     ],
-    "title": "Cascade | Remy Human Hair Lace Front Wig (Hand-Tied)",
+    "title": "Winner Petite | Synthetic Wig (Basic Cap)",
     "style": "",
-    "type": "Human Hair",
-    "color": "Blondes",
-    "size": [32, 22,12, 12],
-    "price": 115000,
-    "desc": "CASCADE by ELLEN WILLE in SANDY BLONDE ROOTED | Medium Honey Blonde, Light Ash Blonde, and Lightest Reddish Brown blend with Dark Roots",
-    "view": 21,
-    "favorite": 6,
-    "use": 12
+    "type": "Synthetic",
+    "color": "Blown",
+    "size": [5, 5, 3, 2],
+    "price": 5950,
+    "desc": "WINNER PETITE by RAQUEL WELCH | 20th Anniversary | R6/28H COPPERY MINK | Dark Medium Brown Evenly Blended with Vibrant Red Highlights",
+    "view": 16,
+    "favorite": 3,
+    "use": 8
 }

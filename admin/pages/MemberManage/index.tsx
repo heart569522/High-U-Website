@@ -22,8 +22,6 @@ import {
   DialogContent,
   Stack,
   DialogActions,
-  Avatar,
-  Input
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
@@ -83,9 +81,7 @@ const theme = createTheme({
 export default function MemberManage(props: Props) {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState<Member[]>(props.members);
-  const [validationErrors, setValidationErrors] = useState<{
-    [cellId: string]: string;
-  }>({});
+  const [validationErrors, setValidationErrors] = useState<{ [cellId: string]: string; }>({});
   const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
 
   const handleCreateNewRow = (values: Member) => {
@@ -195,12 +191,12 @@ export default function MemberManage(props: Props) {
         enableColumnOrdering: false,
         enableEditing: false, //disable editing on this column
         enableSorting: false,
-        size: 80,
       },
       {
         accessorKey: 'image',
         header: 'Image',
         enableEditing: false,
+        enableColumnActions: false,
         size: 10,
         Cell: ({ row }) => (
           <Box className="flex">
@@ -282,7 +278,6 @@ export default function MemberManage(props: Props) {
         className="h-full p-5 ml-[240px] max-[899px]:ml-0"
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
-        <Head><title>Member Manage | High U</title></Head>
         <Toolbar />
         <Box className="bg-white w-full h-full rounded-xl p-5 shadow-md max-[899px]:pb-3">
           <Grid item xs={12} md={12} className="flex items-center  max-md:mb-3">
