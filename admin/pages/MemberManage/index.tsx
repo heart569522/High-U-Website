@@ -22,14 +22,15 @@ import {
   DialogContent,
   Stack,
   DialogActions,
-  Avatar,
-  Input
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { ExportToCsv } from 'export-to-csv';
 
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
+import { useRouter } from 'next/router';
 
 type Props = {
   members: [Member]
@@ -56,7 +57,7 @@ export async function getServerSideProps() {
     console.error(e);
   }
   return {
-    props: {}
+    props: { members: [] },
   };
 }
 
@@ -79,25 +80,38 @@ const theme = createTheme({
 
 export default function MemberManage(props: Props) {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState<[Member]>(props.members);
-  const [validationErrors, setValidationErrors] = useState<{
-    [cellId: string]: string;
-  }>({});
+  const [tableData, setTableData] = useState<Member[]>(props.members);
+  const [validationErrors, setValidationErrors] = useState<{ [cellId: string]: string; }>({});
+  const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
 
   const handleCreateNewRow = (values: Member) => {
-    tableData.push(values);
-    setTableData([...tableData]);
+    const lastRowId = tableData[tableData.length - 1]._id;
+    const newRow = { ...values, image: defaultImage, _id: lastRowId };
+    setTableData([...tableData, newRow]);
   };
 
-  const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] =
-    async ({ exitEditingMode, row, values }) => {
-      if (!Object.keys(validationErrors).length) {
+  const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
+    try {
+      const response = await fetch("http://localhost:8000/api/member/updateMember?id=" + values._id, {
+        method: 'POST',
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(values)
+      });
+      console.log(response);
+      if (response.ok) {
         tableData[row.index] = values;
-        //send/receive api updates here, then refetch or update local table data for re-render
         setTableData([...tableData]);
-        exitEditingMode(); //required to exit editing mode and close modal
+        exitEditingMode();
+      } else {
+        throw new Error(await response.text());
       }
-    };
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
 
   const handleCancelRowEdits = () => {
     setValidationErrors({});
@@ -172,10 +186,19 @@ export default function MemberManage(props: Props) {
   const columns = useMemo<MRT_ColumnDef<Member>[]>(
     () => [
       {
-        accessorKey: 'image', //id is still required when using accessorFn instead of accessorKey
+        accessorKey: '_id',
+        header: 'ID',
+        enableColumnOrdering: false,
+        enableEditing: false, //disable editing on this column
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'image',
         header: 'Image',
+        enableEditing: false,
+        enableColumnActions: false,
         size: 10,
-        Cell: ({ renderedCellValue, row }) => (
+        Cell: ({ row }) => (
           <Box className="flex">
             <Image
               alt="avatar"
@@ -184,8 +207,6 @@ export default function MemberManage(props: Props) {
               src={row.original.image}
               className="object-cover w-10 h-10 rounded-full"
             />
-            {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
-            {/* <span>{renderedCellValue}</span> */}
           </Box>
         ),
       },
@@ -229,6 +250,26 @@ export default function MemberManage(props: Props) {
     [getCommonEditTextFieldProps],
   );
 
+  const csvOptions = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalSeparator: '.',
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
+
+  const csvExporter = new ExportToCsv(csvOptions);
+
+  const handleExportRows = (rows: MRT_Row<Member>[]) => {
+    csvExporter.generateCsv(rows.map((row) => row.original));
+  };
+
+  const handleExportData = () => {
+    csvExporter.generateCsv(tableData);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Head><title>Member Manage | High U Administrator</title></Head>
@@ -237,7 +278,6 @@ export default function MemberManage(props: Props) {
         className="h-full p-5 ml-[240px] max-[899px]:ml-0"
         sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
       >
-        <Head><title>Member Manage | High U</title></Head>
         <Toolbar />
         <Box className="bg-white w-full h-full rounded-xl p-5 shadow-md max-[899px]:pb-3">
           <Grid item xs={12} md={12} className="flex items-center  max-md:mb-3">
@@ -267,10 +307,14 @@ export default function MemberManage(props: Props) {
               }}
               columns={columns}
               data={tableData}
-              editingMode="modal" //default
+              editingMode="modal"
+              initialState={{ columnVisibility: { _id: false } }}
+              // enableColumnVirtualization
+              enableGlobalFilterModes
               enableEditing
               enableRowNumbers
-              // enableRowSelection
+              enableRowSelection
+              positionToolbarAlertBanner="bottom"
               onEditingRowSave={handleSaveRowEdits}
               onEditingRowCancel={handleCancelRowEdits}
               renderRowActions={({ row, table }) => (
@@ -287,14 +331,61 @@ export default function MemberManage(props: Props) {
                   </Tooltip>
                 </Box>
               )}
-              renderTopToolbarCustomActions={() => (
-                <Button
-                  className="bg-[#303030] hover:bg-[#666666] text-white"
-                  onClick={() => setCreateModalOpen(true)}
-                  variant="contained"
+              renderTopToolbarCustomActions={({ table }) => (
+                <Box
+                  sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
                 >
-                  Create New Member
-                </Button>
+                  <Button
+                    className="bg-[#303030] hover:bg-[#666666] text-white"
+                    onClick={() => setCreateModalOpen(true)}
+                    variant="contained"
+                  >
+                    Create New Member
+                  </Button>
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                    onClick={handleExportData}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export All Data
+                  </Button>
+                  {/* <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={table.getPrePaginationRowModel().rows.length === 0}
+                    //export all rows, including from the next page, (still respects filtering and sorting)
+                    onClick={() =>
+                      handleExportRows(table.getPrePaginationRowModel().rows)
+                    }
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export All Rows
+                  </Button>
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={table.getRowModel().rows.length === 0}
+                    //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+                    onClick={() => handleExportRows(table.getRowModel().rows)}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export Page Rows
+                  </Button> */}
+                  <Button
+                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
+                    disabled={
+                      !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+                    }
+                    //only export selected rows
+                    onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+                    startIcon={<FileDownloadIcon />}
+                    variant="contained"
+                  >
+                    Export Selected Rows
+                  </Button>
+                </Box>
               )}
             />
             <CreateNewAccountModal
@@ -352,6 +443,7 @@ export const CreateNewAccountModal = ({
       console.log(response);
       // setMessage('Member Added Successfully!');
       // setOpenAlert(true);
+
       onSubmit(values);
       onClose();
       if (!response.ok) {
@@ -379,6 +471,15 @@ export const CreateNewAccountModal = ({
             }}
           >
             {columns.map((column) => {
+              if (column.accessorKey === '_id') {
+                return (
+                  <input
+                    key={column.accessorKey}
+                    disabled
+                    type="hidden"
+                  />
+                );
+              }
               if (column.accessorKey === 'image') {
                 return (
                   <input
