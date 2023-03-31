@@ -1,4 +1,6 @@
-
+// can you help me for create form add image wig, it have ar_image, main_image, sub_image 
+// on input of sub_image I want to add sub image not more than 6 images and want to have input of sub_image already 3 then 
+// if user want to add more sub_image then press button to add input and input will be added one by one but no more than 6 pre-existing 3 sub_images
 import { useEffect, useRef, useState } from 'react'
 import {
   Box,
@@ -10,161 +12,123 @@ import {
   Tooltip,
 } from "@mui/material";
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import sharp from 'sharp';
 
-import DrawerBar from '../Navigation/DrawerBar';
+type ImageWig = {
+  arImage: File | null;
+  mainImage: File | null;
+  subImages: (File | {})[];
+};
+
+const MAX_SUB_IMAGES = 6;
+const INITIAL_SUB_IMAGES_COUNT = 3;
 
 const drawerWidth = 240;
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Prompt, sans-serif'
+    ].join(','),
+  },
+  palette: {
+    primary: {
+      main: "#303030",
+    },
+    secondary: {
+      main: "#F0CA83"
+    }
+  },
+});
 
 const AddWig_Form = () => {
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Fetch data
-    setTimeout(() => {
-      setLoading(false);
-    }, 700);
-  }, [loading]);
+  const [imageWig, setImageWig] = useState<ImageWig>({
+    arImage: null,
+    mainImage: null,
+    subImages: new Array(INITIAL_SUB_IMAGES_COUNT).fill({}), // initialize with empty objects
+  });
 
-  const [mainImage, setMainImage] = useState<File | null>(null);
-  const [subImage1, setSubImage1] = useState<File | null>(null);
-  const [arImage, setArImage] = useState<File | null>(null);
+  const [formErrors, setFormErrors] = useState({
+    arImage: '',
+    mainImage: '',
+    subImages: '',
+  });
 
-  const [previewMainImage, setPreviewMainImage] = useState<string | null>(null);
-  const [previewSubImage1, setPreviewSubImage1] = useState<string | null>(null);
-  const [previewArImage, setPreviewArImage] = useState<string | null>(null);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+    const { name, files } = event.target;
 
-  useEffect(() => {
-    if (!previewMainImage) {
-      return;
-    }
-    return () => URL.revokeObjectURL(previewMainImage);
-  }, [previewMainImage]);
+    if (name === "subImage" && typeof index !== "undefined" && files) {
+      const subImages = [...imageWig.subImages];
+      subImages[index] = files[0];
 
-  useEffect(() => {
-    if (!previewSubImage1) {
-      return;
-    }
-    return () => URL.revokeObjectURL(previewSubImage1);
-  }, [previewSubImage1]);
-
-  useEffect(() => {
-    if (!previewArImage) {
-      return;
-    }
-    return () => URL.revokeObjectURL(previewArImage);
-  }, [previewArImage]);
-
-  const handleMainImageReset = () => {
-    setMainImage(null);
-    setPreviewMainImage(null);
-  };
-
-  const handleSubImage1Reset = () => {
-    setSubImage1(null);
-    setPreviewSubImage1(null);
-  };
-
-  const handleArImageReset = () => {
-    setArImage(null);
-    setPreviewArImage(null);
-  };
-
-  const mainImageInputRef = useRef<HTMLInputElement>(null);
-  const subImage1InputRef = useRef<HTMLInputElement>(null);
-  const arImageInputRef = useRef<HTMLInputElement>(null);
-
-  const openMainImageDialog = () => {
-    if (mainImageInputRef.current) {
-      mainImageInputRef.current.click();
+      setImageWig({
+        ...imageWig,
+        subImages,
+      });
+    } else if (files) {
+      setImageWig({
+        ...imageWig,
+        [name]: files[0],
+      });
     }
   };
 
-  const openSubImage1Dialog = () => {
-    if (subImage1InputRef.current) {
-      subImage1InputRef.current.click();
+  const handleAddSubImage = () => {
+    if (imageWig.subImages.length < MAX_SUB_IMAGES) {
+      setImageWig({
+        ...imageWig,
+        subImages: [...imageWig.subImages, {}], // add an empty object to represent the new sub-image
+      });
     }
   };
 
 
-  const openArImageDialog = () => {
-    if (arImageInputRef.current) {
-      arImageInputRef.current.click();
-    }
-  };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const mainImage = e.target.files?.[0];
-    if (!mainImage) {
-      setMainImage(null);
-      setPreviewMainImage(null);
-      return;
-    }
-
-    const isValidType = mainImage.type === "image/jpeg" || mainImage.type === "image/png";
-    if (!isValidType) {
-      // Show an error message for invalid file type
-      setMainImage(null);
-      setPreviewMainImage(null);
-      return;
-    }
-
-    const image = new Image();
-    image.src = URL.createObjectURL(mainImage);
-    image.onload = () => {
-      if (image.width > 1080 || image.height > 1920) {
-        // Show an error message for image size too small
-        setMainImage(null);
-        setPreviewMainImage(null);
-        return;
-      }
-
-      URL.revokeObjectURL(image.src);
-      setMainImage(mainImage);
-      setPreviewMainImage(URL.createObjectURL(mainImage));
+    let errors = {
+      arImage: '',
+      mainImage: '',
+      subImages: '',
     };
-  };
 
-  const handleSubImage1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const subImage1 = e.target.files?.[0];
-    if (!subImage1) {
-      setSubImage1(null);
-      setPreviewSubImage1(null);
-      return;
+    if (!imageWig.arImage) {
+      errors = {
+        ...errors,
+        arImage: 'Please select an AR image.',
+      };
     }
 
-    const isValidType = subImage1.type === "image/jpeg" || subImage1.type === "image/png";
-    if (!isValidType) {
-      // Show an error message for invalid file type
-      setSubImage1(null);
-      setPreviewSubImage1(null);
-      return;
+    if (!imageWig.mainImage) {
+      errors = {
+        ...errors,
+        mainImage: 'Please select a main image.',
+      };
     }
 
-    const image = new Image();
-    image.src = URL.createObjectURL(subImage1);
-    image.onload = () => {
-      if (image.width > 1080 || image.height > 1920) {
-        // Show an error message for image size too small
-        setSubImage1(null);
-        setPreviewSubImage1(null);
-        return;
-      }
+    const subImages = imageWig.subImages.filter((subImage) => subImage instanceof File);
+    if (subImages.length === 0) {
+      errors = {
+        ...errors,
+        subImages: 'Please select at least one sub image.',
+      };
+    } else if (subImages.length > MAX_SUB_IMAGES) {
+      errors = {
+        ...errors,
+        subImages: `Please select no more than ${MAX_SUB_IMAGES} sub images.`,
+      };
+    }
 
-      URL.revokeObjectURL(image.src);
-      setSubImage1(subImage1);
-      setPreviewSubImage1(URL.createObjectURL(subImage1));
-    };
+    setFormErrors(errors);
+
+    if (Object.values(errors).every((val) => val === '')) {
+      // Handle form submission here
+      console.log('Form submitted.');
+    }
   };
-
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-  }
-
   return (
-    <div>
-      <DrawerBar />
+    <ThemeProvider theme={theme}>
       <Box
         component="main"
         className="p-5 ml-[240px] max-[899px]:ml-0"
@@ -174,122 +138,36 @@ const AddWig_Form = () => {
         <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
           <Grid container>
             <Grid item xs={12}>
-              {loading ? (<Skeleton animation="wave" variant="text" className="w-1/5 text-5xl rounded-md" />) : (
-                <Typography className="text-[#303030] font-bold text-xl">
-                  Add Wig
-                </Typography>
-              )}
+              <Typography className="text-[#303030] font-bold text-xl">
+                Add Wig
+              </Typography>
             </Grid>
           </Grid>
-          <form onSubmit={handleSubmit} className="pt-3">
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={6} md={3}>
-                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-                  <input
-                    ref={arImageInputRef}
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    // multiple
-                    onChange={handleArImageReset}
-                  />
-                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Wig AR Image</Typography>
-                  {previewArImage ? (
-                    <center>
-                      <img
-                        src={previewArImage || ''}
-                        className="rounded-lg object-contain h-[400px] w-80 py-2"
-                      />
-                      <Box className="text-center items-center justify-center flex flex-col">
-                        <Tooltip title="Reset Image">
-                          <IconButton onClick={handleArImageReset} className='text-gray-400 hover:text-red-400'>
-                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </center>
-                  ) : (
-                    <>
-
-                    </>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-                  <input
-                    ref={mainImageInputRef}
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    // multiple
-                    onChange={handleMainImageChange}
-                  />
-                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Main Image</Typography>
-                  {previewMainImage ? (
-                    <center>
-                      <img
-                        src={previewMainImage || ''}
-                        className="rounded-lg object-contain h-[400px] w-80 py-2"
-                      />
-                      <Box className="text-center items-center justify-center flex flex-col">
-                        <Tooltip title="Reset Image">
-                          <IconButton onClick={handleMainImageReset} className='text-gray-400 hover:text-red-400'>
-                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </center>
-                  ) : (
-                    <>
-
-                    </>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
-                  <input
-                    ref={subImage1InputRef}
-                    accept="image/*"
-                    style={{ display: "none", }}
-                    id="upload-button"
-                    type="file"
-                    // multiple
-                    onChange={handleSubImage1Change}
-                  />
-                  <Typography className="text-gray-700 font-bold text-center" variant="h5">Sub Image 1</Typography>
-                  {previewSubImage1 ? (
-                    <center>
-                      <img
-                        src={previewSubImage1 || ''}
-                        className="rounded-lg object-contain h-[400px] w-80 py-2"
-                      />
-                      <Box className="text-center items-center justify-center flex flex-col">
-                        <Tooltip title="Reset Image">
-                          <IconButton onClick={handleSubImage1Reset} className='text-gray-400 hover:text-red-400'>
-                            <RotateLeftIcon className="w-8 h-8" fontSize='large' />
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                    </center>
-                  ) : (
-                    <>
-
-                    </>
-                  )}
-                </Box>
-              </Grid>
-
-            </Grid>
-
-
+          <form onSubmit={handleSubmit}>
+            <label className='text-black'>
+              AR Image:
+              <input type="file" name="arImage" accept="image/*" onChange={handleInputChange} />
+            </label>
+            <label className='text-black'>
+              Main Image:
+              <input type="file" name="mainImage" accept="image/*" onChange={handleInputChange} />
+            </label>
+            {imageWig.subImages.map((subImage, index) => (
+              <label className='text-black' key={index}>
+                {`Sub Image ${index + 1}:`}
+                <input type="file" name="subImage" accept="image/*" onChange={(event) => handleInputChange(event, index)} />
+              </label>
+            ))}
+            {imageWig.subImages.length < MAX_SUB_IMAGES && (
+              <button type="button" className="bg-black text-white" onClick={handleAddSubImage}>
+                Add Sub Image
+              </button>
+            )}
+            <button type="submit" className="bg-black text-white">Submit</button>
           </form>
         </Box>
       </Box>
-    </div>
+    </ThemeProvider>
 
   )
 }
