@@ -579,7 +579,8 @@ const AddWig_Form = () => {
               <Grid item xs={12} sm={6} md={4}>
                 {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 my-3 rounded-md" />) : (
                   <>
-                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography><TextField
+                    <Typography className="text-[#303030] font-bold pb-2 text-lg">Title</Typography>
+                    <TextField
                       type='text'
                       value={title}
                       fullWidth
