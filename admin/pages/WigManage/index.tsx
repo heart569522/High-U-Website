@@ -24,6 +24,8 @@ import {
     DialogActions,
     Modal,
     Divider,
+    AvatarGroup,
+    Avatar,
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
@@ -94,6 +96,19 @@ export default function WigManage(props: Props) {
     const defaultARImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-ar-icon.jpg?alt=media&token=03355034-4fda-4ae7-b1d5-86932687046e';
     const [tableData, setTableData] = useState<Wig[]>(props.wigs);
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const wigsResponse = await fetch("http://localhost:8000/api/wig/getAllWigs");
+                const wigs = await wigsResponse.json();
+                setTableData(wigs);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        fetchData();
+    }, []);
+
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<Wig | null>(null);
     const handleOpenDetailModal = (row: MRT_Row<Wig>) => {
@@ -113,16 +128,22 @@ export default function WigManage(props: Props) {
             },
             {
                 accessorKey: 'main_image',
-                header: 'Image',
+                header: 'Main Image',
                 enableEditing: false,
                 enableColumnActions: false,
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
                 size: 10,
                 Cell: ({ row }) => (
-                    <Box className="flex">
+                    <Box className="flex justify-center">
                         <Image
-                            alt="avatar"
-                            height={30}
-                            width={30}
+                            alt="main_image"
+                            height={48}
+                            width={48}
                             src={row.original.main_image}
                             className="object-cover w-12 h-12 rounded-full"
                         />
@@ -132,23 +153,53 @@ export default function WigManage(props: Props) {
             {
                 accessorKey: 'ar_image',
                 header: 'AR Image',
-                enableGlobalFilter: false,
+                enableEditing: false,
+                enableColumnActions: false,
                 muiTableHeadCellProps: {
-                    hidden: true,
+                    align: 'center',
                 },
                 muiTableBodyCellProps: {
-                    hidden: true,
+                    align: 'center',
                 },
+                size: 10,
+                Cell: ({ row }) => (
+                    <Box className="flex justify-center">
+                        <Image
+                            alt="ar_image"
+                            height={48}
+                            width={48}
+                            src={row.original.ar_image || defaultARImage}
+                            className="object-cover w-12 h-12 rounded-full"
+                        />
+                    </Box>
+                ),
             },
             {
                 accessorKey: 'sub_image',
                 header: 'Sub Image',
+                enableEditing: false,
+                enableColumnActions: false,
                 muiTableHeadCellProps: {
-                    hidden: true,
+                    align: 'center',
                 },
                 muiTableBodyCellProps: {
-                    hidden: true,
+                    align: 'center',
                 },
+                size: 100,
+                Cell: ({ row }) => (
+                    <Box className="flex justify-center items-center">
+                        <AvatarGroup max={3}>
+                            {row.original.sub_image.map((item, i) => (
+                                <Avatar
+                                    key={i}
+                                    alt="sub_image"
+                                    src={item}
+                                    className="w-10 h-10 rounded-full object-cover"
+                                />
+                            ))}
+                        </AvatarGroup>
+                    </Box>
+                ),
             },
             {
                 accessorKey: 'title',
@@ -180,13 +231,15 @@ export default function WigManage(props: Props) {
             {
                 accessorKey: 'size',
                 header: 'Size',
-                size: 10,
-                muiTableHeadCellProps: {
-                    align: 'center',
-                },
-                muiTableBodyCellProps: {
-                    align: 'center',
-                },
+                size: 50,
+                Cell: ({ row }) => (
+                    <Box className="flex">
+                        Length:&nbsp;{row.original.size[0]} <br />
+                        Circumference:&nbsp;{row.original.size[1]} <br />
+                        Ear&nbsp;to&nbsp;Ear:&nbsp;{row.original.size[2]} <br />
+                        Front&nbsp;to&nbsp;Back:&nbsp;{row.original.size[3]}
+                    </Box>
+                ),
             },
             {
                 accessorKey: 'price',
@@ -601,11 +654,11 @@ export default function WigManage(props: Props) {
                                     </Modal>
                                     <Tooltip arrow placement="bottom" title="Edit">
                                         <>
-                                            {/* <Link href={`./WigManage/[id]`} as={`./WigManage/${selectedRow?._id}`}> */}
-                                            <IconButton className="hover:text-amber-500">
-                                                <Edit />
-                                            </IconButton>
-                                            {/* </Link> */}
+                                            <Link href={`./WigManage/[id]`} as={`./WigManage/${row.original._id}`}>
+                                                <IconButton className="hover:text-amber-500">
+                                                    <Edit />
+                                                </IconButton>
+                                            </Link>
                                         </>
                                     </Tooltip>
                                     <Tooltip arrow placement="right" title="Delete">
