@@ -96,19 +96,6 @@ export default function WigManage(props: Props) {
     const defaultARImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-ar-icon.jpg?alt=media&token=03355034-4fda-4ae7-b1d5-86932687046e';
     const [tableData, setTableData] = useState<Wig[]>(props.wigs);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const wigsResponse = await fetch("http://localhost:8000/api/wig/getAllWigs");
-                const wigs = await wigsResponse.json();
-                setTableData(wigs);
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        fetchData();
-    }, []);
-
     const [openDetailModal, setOpenDetailModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState<Wig | null>(null);
     const handleOpenDetailModal = (row: MRT_Row<Wig>) => {
@@ -448,8 +435,8 @@ export default function WigManage(props: Props) {
                                                                     <Image
                                                                         src={selectedRow?.main_image || defaultARImage}
                                                                         alt="main_image"
-                                                                        width={200}
-                                                                        height={200}
+                                                                        width={525}
+                                                                        height={700}
                                                                         className="w-full rounded-md object-cover"
                                                                     />
                                                                 </Tooltip>
@@ -459,8 +446,8 @@ export default function WigManage(props: Props) {
                                                                     <Image
                                                                         src={selectedRow?.ar_image || defaultARImage}
                                                                         alt="main_image"
-                                                                        width={200}
-                                                                        height={200}
+                                                                        width={525}
+                                                                        height={700}
                                                                         className="w-full rounded-md object-cover"
                                                                     />
                                                                 </Tooltip>
@@ -482,8 +469,8 @@ export default function WigManage(props: Props) {
                                                                                 <Image
                                                                                     src={image}
                                                                                     alt={`sub_image_${i}`}
-                                                                                    width={200}
-                                                                                    height={200}
+                                                                                    width={525}
+                                                                                    height={700}
                                                                                     className="w-full rounded-md object-cover"
                                                                                 />
                                                                             </Tooltip>

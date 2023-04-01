@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Grid,
     Paper,
@@ -24,6 +24,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Webcam from 'react-webcam';
+import * as faceapi from 'face-api.js';
+import { WithFaceLandmarks } from 'face-api.js';
 
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
@@ -60,11 +62,55 @@ export default function TryAR() {
     const [image, setImage] = useState<string | null>(null);
     const webcamRef = React.useRef<Webcam>(null);
 
-    const capture = () => {
+    const [modelsLoaded, setModelsLoaded] = useState(false);
+
+    useEffect(() => {
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+        ]).then(() => setModelsLoaded(true));
+    }, []);
+
+    const capture = async () => {
         const image = webcamRef.current?.getScreenshot();
         setImage(image as string | null);
-        setModalOpen(true);
+
+        if (modelsLoaded && image && webcamRef.current?.video) {
+            const img = await faceapi.fetchImage(image);
+            const detections = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks() as WithFaceLandmarks<faceapi.WithFaceDetection<{}>>[];
+            if (detections.length > 0) {
+                const canvas = document.createElement('canvas');
+                canvas.width = webcamRef.current?.video.videoWidth ?? 0;
+                canvas.height = webcamRef.current?.video.videoHeight ?? 0;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.drawImage(webcamRef.current?.video, 0, 0);
+                    const resizedDetections = faceapi.resizeResults(detections, {
+                        width: detections[0].detection.box.width,
+                        height: detections[0].detection.box.height
+                    }).withFaceLandmarks();
+                    const faceLandmarks = resizedDetections[0].landmarks;
+                    const imgElement = document.createElement('img');
+                    imgElement.src = '../public/hair_models.png';
+                    imgElement.onload = () => {
+                        faceapi.matchDimensions(canvas, resizedDetections[0].detection);
+                        const wigSize = Math.abs(faceLandmarks[14].x - faceLandmarks[0].x);
+                        const wigWidth = wigSize * (imgElement.width / imgElement.height);
+                        const wigHeight = wigSize;
+                        const wigX = faceLandmarks[0].x - (wigWidth / 2);
+                        const wigY = faceLandmarks[0].y - (wigHeight / 2);
+                        const wigPosition = new faceapi.Rect(wigX, wigY, wigWidth, wigHeight);
+                        ctx.drawImage(imgElement, wigPosition.x, wigPosition.y, wigPosition.width, wigPosition.height);
+                        setImage(canvas.toDataURL('image/jpeg'));
+                        setModalOpen(true);
+                    };
+                }
+            }
+        }
     };
+
+
 
     return (
         <ThemeProvider theme={theme}>

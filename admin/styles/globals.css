@@ -162,6 +162,12 @@ a {
   opacity: 1;
 }
 
+.image-crop {
+  width: 525px;
+  height: 700px;
+  object-fit: cover;
+}
+
 
 @tailwind base;
 @tailwind components;
