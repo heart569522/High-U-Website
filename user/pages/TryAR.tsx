@@ -58,10 +58,28 @@ export default function TryAR() {
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  function handleMessage(event: { data: { type: string; image: React.SetStateAction<string | null>; }; }) {
+  function handleMessage(event: any) {
+    // console.log("Received message:", event.data);
     if (event.data.type === "screenshot") {
-      setImage(event.data.image);
-      setModalOpen(true);
+      const overlayImage = new Image();
+      overlayImage.onload = () => {
+        const faceImage = new Image();
+        faceImage.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = faceImage.width;
+          canvas.height = faceImage.height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(faceImage, 0, 0);
+            ctx.drawImage(overlayImage, 0, 0, overlayImage.width, overlayImage.height);
+            const image = canvas.toDataURL("image/png");
+            setImage(image);
+            setModalOpen(true);
+          }
+        };
+        faceImage.src = event.data.faceImage;
+      };
+      overlayImage.src = event.data.overlayImage;
     }
   }
 
@@ -87,13 +105,13 @@ export default function TryAR() {
             </Grid>
           </Grid>
           <Grid container spacing={2} className="pt-3">
-            <Grid item sm={12} md={6}>
-              <Box className="w-full h-full border-2 border-[#F0CA83] rounded">
+            <Grid item xs={12} sm={12} md={6}>
+              <Box className="w-full border-2 border-[#F0CA83] rounded pb-5">
                 <center>
                   <iframe
                     ref={iframeRef}
                     src="/trywig2D/index.html"
-                    className="w-full h-screen"
+                    className="w-full h-[650px] object-fill"
                   />
                   <Grid item xs={12} className="pt-5 text-center">
                     <IconButton
@@ -130,7 +148,9 @@ export default function TryAR() {
               onClose={() => setModalOpen(false)}
             >
               <Box className="text-right">
-                <img src={image as string | undefined} alt="Screenshot" className="border-[12px] border-[#646464] rounded scale-x-[-1]" />
+                {image ?
+                  <img src={image as string | undefined} alt="Screenshot" className="border-[12px] border-[#646464] rounded scale-x-[-1]" />
+                  : <h1>Error image captured!!</h1>}
                 <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
                   <FavoriteIcon />
                 </IconButton>

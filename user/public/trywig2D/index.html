@@ -55,9 +55,11 @@
     <script>
       window.addEventListener("message", (event) => {
         if (event.data.type === "capture") {
-          const canvas = document.getElementById("overlayCanvas");
-          const image = canvas.toDataURL("image/png");
-          event.source.postMessage({ type: "screenshot", image }, event.origin);
+          const overlayCanvas = document.getElementById("overlayCanvas");
+          const overlayImage = overlayCanvas.toDataURL("image/png");
+          const faceCanvas = document.getElementById("WebARRocksFaceCanvas");
+          const faceImage = faceCanvas.toDataURL("image/png");
+          event.source.postMessage({ type: "screenshot", overlayImage, faceImage }, event.origin);
         }
       });
     </script>

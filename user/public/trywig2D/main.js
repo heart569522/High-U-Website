@@ -2,24 +2,18 @@ const _canvases = {
   face: null, 
   overlay:null
 };
-let _ctx = null, _earringImage = null;
+let _ctx = null, _wigImage = null;
 
-const _earringSettings = {
-  image: 'images/earring.png',
-  angleHide: 5, // head rotation angle in degrees from which we should hide the earrings
+const _wigSettings = {
+  image: 'images/wig.png',
+  angleHide: 5, // head rotation angle in degrees from which we should hide the wig
   angleHysteresis: 0.5, // add hysteresis to angleHide value, in degrees
-  scale: 0.08,    // width of the earring compared to the face width (1 -> 100% of the face width)
-  pullUp: 0.05,   // 0 -> earring are displayed at the bottom of the spotted position
-                  // 1 -> earring are displaed above the spotted position 
+  scale: 0.1,    // width of the wig compared to the face width (1 -> 100% of the face width)
+  pullUp: 0.8,   // 0 -> wig is displayed at the bottom of the spotted position
+                  // 1 -> wig is displayed above the spotted position 
   k: 0.7,  // position is interpolated between 2 keypoints. this is the interpolation coefficient
-           // 0-> earrings are at the bottom of the ear, 1-> earrings are further back
+           // 0-> wig is at the bottom of the head, 1-> wig is further back
 }
-
-const _earringsVisibility = {
-  right: false,
-  left: false
-};
-
 
 function start(){
   WebARRocksFaceCanvas2DHelper.init({
@@ -34,7 +28,8 @@ function start(){
         return;
       }
 
-      console.log('INFO in demo.js: WebAR.rocks.face is ready :)');
+      // console.log('INFO in demo.js: WebAR.rocks.face is ready :)');
+      console.log('Try AR is ready!!');
     },
 
     callbackTrack: function(detectState){
@@ -72,12 +67,12 @@ function draw_faceCrop(faceCrop){
 
 
 function draw_earrings(landmarks, faceWidth, ry){
-  const scale = _earringSettings.scale * faceWidth / _earringImage.width
+  const scale = _wigSettings.scale * faceWidth / _wigImage.width
   
   // right earring:
-  const rightEarringAngleHide = -_earringSettings.angleHide - _earringSettings.angleHysteresis * ((_earringsVisibility.right) ? 1 : -1);
+  const rightEarringAngleHide = -_wigSettings.angleHide - _wigSettings.angleHysteresis * ((_earringsVisibility.right) ? 1 : -1);
   if (ry > rightEarringAngleHide){
-    const pos = mix_landmarks(landmarks.rightEarBottom, landmarks.rightEarEarring, _earringSettings.k);
+    const pos = mix_landmarks(landmarks.rightEarBottom, landmarks.rightEarEarring, _wigSettings.k);
     draw_earring(pos, scale);
     _earringsVisibility.right = true;
   } else {
@@ -85,9 +80,9 @@ function draw_earrings(landmarks, faceWidth, ry){
   }
 
   // left earring:
-  const leftEarringAngleHide = -_earringSettings.angleHide - _earringSettings.angleHysteresis * ((_earringsVisibility.left) ? 1 : -1);
+  const leftEarringAngleHide = -_wigSettings.angleHide - _wigSettings.angleHysteresis * ((_earringsVisibility.left) ? 1 : -1);
   if (-ry > leftEarringAngleHide){
-    const pos = mix_landmarks(landmarks.leftEarBottom, landmarks.leftEarEarring, _earringSettings.k);
+    const pos = mix_landmarks(landmarks.leftEarBottom, landmarks.leftEarEarring, _wigSettings.k);
     draw_earring(pos, scale); 
     _earringsVisibility.left = true;
   } else {
@@ -97,11 +92,11 @@ function draw_earrings(landmarks, faceWidth, ry){
 
 
 function draw_earring(pos, scale){
-  const dWidth = scale * _earringImage.width;
-  const dHeight = scale * _earringImage.height;
+  const dWidth = scale * _wigImage.width;
+  const dHeight = scale * _wigImage.height;
   const dx = pos[0] - dWidth/2.0; //earring are centered horizontally
-  const dy = pos[1] - dHeight * _earringSettings.pullUp;
-  _ctx.drawImage(_earringImage, dx, dy, dWidth, dHeight);
+  const dy = pos[1] - dHeight * _wigSettings.pullUp;
+  _ctx.drawImage(_wigImage, dx, dy, dWidth, dHeight);
 }
 
 
@@ -112,8 +107,8 @@ function clear_canvas(){
 
 function main(){
   // Create earring image:
-  _earringImage = new Image();
-  _earringImage.src = _earringSettings.image;
+  _wigImage = new Image();
+  _wigImage.src = _wigSettings.image;
 
   // Get canvas from the DOM:
   _canvases.face = document.getElementById('WebARRocksFaceCanvas');
