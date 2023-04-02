@@ -4,3 +4,6 @@ https://www.wigs.com/
 CIRCUMFERENCE = side*2 (ต้องเยอะสุด)
 EAR TO EAR	= crown
 FRONT TO BACK - nape
+
+2D AR :
+https://github.com/WebAR-rocks/WebAR.rocks.face

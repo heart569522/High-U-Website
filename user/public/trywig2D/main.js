@@ -1,61 +1,66 @@
 const _canvases = {
-  face: null, 
-  overlay:null
+  face: null,
+  overlay: null,
 };
-let _ctx = null, _wigImage = null;
+let _ctx = null,
+  _earringImage = null;
 
-const _wigSettings = {
-  image: 'images/wig.png',
-  angleHide: 5, // head rotation angle in degrees from which we should hide the wig
-  angleHysteresis: 0.5, // add hysteresis to angleHide value, in degrees
-  scale: 0.1,    // width of the wig compared to the face width (1 -> 100% of the face width)
-  pullUp: 0.8,   // 0 -> wig is displayed at the bottom of the spotted position
-                  // 1 -> wig is displayed above the spotted position 
-  k: 0.7,  // position is interpolated between 2 keypoints. this is the interpolation coefficient
-           // 0-> wig is at the bottom of the head, 1-> wig is further back
-}
+const _earringSettings = {
+  image: "images/wig.png",
+  angleHide: 5,
+  angleHysteresis: 0.5,
+  scale: 1,
+  pullUp: 0.9,
+  k: 0.8,
+};
 
-function start(){
+const _earringsVisibility = {
+  right: false,
+  left: false,
+};
+
+function start() {
   WebARRocksFaceCanvas2DHelper.init({
     spec: {
-      NNCPath: './neuralNets/NN_EARS_4.json', // neural network model file
-      canvas: _canvases.face
+      NNCPath: "./neuralNets/NN_EARS_4.json",
+      canvas: _canvases.face,
     },
 
-    callbackReady: function(err, spec){ // called when everything is ready
+    callbackReady: function (err, spec) {
       if (err) {
-        console.log('ERROR in demo.js: ', err);
+        console.log("ERROR in demo.js: ", err);
         return;
       }
 
-      // console.log('INFO in demo.js: WebAR.rocks.face is ready :)');
-      console.log('Try AR is ready!!');
+      console.log("Try AR ready!!");
     },
 
-    callbackTrack: function(detectState){
+    callbackTrack: function (detectState) {
       clear_canvas();
-      if (detectState.isDetected){
+      if (detectState.isDetected) {
         draw_faceCrop(detectState.faceCrop);
-        draw_earrings(detectState.landmarks, detectState.faceWidth, detectState.ry);
+        draw_earrings(
+          detectState.landmarks,
+          detectState.faceWidth,
+          detectState.ry
+        );
       } else {
         _earringsVisibility.right = true;
         _earringsVisibility.left = true;
       }
-    }
+    },
   });
 }
 
-
-function mix_landmarks(posA, posB, k){
+function mix_landmarks(posA, posB, k) {
   return [
-    posA[0] * (1-k) + posB[0] * k, // X
-    posA[1] * (1-k) + posB[1] * k  // Y
+    posA[0] * (1 - k) + posB[0] * k, // X
+    posA[1] * (1 - k) + posB[1] * k, // Y
   ];
 }
 
-
-function draw_faceCrop(faceCrop){
-  _ctx.strokeStyle = 'lime';
+function draw_faceCrop(faceCrop) {
+  _ctx.strokeStyle = "lime";
   _ctx.beginPath();
   _ctx.moveTo(faceCrop[0][0], faceCrop[0][1]);
   _ctx.lineTo(faceCrop[1][0], faceCrop[1][1]);
@@ -65,14 +70,19 @@ function draw_faceCrop(faceCrop){
   _ctx.stroke();
 }
 
+function draw_earrings(landmarks, faceWidth, ry) {
+  const scale = (_earringSettings.scale * faceWidth) / _earringImage.width;
 
-function draw_earrings(landmarks, faceWidth, ry){
-  const scale = _wigSettings.scale * faceWidth / _wigImage.width
-  
   // right earring:
-  const rightEarringAngleHide = -_wigSettings.angleHide - _wigSettings.angleHysteresis * ((_earringsVisibility.right) ? 1 : -1);
-  if (ry > rightEarringAngleHide){
-    const pos = mix_landmarks(landmarks.rightEarBottom, landmarks.rightEarEarring, _wigSettings.k);
+  const rightEarringAngleHide =
+    -_earringSettings.angleHide -
+    _earringSettings.angleHysteresis * (_earringsVisibility.right ? 1 : -1);
+  if (ry > rightEarringAngleHide) {
+    const pos = mix_landmarks(
+      landmarks.rightEarBottom,
+      landmarks.rightEarEarring,
+      _earringSettings.k
+    );
     draw_earring(pos, scale);
     _earringsVisibility.right = true;
   } else {
@@ -80,52 +90,49 @@ function draw_earrings(landmarks, faceWidth, ry){
   }
 
   // left earring:
-  const leftEarringAngleHide = -_wigSettings.angleHide - _wigSettings.angleHysteresis * ((_earringsVisibility.left) ? 1 : -1);
-  if (-ry > leftEarringAngleHide){
-    const pos = mix_landmarks(landmarks.leftEarBottom, landmarks.leftEarEarring, _wigSettings.k);
-    draw_earring(pos, scale); 
+  const leftEarringAngleHide =
+    -_earringSettings.angleHide -
+    _earringSettings.angleHysteresis * (_earringsVisibility.left ? 1 : -1);
+  if (-ry > leftEarringAngleHide) {
+    const pos = mix_landmarks(
+      landmarks.leftEarBottom,
+      landmarks.leftEarEarring,
+      _earringSettings.k
+    );
+    draw_earring(pos, scale);
     _earringsVisibility.left = true;
   } else {
     _earringsVisibility.left = false;
   }
 }
 
-
-function draw_earring(pos, scale){
-  const dWidth = scale * _wigImage.width;
-  const dHeight = scale * _wigImage.height;
-  const dx = pos[0] - dWidth/2.0; //earring are centered horizontally
-  const dy = pos[1] - dHeight * _wigSettings.pullUp;
-  _ctx.drawImage(_wigImage, dx, dy, dWidth, dHeight);
+function draw_earring(pos, scale) {
+  const dWidth = scale * _earringImage.width;
+  const dHeight = scale * _earringImage.height;
+  const dx = pos[0] - dWidth / 2.0;
+  const dy = pos[1] - dHeight * _earringSettings.pullUp;
+  _ctx.drawImage(_earringImage, dx, dy, dWidth, dHeight);
 }
 
-
-function clear_canvas(){
+function clear_canvas() {
   _ctx.clearRect(0, 0, _canvases.overlay.width, _canvases.overlay.height);
 }
 
+function main() {
+  _earringImage = new Image();
+  _earringImage.src = _earringSettings.image;
 
-function main(){
-  // Create earring image:
-  _wigImage = new Image();
-  _wigImage.src = _wigSettings.image;
+  _canvases.face = document.getElementById("WebARRocksFaceCanvas");
+  _canvases.overlay = document.getElementById("overlayCanvas");
 
-  // Get canvas from the DOM:
-  _canvases.face = document.getElementById('WebARRocksFaceCanvas');
-  _canvases.overlay = document.getElementById('overlayCanvas');
+  _ctx = _canvases.overlay.getContext("2d");
 
-  // Create 2D context for the overlay canvas (where the earring are drawn):
-  _ctx = _canvases.overlay.getContext('2d'); 
-
-  // Set the canvas to fullscreen
-  // and add an event handler to capture window resize:
   WebARRocksResizer.size_canvas({
     isFullScreen: true,
-    canvas: _canvases.face,     // WebARRocksFace main canvas
-    overlayCanvas: [_canvases.overlay], // other canvas which should be resized at the same size of the main canvas
-    callback: start
-  })
+    canvas: _canvases.face,
+    overlayCanvas: [_canvases.overlay],
+    callback: start,
+  });
 }
 
-
-window.addEventListener('load', main);
+window.addEventListener("load", main);
