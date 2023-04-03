@@ -143,7 +143,7 @@ export default function TryAR() {
                     alt="Screenshot"
                     className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
                   />
-                  : <h1>Error image captured!!</h1>
+                  : <h1>Error image captured!!!</h1>
                 }
                 <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
                   <FavoriteIcon />
