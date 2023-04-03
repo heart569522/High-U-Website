@@ -60,12 +60,12 @@ export default function TryAR() {
 
   function handleMessage(event: any) {
     console.log(event.data);
-    
+
     if (event.data.type === "screenshot") {
       setImage(event.data.image);
       setModalOpen(true);
     } else {
-      
+
     }
   }
 
@@ -145,27 +145,25 @@ export default function TryAR() {
                   />
                   : <h1>Error image captured!!</h1>
                 }
-                <Box>
-                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
-                    <FavoriteIcon />
-                  </IconButton>
-                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
-                    <DownloadIcon />
-                  </IconButton>
-                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
-                    <ShareIcon />
-                  </IconButton>
-                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
-                    <ClearIcon />
-                  </IconButton>
-                </Box>
+                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
+                  <FavoriteIcon />
+                </IconButton>
+                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
+                  <DownloadIcon />
+                </IconButton>
+                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
+                  <ShareIcon />
+                </IconButton>
+                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
+                  <ClearIcon />
+                </IconButton>
               </Box>
             </Modal>
 
           </Grid>
         </Container>
       </Paper>
-    </ThemeProvider>
+    </ThemeProvider >
 
   )
 }
