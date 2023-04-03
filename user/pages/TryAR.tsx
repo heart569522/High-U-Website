@@ -59,29 +59,16 @@ export default function TryAR() {
   }, []);
 
   function handleMessage(event: any) {
-    // console.log("Received message:", event.data);
+    console.log(event.data);
+    
     if (event.data.type === "screenshot") {
-      const overlayImage = new Image();
-      overlayImage.onload = () => {
-        const faceImage = new Image();
-        faceImage.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = faceImage.width;
-          canvas.height = faceImage.height;
-          const ctx = canvas.getContext("2d");
-          if (ctx) {
-            ctx.drawImage(faceImage, 0, 0);
-            ctx.drawImage(overlayImage, 0, 0, overlayImage.width, overlayImage.height);
-            const image = canvas.toDataURL("image/png");
-            setImage(image);
-            setModalOpen(true);
-          }
-        };
-        faceImage.src = event.data.faceImage;
-      };
-      overlayImage.src = event.data.overlayImage;
+      setImage(event.data.image);
+      setModalOpen(true);
+    } else {
+      
     }
   }
+
 
   const handleCapture = () => {
     const iframe = iframeRef.current;
@@ -92,7 +79,9 @@ export default function TryAR() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Head><title>Try AR | High U</title></Head>
+      <Head>
+        <title>Try AR | High U</title>
+      </Head>
       <Navbar />
       <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
         <Container maxWidth="xl" >
@@ -111,7 +100,7 @@ export default function TryAR() {
                   <iframe
                     ref={iframeRef}
                     src="/trywig2D/index.html"
-                    className="w-full h-[650px] object-fill"
+                    className="w-full h-[650px] object-cover"
                   />
                   <Grid item xs={12} className="pt-5 text-center">
                     <IconButton
@@ -140,7 +129,7 @@ export default function TryAR() {
                     </CardActionArea>
                   </Card>
                 </Grid>
-              )}
+              )}a
             </Grid>
             <Modal
               className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
@@ -149,20 +138,27 @@ export default function TryAR() {
             >
               <Box className="text-right">
                 {image ?
-                  <img src={image as string | undefined} alt="Screenshot" className="border-[12px] border-[#646464] rounded scale-x-[-1]" />
-                  : <h1>Error image captured!!</h1>}
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
-                  <DownloadIcon />
-                </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
-                  <ShareIcon />
-                </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
-                  <ClearIcon />
-                </IconButton>
+                  <img
+                    src={image as string | undefined}
+                    alt="Screenshot"
+                    className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
+                  />
+                  : <h1>Error image captured!!</h1>
+                }
+                <Box>
+                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
+                    <FavoriteIcon />
+                  </IconButton>
+                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
+                    <DownloadIcon />
+                  </IconButton>
+                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
+                    <ShareIcon />
+                  </IconButton>
+                  <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
+                    <ClearIcon />
+                  </IconButton>
+                </Box>
               </Box>
             </Modal>
 

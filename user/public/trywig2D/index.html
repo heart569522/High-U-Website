@@ -1,68 +1,58 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="content-language" content="en-EN" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-
-    <title>WebAR.rocks.face 2D earrings demo</title>
-
-    <!-- INCLUDE WebAR.rocks.face MAIN SCRIPT -->
-    <script src="./dist/WebARRocksFace.js"></script>
-
-    <!-- INCLUDE CANVAS2D HELPER -->
-    <script src="./helpers/WebARRocksFaceCanvas2DHelper.js"></script>
-
-    <!-- INCLUDE RESIZER HELPER -->
-    <script src="./helpers/WebARRocksResizer.js"></script>
-
-    <!-- INCLUDE LANDMARKS STABILIZER -->
-    <script src="./helpers/landmarksStabilizers/WebARRocksLMStabilizer.js"></script>
-
-    <!-- INCLUDE DEMO SCRIPT -->
-    <script src="./main.js"></script>
-
-    <style type="text/css">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://libs.zappar.com/zappar-aframe/2.0.0/zappar-aframe.js"></script>
+    <style>
+      html,
       body {
         margin: 0;
-      }
-      canvas {
-        transform: scaleX(-1); /* flip horizontally (mirror mode) */
-        position: absolute;
-        top: 0;
-        left: 0;
-        max-width: 100vw;
-        max-height: 100vh;
-      }
-      #overlayCanvas {
-        z-index: 10;
-      }
-      #WebARRocksFaceCanvas {
-        z-index: 1;
+        padding: 0;
       }
     </style>
   </head>
   <body>
-    <!-- canvas where the earring will be displayed: -->
-    <canvas width="600" height="600" id="overlayCanvas"></canvas>
-
-    <!-- canvas where the video will be displayed: -->
-    <canvas width="600" height="600" id="WebARRocksFaceCanvas"></canvas>
-    
+    <a-scene loading-screen="backgroundColor: #344b60">
+      <a-entity zappar-permissions-ui id="permissions"></a-entity>
+      <a-entity zappar-compatibility-ui id="compatibility"></a-entity>
+      <a-assets>
+        <img id="faceImage" src="./images/wig.png" />
+      </a-assets>
+      <a-camera zappar-camera="user-facing: true;"></a-camera>
+      <a-entity zappar-face id="face-group">
+        <a-entity zappar-head-mask="face: #face-group;"></a-entity>
+        <a-image
+          id="face-overlay"
+          position="0 0.2 1"
+          width="2"
+          height="2"
+          src="#faceImage"
+        ></a-image>
+      </a-entity>
+    </a-scene>
 
     <script>
       window.addEventListener("message", (event) => {
         if (event.data.type === "capture") {
-          const overlayCanvas = document.getElementById("overlayCanvas");
-          const overlayImage = overlayCanvas.toDataURL("image/png");
-          const faceCanvas = document.getElementById("WebARRocksFaceCanvas");
-          const faceImage = faceCanvas.toDataURL("image/png");
-          event.source.postMessage({ type: "screenshot", overlayImage, faceImage }, event.origin);
+          const canvas = document
+            .querySelector("a-scene")
+            .components.screenshot.getCanvas("perspective", "none");
+          const dataUrl = canvas.toDataURL("image/png");
+          event.source.postMessage(
+            { type: "screenshot", image: dataUrl },
+            event.origin
+          );
         }
       });
     </script>
+    <!-- <script>
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "capture") {
+          const canvas = document.querySelector("a-scene").components.screenshot.getCanvas("perspective", "none");
+          const dataUrl = canvas.toDataURL("image/png");
+          event.source.postMessage({ type: "screenshot", image: dataUrl }, event.origin);
+        }
+      });
+    </script> -->
   </body>
 </html>
