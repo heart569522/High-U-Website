@@ -20,7 +20,7 @@ const INITIAL_SUB_IMAGES_COUNT = 3;
 
 const drawerWidth = 240;
 
-const AddWig_Form = () => {
+const AddWig = () => {
   const [title, setTitle] = useState('');
 
   const [imageWig, setImageWig] = useState<ImageWig>({
@@ -39,16 +39,16 @@ const AddWig_Form = () => {
   const [mainImagePreview, setMainImagePreview] = useState<string>('');
   const [subImagePreviews, setSubImagePreviews] = useState<string[]>(new Array(INITIAL_SUB_IMAGES_COUNT).fill('')); // initialize with empty strings
 
-  const arImageRef = useRef<HTMLInputElement>(null);
-  const mainImageRef = useRef<HTMLInputElement>(null);
-  const subImageRefs = useRef<(HTMLInputElement | null)[]>(new Array(INITIAL_SUB_IMAGES_COUNT).fill(null));
+  // const arImageRef = useRef<HTMLInputElement>(null);
+  // const mainImageRef = useRef<HTMLInputElement>(null);
+  // const subImageRefs = useRef<(HTMLInputElement | null)[]>(new Array(INITIAL_SUB_IMAGES_COUNT).fill(null));
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index?: number) => {
-    const { name } = event.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+    const { name } = e.target;
 
-    if (name === "subImage" && typeof index !== "undefined" && event.target.files) {
+    if (name === "subImage" && typeof index !== "undefined" && e.target.files) {
       const subImages = [...imageWig.subImages];
-      subImages[index] = event.target.files[0];
+      subImages[index] = e.target.files[0];
 
       setImageWig({
         ...imageWig,
@@ -57,26 +57,104 @@ const AddWig_Form = () => {
 
       const reader = new FileReader();
       reader.onload = () => {
-        const previews = [...subImagePreviews];
-        previews[index] = reader.result as string;
-        setSubImagePreviews(previews);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            const srcRatio = img.width / img.height;
+            const destRatio = 525 / 700;
+            let cropWidth = img.width;
+            let cropHeight = img.height;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            if (srcRatio > destRatio) {
+              cropWidth = img.height * destRatio;
+              offsetX = (img.width - cropWidth) / 2;
+            } else if (srcRatio < destRatio) {
+              cropHeight = img.width / destRatio;
+              offsetY = (img.height - cropHeight) / 2;
+            }
+
+            canvas.width = 525;
+            canvas.height = 700;
+            ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
+            const previews = [...subImagePreviews];
+            previews[index] = canvas.toDataURL();
+            setSubImagePreviews(previews);
+          }
+        };
+        img.src = reader.result as string;
       };
-      reader.readAsDataURL(event.target.files[0]);
-    } else if (event.target.files) {
+      reader.readAsDataURL(e.target.files[0]);
+    } else if (e.target.files) {
       setImageWig({
         ...imageWig,
-        [name]: event.target.files[0],
+        [name]: e.target.files[0],
       });
 
       const reader = new FileReader();
       reader.onload = () => {
         if (name === 'arImage') {
-          setArImagePreview(reader.result as string);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              const srcRatio = img.width / img.height;
+              const destRatio = 525 / 700;
+              let cropWidth = img.width;
+              let cropHeight = img.height;
+              let offsetX = 0;
+              let offsetY = 0;
+
+              if (srcRatio > destRatio) {
+                cropWidth = img.height * destRatio;
+                offsetX = (img.width - cropWidth) / 2;
+              } else if (srcRatio < destRatio) {
+                cropHeight = img.width / destRatio;
+                offsetY = (img.height - cropHeight) / 2;
+              }
+
+              canvas.width = 525;
+              canvas.height = 700;
+              ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
+              setArImagePreview(canvas.toDataURL());
+            }
+          };
+          img.src = reader.result as string;
         } else if (name === 'mainImage') {
-          setMainImagePreview(reader.result as string);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              const srcRatio = img.width / img.height;
+              const destRatio = 525 / 700;
+              let cropWidth = img.width;
+              let cropHeight = img.height;
+              let offsetX = 0;
+              let offsetY = 0;
+
+              if (srcRatio > destRatio) {
+                cropWidth = img.height * destRatio;
+                offsetX = (img.width - cropWidth) / 2;
+              } else if (srcRatio < destRatio) {
+                cropHeight = img.width / destRatio;
+                offsetY = (img.height - cropHeight) / 2;
+              }
+
+              canvas.width = 525;
+              canvas.height = 700;
+              ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
+              setMainImagePreview(canvas.toDataURL());
+            }
+          };
+          img.src = reader.result as string;
         }
       };
-      reader.readAsDataURL(event.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
@@ -105,8 +183,8 @@ const AddWig_Form = () => {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       if (!imageWig.arImage) {
         throw new Error('File is required')
@@ -123,14 +201,14 @@ const AddWig_Form = () => {
 
       const arImageRef = ref(
         storage,
-        `wig_images/${title}/${'AR_'+arImageName}`
+        `wig_images/${title}/${'AR_' + arImageName}`
       );
       const mainImageRef = ref(
         storage,
-        `wig_images/${title}/${'MAIN_'+mainImageName}`
+        `wig_images/${title}/${'MAIN_' + mainImageName}`
       );
       const subImageRefs = subImageNames.map((name, i) =>
-        ref(storage, `wig_images/${title}/sub_images/${'SUB_'+i+'_'+name}`)
+        ref(storage, `wig_images/${title}/sub_images/${'SUB_' + i + '_' + name}`)
       );
 
       const arUploadTask = uploadBytesResumable(
@@ -177,15 +255,11 @@ const AddWig_Form = () => {
       if (!response.ok) {
         throw new Error(await response.text());
       }
-
-      // Reset form and show success message
-
     } catch (error) {
       console.error(error);
 
     }
   }
-
 
   return (
     <Box
@@ -320,4 +394,4 @@ const AddWig_Form = () => {
 
 }
 
-export default AddWig_Form
+export default AddWig

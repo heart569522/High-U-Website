@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://libs.zappar.com/zappar-aframe/2.0.0/zappar-aframe.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene loading-screen="backgroundColor: #344b60">
+      <a-entity zappar-permissions-ui id="permissions"></a-entity>
+      <a-entity zappar-compatibility-ui id="compatibility"></a-entity>
+      <a-assets>
+        <img id="faceImage" src="./images/wig.png" />
+      </a-assets>
+      <a-camera zappar-camera="user-facing: true;"></a-camera>
+      <a-entity zappar-face id="face-group">
+        <a-entity zappar-head-mask="face: #face-group;"></a-entity>
+        <a-image
+          id="face-overlay"
+          position="0 0.2 1"
+          width="2"
+          height="2"
+          src="#faceImage"
+        ></a-image>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "capture") {
+          const canvas = document
+            .querySelector("a-scene")
+            .components.screenshot.getCanvas("perspective", "none");
+          const dataUrl = canvas.toDataURL("image/png");
+          event.source.postMessage(
+            { type: "screenshot", image: dataUrl },
+            event.origin
+          );
+        }
+      });
+    </script>
+    <!-- <script>
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "capture") {
+          const canvas = document.querySelector("a-scene").components.screenshot.getCanvas("perspective", "none");
+          const dataUrl = canvas.toDataURL("image/png");
+          event.source.postMessage({ type: "screenshot", image: dataUrl }, event.origin);
+        }
+      });
+    </script> -->
+  </body>
+</html>
