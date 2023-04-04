@@ -10,11 +10,7 @@ import {
   Box,
   Card,
   CardMedia,
-  CardContent,
   CardActionArea,
-  ImageList,
-  ImageListItem,
-  Backdrop
 } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -29,6 +25,7 @@ import Navbar from "../components/Navigation/Navigation"
 
 import AR_Data from '../helper/AR_Data.json';
 import Head from 'next/head';
+import Image from 'next/image';
 
 const theme = createTheme({
   palette: {
@@ -47,7 +44,44 @@ const theme = createTheme({
 
 });
 
-export default function TryAR() {
+type Props = {
+  wigs: [Wig]
+}
+
+type Wig = {
+  _id: string;
+  ar_image: string;
+  main_image: string;
+  sub_image: string[];
+  title: string;
+  style: string;
+  type: string;
+  color: string;
+  size: number[];
+  price: number;
+  desc: string;
+  view: number;
+  favorite: number;
+  use: number;
+}
+
+export async function getServerSideProps() {
+  try {
+    let wigsResponse = await fetch("http://localhost:3000/api/wig_data/getAllWigs");
+    let wigs = await wigsResponse.json();
+    return {
+      props: { wigs: JSON.parse(JSON.stringify(wigs)) }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return {
+    props: { wigs: [] }
+  };
+}
+
+export default function TryAR(props: Props) {
+  const [wigData, setWigData] = useState<Wig[]>(props.wigs);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
@@ -69,13 +103,20 @@ export default function TryAR() {
     }
   }
 
-
   const handleCapture = () => {
     const iframe = iframeRef.current;
     if (iframe) {
       iframe.contentWindow?.postMessage({ type: 'capture' }, '*');
     }
   };
+
+  const handleSelectWig = (arImage: string) => {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      // setSelectedWig(arImage);
+      iframe.contentWindow?.postMessage({ type: 'select', image: arImage }, '*');
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -116,20 +157,23 @@ export default function TryAR() {
               </Box>
             </Grid>
             <Grid item sm={12} md={6}>
-              {AR_Data.map((item, i) =>
+              {wigData.map((item, i) =>
                 <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                   <Card variant="outlined" className="content">
-                    <CardActionArea>
+                    <CardActionArea onClick={() => handleSelectWig(item.ar_image)}>
                       <div className="content-overlay" />
-                      <CardMedia
-                        className="content-image object-top h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
-                        component="img"
-                        image={item.image}
+                      <Image
+                        className="content-image object-cover h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
+                        src={item.main_image}
+                        alt={item.title}
+                        width={224}
+                        height={224}
+                        priority
                       />
                     </CardActionArea>
                   </Card>
                 </Grid>
-              )}a
+              )}
             </Grid>
             <Modal
               className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
