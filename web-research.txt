@@ -5,5 +5,4 @@ CIRCUMFERENCE = side*2 (ต้องเยอะสุด)
 EAR TO EAR	= crown
 FRONT TO BACK - nape
 
-2D AR :
-https://github.com/WebAR-rocks/WebAR.rocks.face
+2D AR : https://github.com/zappar-xr/aframe-example-face-tracking-solar-system
