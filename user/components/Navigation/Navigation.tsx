@@ -23,6 +23,7 @@ import NavbarLikeProfile from './NavbarLikeProfile';
 import NavbarSignInUpButton from './NavbarSignInUpButton';
 import { Avatar, Button, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText, Tooltip } from '@mui/material';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
+import Image from 'next/image';
 
 // Create Theme
 const theme = createTheme({
@@ -329,7 +330,7 @@ export default function Navbar() {
                     <Box className="flex items-center justify-end ml-3">
                       <Tooltip title="Profile">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt="" src={session.user.image || undefined} />
+                          <Image className="rounded-full object-cover w-12 h-12" alt={session.user.name || ''} width={100} height={100} src={session.user.image || ''} />
                         </IconButton>
                       </Tooltip>
                       <Menu
