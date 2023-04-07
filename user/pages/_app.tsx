@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import AOS from 'aos';
 import { SessionProvider } from "next-auth/react"
 
+import '../styles/tailwind.css';
 import 'aos/dist/aos.css';
 import '../styles/globals.css'
 import '../styles/lodingStyle.css'
