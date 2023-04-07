@@ -4,25 +4,33 @@ import {
     Box,
     Grid,
     Container,
-    InputLabel,
-    MenuItem,
-    FormControl,
-    Checkbox,
-    FormGroup,
-    FormControlLabel,
     Card,
     CardMedia,
     CardContent,
     CardActionArea,
     Typography,
-    Skeleton
+    Skeleton,
+    Divider,
+    List,
+    ListItemButton,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Button,
+    SwipeableDrawer
 
 } from '@mui/material'
 import Select, { SelectChangeEvent, SelectProps } from '@mui/material/Select';
-import { createTheme, ThemeProvider, } from '@mui/material/styles';
+import { createTheme, CSSObject, styled, Theme, ThemeProvider, useTheme, } from '@mui/material/styles';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import MuiDrawer from '@mui/material/Drawer';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import MenuIcon from '@mui/icons-material/Menu';
+import MailIcon from '@mui/icons-material/Mail';
 
 import Link from 'next/link'
-import _ from 'lodash';
 
 // import WigList_Item from './WigList_Item';
 import Wig_Product from '../../helper/Wig_Product.json';
@@ -43,7 +51,61 @@ const theme = createTheme({
 
 });
 
+type Anchor = 'left';
+
+
 function WigList() {
+    const [state, setState] = useState({ left: false });
+
+    const toggleDrawer = (anchor: Anchor, open: boolean) =>
+            (event: React.KeyboardEvent | React.MouseEvent) => {
+                if (
+                    event &&
+                    event.type === 'keydown' &&
+                    ((event as React.KeyboardEvent).key === 'Tab' ||
+                        (event as React.KeyboardEvent).key === 'Shift')
+                ) {
+                    return;
+                }
+
+                setState({ ...state, [anchor]: open });
+            };
+
+    const list = (anchor: Anchor) => (
+        <Box
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <List>
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider />
+            <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
+
+
     const [loading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -60,96 +122,28 @@ function WigList() {
     const [selectedBrand, setSelectedBrand] = React.useState<string | null>(null);
     const uniqueBrand = Array.from(new Set(Wig_Product.map(item => item.brand)));
 
-    const handleChange_Color = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-        setSelectedColor(event.target.value as string);
-    };
-
-    const handleChange_Size = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-        setSelectedSize(event.target.value as string);
-    };
-
-    const handleChange_Brand = (event: SelectChangeEvent<string>, child: React.ReactNode) => {
-        setSelectedBrand(event.target.value as string);
-    };
-
     return (
         <ThemeProvider theme={theme}>
-            <Paper sx={{ backgroundColor: '#faf7f7', pb: 4}}>
+            <Paper sx={{ backgroundColor: '#faf7f7', pb: 4, display: 'flex' }}>
                 <Container maxWidth="xl" >
                     {/* SELECT INPUT */}
-
                     <Grid container spacing={3} alignItems="center" justifyContent="center" className="py-8">
-                        <Grid item xs={12} sm={4}>
-                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
-                                <Box sx={{ minWidth: 100 }}>
-                                    <FormControl fullWidth >
-                                        <InputLabel color='warning'>Colors</InputLabel>
-                                        <Select
-                                            color='warning'
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={selectedColor || ''}
-                                            label="First Menu"
-                                            onChange={handleChange_Color}
-                                        >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
-                                            {uniqueColors.map((item, i) => (
-                                                <MenuItem value={item} key={i}>{item}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                        <Grid item xs={12}>
+                            <Typography className="text-6xl font-bold max-md:text-5xl max-sm:text-4xl">High U Wig</Typography>
+                            <Divider className="py-2 w-full" />
+                            {(['left'] as const).map((anchor, i) => (
+                                <Box className="pt-3" key={i}>
+                                    <Button className="bg-[#F0CA83] hover:bg-[#ffc457] p-3 text-[#303030] font-bold" onClick={toggleDrawer(anchor, true)}>Show&nbsp;Filters</Button>
+                                    <SwipeableDrawer
+                                        anchor={anchor}
+                                        open={state[anchor]}
+                                        onClose={toggleDrawer(anchor, false)}
+                                        onOpen={toggleDrawer(anchor, true)}
+                                    >
+                                        {list(anchor)}
+                                    </SwipeableDrawer>
                                 </Box>
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
-                                <Box sx={{ minWidth: 100 }}>
-                                    <FormControl fullWidth >
-                                        <InputLabel color='warning'>Sizes</InputLabel>
-                                        <Select
-                                            color='warning'
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={selectedSize || ''}
-                                            label="Second Menu"
-                                            onChange={handleChange_Size}
-                                        >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
-                                            {uniqueSizes.map((item, i) => (
-                                                <MenuItem value={item} key={i}>{item}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-10 rounded-md" />) : (
-                                <Box sx={{ minWidth: 100 }}>
-                                    <FormControl fullWidth >
-                                        <InputLabel color='warning'>Brands</InputLabel>
-                                        <Select
-                                            color='warning'
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={selectedBrand || ''}
-                                            label="third Menu"
-                                            onChange={handleChange_Brand}
-                                        >
-                                            <MenuItem value="">
-                                                <em>None</em>
-                                            </MenuItem>
-                                            {uniqueBrand.map((item, i) => (
-                                                <MenuItem value={item} key={i}>{item}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            )}
+                            ))}
                         </Grid>
                     </Grid>
 

@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Link from 'next/link'
+import Image from 'next/image';
 
 import Wig_Color from '../../helper/Wig_Color.json';
 import Wig_Product from '../../helper/Wig_Product.json';
@@ -64,10 +65,13 @@ export default function WigProductItem() {
                     <Grid container spacing={5}>
                         <Grid item xs={12} md={5}>
                             {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-[700px] rounded-md" />) : (
-                                <img
-                                    src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
-                                    className="max-w-xl w-full"
-                                />
+                                <picture>
+                                    <img
+                                        src="https://cdn.shopify.com/s/files/1/1410/9094/products/Resized-525x700-_0001_ew_purepower_cascade_1.jpg?v=1626906369"
+                                        className="max-w-xl w-full"
+                                        alt="title"
+                                    />
+                                </picture>
                             )}
                         </Grid>
                         <Grid item xs={12} md={7}>
@@ -110,12 +114,15 @@ export default function WigProductItem() {
                                 >
                                     {Wig_Color.map((item) => (
                                         <ImageListItem key={item.image} className="p-2">
-                                            <img
-                                                className="rounded hover:opacity-80 transition duration-200 ease-in-out"
-                                                src={item.image}
-                                                alt={item.color}
-                                                loading="lazy"
-                                            />
+                                            <picture>
+                                                <img
+                                                    className="rounded hover:opacity-80 transition duration-200 ease-in-out"
+                                                    src={item.image}
+                                                    alt={item.color}
+                                                    width={500}
+                                                    height={500}
+                                                />
+                                            </picture>
                                         </ImageListItem>
                                     ))}
                                 </ImageList>
