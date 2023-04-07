@@ -49,9 +49,11 @@ a {
       #cb9b51 90%,
       #e9a31f 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   text-shadow: 0px 1px 1px rgba(255, 245, 181, 0.5);
   color: transparent;
 }
+
 
 .colorBackgroundContentGold {
   background-image: linear-gradient(to right,
