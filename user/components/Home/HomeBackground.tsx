@@ -19,21 +19,8 @@ theme.typography.h3 = {
   },
 };
 
-// function myFunction() {
-//   const scrollY = window.scrollY;
-//   const image = document.getElementById("bg-image");
-//   // const imageWidth = image !== null ? image.clientWidth : 0;
-//   image.style.transform = `translateX(${scrollY}px)`;
-// }
-
 
 export default function HomeBackground() {
-  // useEffect(() => {
-  //   window.addEventListener("scroll", myFunction);
-  //   return () => {
-  //     window.removeEventListener("scroll", myFunction);
-  //   };
-  // }, []);
 
   return (
     <ThemeProvider theme={theme}>

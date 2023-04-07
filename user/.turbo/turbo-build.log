@@ -1,0 +1,31 @@
+
+> high-u@0.1.0 build
+> next build
+
+info  - Loaded env from D:\PAYAP\High-U-Website\user\.env.local
+info  - Linting and checking validity of types...
+
+./components/Other/SplashScreen.tsx
+32:6  Warning: React Hook useEffect has a missing dependency: 'animate'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/Wig/WigBanner_Item.tsx
+7:13  Warning: Do not use `<img>` element. Use `<Image />` from `next/image` instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/Wig/WigProduct_Item.tsx
+67:33  Warning: Do not use `<img>` element. Use `<Image />` from `next/image` instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+67:33  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+113:45  Warning: Do not use `<img>` element. Use `<Image />` from `next/image` instead. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+Failed to compile.
+
+./components/Auth/SignInForm.tsx:81:18
+Type error: Expression produces a union type that is too complex to represent.
+
+[0m [90m 79 | [39m[0m
+[0m [90m 80 | [39m        [33m<[39m[33mThemeProvider[39m theme[33m=[39m{theme}[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 81 | [39m            [33m<[39m[33mBox[39m className[33m=[39m[32m"bg-[#948975] h-full w-full bg-cover fixed"[39m[33m>[39m[0m
+[0m [90m    | [39m                 [31m[1m^[22m[39m[0m
+[0m [90m 82 | [39m                [33m<[39m[33mBox[39m className[33m=[39m[32m"colorBackgroundGold h-full w-full bg-cover fixed"[39m [33m>[39m[0m
+[0m [90m 83 | [39m                    [33m<[39m[33mContainer[39m component[33m=[39m[32m"main"[39m maxWidth[33m=[39m[32m"sm"[39m[33m>[39m[0m
+[0m [90m 84 | [39m                        [33m<[39m[33mCssBaseline[39m [33m/[39m[33m>[39m[0m
