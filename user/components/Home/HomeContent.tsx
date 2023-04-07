@@ -50,7 +50,7 @@ export default function HomeContent() {
               <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-right">
                 <Image
                   className="w-full max-w-lg p-3 rounded-md"
-                  src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fimage_showcase1.jpg?alt=media&token=dca062ad-7f3e-4e05-bf99-e34906d9fbf3"
+                  src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Fimage_showcase1.jpg?alt=media&token=ddb04a3f-bafa-444f-ac93-8617d74b2bf6"
                   alt="Image Showcase 1"
                   width={500}
                   height={500}
@@ -80,7 +80,7 @@ export default function HomeContent() {
               <Grid item xs={12} sm={6} className="flex items-center justify-start max-sm:justify-center " data-aos="fade-left">
                 <Image
                   className="w-full max-w-lg p-3 rounded-md"
-                  src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fimage_showcase2.jpg?alt=media&token=3d334a8f-f72f-4b68-b20a-3ddc1acd1ad1"
+                  src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Fimage_showcase2.jpg?alt=media&token=8f02e314-f35a-450b-9965-94b9e2123f2e"
                   alt="Image Showcase 2"
                   width={500}
                   height={500}

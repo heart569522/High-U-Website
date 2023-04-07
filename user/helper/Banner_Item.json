@@ -1,17 +1,17 @@
 [
     {
-        "id": 1,
-        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/2109_banner_lacefront.jpg?v=1631708020",
+        "id": "1",
+        "image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fwig_banner%2F2109_banner_lacefront.webp?alt=media&token=2269a98a-8789-4ddf-8e0a-76086b2e8dbe",
         "title": "Lace Front"
     },
     {
-        "id": 2,
-        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/2109_Banner-1370x357_human-hair.jpg?v=1630441633",
+        "id": "2",
+        "image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fwig_banner%2F2109_Banner-1370x357_human-hair.webp?alt=media&token=7de490f4-5307-4f12-ac5d-bdde31101710",
         "title": "Human Hair"
     },
     {
-        "id": 3,
-        "image": "https://cdn.shopify.com/s/files/1/1410/9094/files/Banner-1370x357_see-whats-new_no-cta.jpg?v=1664817069",
+        "id": "3",
+        "image": "https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fwig_banner%2FBanner-1370x357_see-whats-new_no-cta.jpg?alt=media&token=90b3ffe0-8df7-4ac5-a1cb-fd45d2960a3e",
         "title": "New & Now"
     }
 ]
