@@ -182,9 +182,11 @@ export default function TryAR(props: Props) {
             >
               <Box className="text-right">
                 {image ?
-                  <img
-                    src={image as string | undefined}
+                  <Image
+                    src={image || 'Image Error'}
                     alt="Screenshot"
+                    width={600}
+                    height={600}
                     className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
                   />
                   : <h1>Error image captured!!!</h1>
