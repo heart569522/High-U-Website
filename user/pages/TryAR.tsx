@@ -67,7 +67,7 @@ type Wig = {
 
 export async function getServerSideProps() {
   try {
-    let wigsResponse = await fetch("http://localhost:3000/api/wig_data/getAllWigs");
+    let wigsResponse = await fetch("https://high-u-hairwig.vercel.app/api/wig_data/getAllWigs");
     let wigs = await wigsResponse.json();
     return {
       props: { wigs: JSON.parse(JSON.stringify(wigs)) }
