@@ -75,8 +75,8 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchUser() {
-      let apiUrl = process.env.API_URL;
-      let response = await fetch(`${apiUrl}/api/user_data/getUserData`);
+      // let apiUrl = process.env.API_URL;
+      let response = await fetch("https://high-u-hairwig.vercel.app/api/user_data/getUserData");
       let data = await response.json();
       setUser(data);
       setIsLoading(false);
@@ -565,7 +565,7 @@ export default function Profile() {
 
 export async function getServerSideProps(context: GetSessionParams | undefined) {
   const session = await getSession(context)
-  
+
   // If the user doesn't have an active session, redirect to the login page
   if (!session) {
     return {
