@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import { useEffect } from 'react';
 
 const bgHome = 'https://images.squarespace-cdn.com/content/v1/557dc7afe4b0452ec69dc879/1539722002377-ZS55K8YB3D1ZN31RN3NC/hair+models.png?format=2500w';
-const bgCut = '../hair_models.png'
+const bgCut = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Fmodel_overlay.png?alt=media&token=ec1bd66f-6f24-4066-9ab8-fcd6405ed699'
 
 const theme = createTheme();
 
