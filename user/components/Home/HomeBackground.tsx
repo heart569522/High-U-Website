@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 const bgHome = 'https://images.squarespace-cdn.com/content/v1/557dc7afe4b0452ec69dc879/1539722002377-ZS55K8YB3D1ZN31RN3NC/hair+models.png?format=2500w';
 const bgCut = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Fmodel_overlay.png?alt=media&token=ec1bd66f-6f24-4066-9ab8-fcd6405ed699'
+const bgCutLocal = '../model_overlay.png'
 
 const theme = createTheme();
 
@@ -44,7 +45,7 @@ export default function HomeBackground() {
             // id="bg-image"
             data-aos="fade-left"
             sx={{
-              backgroundImage: `url(${bgCut})`,
+              backgroundImage: `url(${bgCut || bgCutLocal})`,
               position: 'absolute',
               top: 0,
               left: 0,
