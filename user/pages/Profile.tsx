@@ -75,8 +75,9 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch(`${process.env.API_URL}/api/user_data/getUserData`);
-      const data = await response.json();
+      let apiUrl = process.env.API_URL;
+      let response = await fetch(`${apiUrl}/api/user_data/getUserData`);
+      let data = await response.json();
       setUser(data);
       setIsLoading(false);
     }
