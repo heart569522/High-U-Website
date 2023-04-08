@@ -113,7 +113,7 @@ export default function SignUpForm() {
             const sanitizedUsername = DOMPurify.sanitize(username);
             const sanitizedPassword = DOMPurify.sanitize(password);
 
-            const response = await fetch('http://localhost:3000/api/auth/user_signup', {
+            const response = await fetch(`${process.env.API_URL}/api/auth/user_signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

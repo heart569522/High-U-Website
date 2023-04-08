@@ -75,7 +75,7 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch('http://localhost:3000/api/user_data/getUserData');
+      const response = await fetch(`${process.env.API_URL}/api/user_data/getUserData`);
       const data = await response.json();
       setUser(data);
       setIsLoading(false);
@@ -140,7 +140,7 @@ export default function Profile() {
             setUrl(imageUrl)
 
             // Update the member with the new image URL
-            let response = await fetch("http://localhost:3000/api/user_data/updateUserProfile?id=" + user?._id, {
+            let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
               method: 'POST',
               headers: {
                 Accept: "application/json, text/plain, */*",
@@ -166,7 +166,7 @@ export default function Profile() {
         )
       } else {
         // Update the member without changing the image URL
-        let response = await fetch("http://localhost:3000/api/user_data/updateUserProfile?id=" + user?._id, {
+        let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
           method: 'POST',
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -242,7 +242,7 @@ export default function Profile() {
 
     try {
       // Call the API to update the user's password
-      const response = await fetch("http://localhost:3000/api/user_data/updateUserPassword?id=" + user?._id, {
+      const response = await fetch(`${process.env.API_URL}/api/user_data/updateUserPassword?id=` + user?._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",
