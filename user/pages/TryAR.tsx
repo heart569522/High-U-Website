@@ -67,7 +67,8 @@ type Wig = {
 
 export async function getServerSideProps() {
   try {
-    let wigsResponse = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
+    let apiUrl = process.env.API_URL;
+    let wigsResponse = await fetch(`${apiUrl}/api/wig_data/getAllWigs`);
     let wigs = await wigsResponse.json();
     return {
       props: { wigs: JSON.parse(JSON.stringify(wigs)) }
