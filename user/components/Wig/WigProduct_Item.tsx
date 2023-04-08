@@ -139,8 +139,8 @@ export default function WigProductItem() {
                             )}
                             {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-32 rounded-md" />) : (
                                 <Grid item className="mt-8 space-x-4 max-sm:text-center" >
-                                    <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add Your Favorite</Button>
-                                    <Link href="/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try AR</Button></Link>
+                                    <Button variant="contained" className="w-[45%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add&nbsp;Your&nbsp;Favorite</Button>
+                                    <Link href="/TryAR"><Button variant="contained" className="w-[45%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try&nbsp;AR</Button></Link>
                                 </Grid>
                             )}
                         </Grid>
