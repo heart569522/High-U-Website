@@ -42,9 +42,10 @@ export default function WigBanner() {
                         <Image
                             src={item.image}
                             alt={item.title}
-                            width={1920}
-                            height={700}
+                            width={1400}
+                            height={400}
                             className="w-full object-cover h-full"
+                            priority
                         />
                     </SwiperSlide>
                 ))}

@@ -45,7 +45,7 @@ export default function HomeBackground() {
             // id="bg-image"
             data-aos="fade-left"
             sx={{
-              backgroundImage: `url(${bgCut || bgCutLocal})`,
+              backgroundImage: `url(${bgCutLocal || bgCut})`,
               position: 'absolute',
               top: 0,
               left: 0,

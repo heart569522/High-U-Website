@@ -31,11 +31,11 @@ import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebas
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Image from 'next/image';
 import { getSession, GetSessionParams } from 'next-auth/react';
+import axios from 'axios';
 
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
-import ChangePassword_Profile from '../components/Other/old-ChangePassword_Profile';
 
 
 interface User {
@@ -64,6 +64,8 @@ const theme = createTheme({
   },
 });
 
+const API_URL = "http://localhost:3000";
+
 export default function Profile() {
   const [value, setValue] = useState('1');
   const handleMenuChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -74,15 +76,18 @@ export default function Profile() {
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchUser() {
-      // let apiUrl = process.env.API_URL;
-      let response = await fetch("https://high-u-hairwig.vercel.app/api/user_data/getUserData");
-      let data = await response.json();
-      setUser(data);
-      setIsLoading(false);
-    }
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+        setUser(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    fetchUser();
+    fetchUserData();
   }, []);
 
   const [editFirstname, setEditFirstname] = useState('');
@@ -141,7 +146,7 @@ export default function Profile() {
             setUrl(imageUrl)
 
             // Update the member with the new image URL
-            let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
+            let response = await fetch(`${API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
               method: 'POST',
               headers: {
                 Accept: "application/json, text/plain, */*",
@@ -167,7 +172,7 @@ export default function Profile() {
         )
       } else {
         // Update the member without changing the image URL
-        let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
+        let response = await fetch(`${API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
           method: 'POST',
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -243,7 +248,7 @@ export default function Profile() {
 
     try {
       // Call the API to update the user's password
-      const response = await fetch(`${process.env.API_URL}/api/user_data/updateUserPassword?id=` + user?._id, {
+      const response = await fetch(`${API_URL}/api/user_data/updateUserPassword?id=` + user?._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",

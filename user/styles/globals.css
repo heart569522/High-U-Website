@@ -154,7 +154,9 @@ a {
   top: 80%;
 }
 
-
+.hover-delay:hover {
+  transition: .5 ease-in-out;
+}
 
 @tailwind base;
 @tailwind components;
