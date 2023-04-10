@@ -20,17 +20,14 @@ import {
   SwipeableDrawer,
   FormControl,
   InputLabel,
-  MenuItem
+  MenuItem,
+  Stack,
+  Pagination
 
 } from '@mui/material'
-import Select, { SelectChangeEvent, SelectProps } from '@mui/material/Select';
-import { createTheme, CSSObject, styled, Theme, ThemeProvider, useTheme, } from '@mui/material/styles';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import MuiDrawer from '@mui/material/Drawer';
+import Select from '@mui/material/Select';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 
 import Link from 'next/link'
@@ -100,6 +97,14 @@ export default function Wig(props: Props) {
   const [selectSort, setSelectSort] = useState("");
   const [sortedWigData, setSortedWigData] = useState<Wig[]>([]);
   const [hoverWigImage, setHoverWigImage] = useState<string>("");
+  const [page, setPage] = useState(1);
+
+  const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
+    setPage(newPage);
+  };
+
+  const pageSize = 9;
+  const pageCount = Math.ceil(sortedWigData.length / pageSize);
 
   const handleSortChange = (event: { target: { value: string; }; }) => {
     setSelectSort(event.target.value as string);
@@ -227,43 +232,52 @@ export default function Wig(props: Props) {
           </Grid>
           {/* WIG PRODUCT */}
           <Grid container spacing={2}>
-            {(sortedWigData.length > 0 ? sortedWigData : wigData).map((item, i) => (
-              <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
-                <Link href="/WigProduct">
-                  <Card variant="outlined" sx={{ maxWidth: 320 }}>
-                    <CardActionArea>
-                      <Image
-                        className={`transition duration-400 ease-in-out hover:opacity-90`}
-                        src={hoverWigImage === item.sub_image[0] ? item.sub_image[0] : item.main_image}
-                        alt={item.title}
-                        width={500}
-                        height={700}
-                        priority
-                        onMouseOver={() => setHoverWigImage(item.sub_image[0])}
-                        onMouseOut={() => setHoverWigImage("")}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom component="div" className="text-base mb-2 max-sm:text-xs">
-                          {item.title}
-                        </Typography>
-                        <Typography variant="body2" className="flex justify-end font-bold text-base max-sm:text-xs">
-                          {item.price?.toLocaleString()}&nbsp;฿
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Link>
-              </Grid>
-            ))}
+            {(sortedWigData.length > 0 ? sortedWigData : wigData)
+              .slice((page - 1) * pageSize, page * pageSize)
+              .map((item, i) => (
+                <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
+                  <Link href="/WigProduct">
+                    <Card variant="outlined" sx={{ maxWidth: 320 }}>
+                      <CardActionArea>
+                        <Image
+                          className={`transition duration-400 ease-in-out hover:opacity-90`}
+                          src={hoverWigImage === item.sub_image[0] ? item.sub_image[0] : item.main_image}
+                          alt={item.title}
+                          width={500}
+                          height={700}
+                          priority
+                          onMouseOver={() => setHoverWigImage(item.sub_image[0])}
+                          onMouseOut={() => setHoverWigImage("")}
+                        />
+                        <CardContent>
+                          <Typography gutterBottom component="div" className="text-base mb-2 max-sm:text-xs">
+                            {item.title}
+                          </Typography>
+                          <Typography variant="body2" className="flex justify-end font-bold text-base max-sm:text-xs">
+                            {item.price?.toLocaleString()}&nbsp;฿
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Link>
+                </Grid>
+              ))}
             {!sortedWigData && (
               <Grid item xs={12} className="flex items-center justify-center my-10">
                 <center><EmptyWig /></center>
               </Grid>
             )}
           </Grid>
-
-
-
+          <Box className="flex justify-center mt-6">
+            <Stack spacing={2}>
+              <Pagination
+                count={pageCount}
+                color="primary"
+                page={page}
+                onChange={handleChangePage}
+              />
+            </Stack>
+          </Box>
         </Container>
       </Paper>
       <Footer />
