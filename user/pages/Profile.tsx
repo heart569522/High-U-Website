@@ -454,7 +454,7 @@ export default function Profile() {
                         width={96}
                         height={96}
                         alt={user?.username || ""}
-                        className="w-24 h-24 ml-5 rounded-full max-sm:mx-auto"
+                        className="w-24 h-24 ml-5 rounded-full object-cover max-sm:mx-auto"
                       />
                     </Grid>
                     <Grid item xs={12} sm={6} className="flex items-center justify-end">
