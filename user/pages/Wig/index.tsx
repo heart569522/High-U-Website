@@ -35,17 +35,16 @@ import MailIcon from '@mui/icons-material/Mail';
 
 import Link from 'next/link'
 
-import EmptyWig from '../components/Other/EmptyWig';
-import Navbar from '../components/Navigation/Navigation';
-import WigBanner from "../components/Wig/WigBanner"
-import Footer from '../components/Footer/Footer';
+import EmptyWig from '../../components/Other/EmptyWig';
+import Navbar from '../../components/Navigation/Navigation';
+import WigBanner from "../../components/Wig/WigBanner"
+import Footer from '../../components/Footer/Footer';
 import Head from 'next/head';
 import Image from 'next/image';
-import { AnimatePresence, m } from 'framer-motion'
 
 const theme = createTheme({
   palette: {
-    warning: {
+    primary: {
       main: "#F0CA83",
     },
   },
@@ -56,26 +55,6 @@ const theme = createTheme({
   },
 
 });
-
-const thumbAnim = {
-  show: {
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      ease: 'linear',
-      when: 'beforeChildren',
-    },
-  },
-  hide: {
-    opacity: 0,
-    transition: {
-      duration: 0.3,
-      ease: 'linear',
-      when: 'afterChildren',
-    },
-  },
-}
-
 
 type Props = {
   wigs: [Wig]
@@ -122,7 +101,7 @@ export default function Wig(props: Props) {
   const [sortedWigData, setSortedWigData] = useState<Wig[]>([]);
   const [hoverWigImage, setHoverWigImage] = useState<string>("");
 
-  const handleSortChange = (event: any) => {
+  const handleSortChange = (event: { target: { value: string; }; }) => {
     setSelectSort(event.target.value as string);
     const value = event.target.value as string;
 
