@@ -5,13 +5,33 @@ const addWig = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const client = await clientPromise;
     const db = client.db("high_u");
-    const { title, arImage, mainImage, subImages } = req.body;
+    const {
+      arImage,
+      mainImage,
+      subImages,
+      title,
+      style,
+      type,
+      color,
+      size,
+      price,
+      desc,
+    } = req.body;
 
     const wig = await db.collection("wig").insertOne({
-      title,
       ar_image: arImage,
       main_image: mainImage,
       sub_image: subImages,
+      title,
+      style,
+      type,
+      color,
+      size,
+      price,
+      desc,
+      view: 0,
+      favorite: 0,
+      use: 0,
       createdAt: new Date(Date.now()).toLocaleString("en-GB", {
         day: "2-digit",
         month: "2-digit",

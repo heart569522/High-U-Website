@@ -18,6 +18,8 @@ import { storage } from '../../pages/api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import Head from 'next/head';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleSharpIcon from '@mui/icons-material/RemoveCircleSharp';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 
 type ImageWig = {
@@ -220,11 +222,29 @@ const AddWig = () => {
     if (imageWig.subImages.length < MAX_SUB_IMAGES) {
       setImageWig({
         ...imageWig,
-        subImages: [...imageWig.subImages, {}], // add an empty object to represent the new sub-image
+        subImages: [...imageWig.subImages, ''], // add an empty object to represent the new sub-image
       });
-      setSubImagePreviews([...subImagePreviews, '']);
+      setSubImagePreviews([...subImagePreviews, '']); // add an empty string to represent the preview of the new sub-image
     }
   };
+
+  const handleDeleteSubImage = (index: number) => {
+    if (imageWig.subImages.length > INITIAL_SUB_IMAGES_COUNT) {
+      const updatedSubImages = [...imageWig.subImages];
+      updatedSubImages.splice(index, 1); // Remove the sub-image at the specified index
+
+      setImageWig({
+        ...imageWig,
+        subImages: updatedSubImages, // Update the sub-images array in the state
+      });
+
+      const updatedPreviews = [...subImagePreviews];
+      updatedPreviews.splice(index, 1); // Remove the preview at the specified index
+
+      setSubImagePreviews(updatedPreviews); // Update the sub-image previews in the state
+    }
+  };
+
 
   const previewImage = (file: File, previewId: string) => {
     const reader = new FileReader();
@@ -309,7 +329,6 @@ const AddWig = () => {
     setSubImagePreviews(new Array(INITIAL_SUB_IMAGES_COUNT).fill(""));
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -385,6 +404,7 @@ const AddWig = () => {
         }),
       });
       console.log(response);
+      handleResetAll();
 
       if (!response.ok) {
         throw new Error(await response.text());
@@ -513,7 +533,7 @@ const AddWig = () => {
                 </Box>
               </Grid>
               {imageWig.subImages.map((subImage, index) => (
-                <Grid item xs={12} sm={6} md={3} key={index}>
+                <Grid item xs={12} sm={6} md={3} key={index} className='relative'>
                   <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
                     <input
                       ref={(ref) => (subImageRefs.current[index] = ref)}
@@ -566,18 +586,29 @@ const AddWig = () => {
                       </>
                     )}
                   </Box>
+                  {/* Conditionally render delete button */}
+                  {imageWig.subImages.length > INITIAL_SUB_IMAGES_COUNT && (
+                    <Tooltip title="Remove Sub Image">
+                      <IconButton
+                        onClick={() => handleDeleteSubImage(index)}
+                        className="text-red-400 absolute -top-1 -right-3"
+                        style={{ zIndex: 1 }}
+                      >
+                        <RemoveCircleSharpIcon className="w-8 h-8" fontSize="large" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Grid>
               ))}
-
-              {imageWig.subImages.length < MAX_SUB_IMAGES && (
-                <button
-                  type="button"
-                  className="bg-black text-white"
-                  onClick={handleAddSubImage}
-                >
-                  Add Sub Image
-                </button>
-              )}
+              <Grid item xs={12} sm={6} md={3}>
+                {imageWig.subImages.length < MAX_SUB_IMAGES && (
+                  <Tooltip title="Add Sub Image (Max 6)">
+                    <IconButton onClick={handleAddSubImage} className='text-gray-400'>
+                      <AddCircleIcon className="w-10 h-10" fontSize='large' />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Grid>
             </Grid>
             <Grid container spacing={1} className="flex items-center justify-center py-2">
               <Grid item xs={12} sm={6} md={4}>
@@ -618,7 +649,7 @@ const AddWig = () => {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={type}
-                    label="Age"
+                    label="type"
                     onChange={handleTypeChange}
                     required
                   >
