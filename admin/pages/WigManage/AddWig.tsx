@@ -412,7 +412,7 @@ const AddWig = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Head><title>Wig Manage | High U Administrator</title></Head>
+      <Head><title>Create Wig | High U Administrator</title></Head>
       <Box
         component="main"
         className="p-5 ml-[240px] max-[899px]:ml-0"

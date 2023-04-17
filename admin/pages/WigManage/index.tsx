@@ -657,7 +657,7 @@ export default function WigManage(props: Props) {
                             )}
                             renderTopToolbarCustomActions={({ table }) => (
                                 <Box sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}>
-                                    <Link href="./WigManage/AddWig">
+                                    <Link href="./WigManage/AddWig" target='_blank'>
                                         <Button
                                             className="bg-[#303030] hover:bg-[#666666] text-white"
                                             variant="contained"
