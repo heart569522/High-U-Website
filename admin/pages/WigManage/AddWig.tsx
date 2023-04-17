@@ -25,7 +25,7 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 type ImageWig = {
   arImage: File | null;
   mainImage: File | null;
-  subImages: (File | null | {})[]; // Allow for null values
+  subImages: (File | undefined | {})[]; // Allow for null values
 };
 
 const MAX_SUB_IMAGES = 6;
@@ -76,12 +76,12 @@ const AddWig = () => {
 
   const [arImagePreview, setArImagePreview] = useState<string>('');
   const [mainImagePreview, setMainImagePreview] = useState<string>('');
-  const [subImagePreviews, setSubImagePreviews] = useState<string[]>(new Array(INITIAL_SUB_IMAGES_COUNT).fill('')); // initialize with empty strings
+  const [subImagePreviews, setSubImagePreviews] = useState<string[]>([]);
 
   const arImageRef = useRef<HTMLInputElement>(null);
   const mainImageRef = useRef<HTMLInputElement>(null);
   const subImageRefs = useRef<(HTMLInputElement | null)[]>(new Array(INITIAL_SUB_IMAGES_COUNT).fill(null));
-  const [subImage, setSubImage] = useState<null | File>(null); // define subImage state variable
+  const [subImage, setSubImage] = useState<File | undefined>(undefined) // define subImage state variable
 
   const [messageImage, setMessageImage] = useState('');
 
@@ -89,14 +89,6 @@ const AddWig = () => {
     const { name } = e.target;
 
     if (name === "subImage" && typeof index !== "undefined" && e.target.files) {
-      const subImages = [...imageWig.subImages];
-      subImages[index] = e.target.files[0];
-
-      setImageWig({
-        ...imageWig,
-        subImages,
-      });
-
       const reader = new FileReader();
       reader.onload = () => {
         const img = new Image();
@@ -122,9 +114,12 @@ const AddWig = () => {
             canvas.width = 525;
             canvas.height = 700;
             ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
-            const previews = [...subImagePreviews];
-            previews[index] = canvas.toDataURL();
-            setSubImagePreviews(previews);
+            const croppedDataURL = canvas.toDataURL();
+            setSubImagePreviews(prevPreviews => {
+              const updatedPreviews = [...prevPreviews];
+              updatedPreviews[index] = croppedDataURL;
+              return updatedPreviews;
+            });
           }
         };
         img.src = reader.result as string;
@@ -279,14 +274,14 @@ const AddWig = () => {
 
   const handleSubImageReset = (index: number) => {
     setImageWig((prevImageWig) => {
-      const updatedSubImages: (File | null | {})[] = [...prevImageWig.subImages];
-      updatedSubImages[index] = null; // set to null
+      const updatedSubImages: (File | undefined | {})[] = [...prevImageWig.subImages];
+      updatedSubImages[index] = undefined; // set to undefined
       return {
         ...prevImageWig,
         subImages: updatedSubImages,
       };
     });
-    setSubImage(null); // set subImage state to null
+    setSubImage(undefined); // set subImage state to undefined
     setSubImagePreviews((prevSubImagePreviews) => {
       const updatedSubImagePreviews = [...prevSubImagePreviews];
       updatedSubImagePreviews[index] = ''; // set to empty string
@@ -555,7 +550,7 @@ const AddWig = () => {
                       }}
                     />
                     <Typography className="text-gray-700 font-bold text-center" variant="h5">Sub Image {index + 1}</Typography>
-                    {subImage ? (
+                    {subImage && subImagePreviews[index] ? (
                       <center>
                         <picture>
                           <img
