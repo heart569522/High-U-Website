@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
 import {
   Box,
   Typography,
@@ -12,6 +12,8 @@ import {
   Button,
   Tooltip,
   IconButton,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { storage } from '../../pages/api/firebaseConfig';
@@ -84,6 +86,9 @@ const AddWig = () => {
   const [subImage, setSubImage] = useState<File | undefined>(undefined) // define subImage state variable
 
   const [messageImage, setMessageImage] = useState('');
+
+  const [uploading, setUploading] = useState(false);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
     const { name } = e.target;
@@ -324,8 +329,74 @@ const AddWig = () => {
     setSubImagePreviews(new Array(INITIAL_SUB_IMAGES_COUNT).fill(""));
   };
 
+  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'main' | 'sub', width = 525, height = 700): Promise<File> => {
+    if (type === 'main' || type === 'sub') {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onload = (event) => {
+          const image = new Image();
+          image.src = event.target?.result as string;
+          image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              const aspectRatio = image.width / image.height;
+              let newWidth = width;
+              let newHeight = height;
+              if (aspectRatio > width / height) {
+                // Image is wider than the target aspect ratio, so reduce its width
+                newWidth = Math.round(height * aspectRatio);
+              } else {
+                // Image is taller than the target aspect ratio, so reduce its height
+                newHeight = Math.round(width / aspectRatio);
+              }
+              canvas.width = newWidth;
+              canvas.height = newHeight;
+              ctx.drawImage(image, 0, 0, newWidth, newHeight);
+              const croppedCanvas = document.createElement('canvas');
+              const croppedCtx = croppedCanvas.getContext('2d');
+              if (croppedCtx) {
+                const x = (newWidth - width) / 2;
+                const y = (newHeight - height) / 2;
+                croppedCanvas.width = width;
+                croppedCanvas.height = height;
+                croppedCtx.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+                croppedCanvas.toBlob((blob) => {
+                  if (blob) {
+                    const typeParts = blob.type.split('/');
+                    const fileType = typeParts[1];
+                    const customType = `${fileType};name=${fileName}`;
+                    const customBlob = new Blob([blob], { type: 'image/png' });
+                    resolve(new File([customBlob], fileName));
+                  } else {
+                    reject(new Error('Failed to convert canvas to blob'));
+                  }
+                }, 'image/png', 1);
+              } else {
+                reject(new Error('Failed to get canvas context'));
+              }
+            } else {
+              reject(new Error('Failed to get canvas context'));
+            }
+          };
+          image.onerror = (error) => {
+            reject(error);
+          };
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    } else {
+      return Promise.reject(new Error('Invalid image type'));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setUploading(true);
     e.preventDefault();
+
     try {
       if (!imageWig.arImage) {
         throw new Error('File is required')
@@ -335,10 +406,20 @@ const AddWig = () => {
         throw new Error('File is required')
       }
 
-      // Upload all images to storage
+      const mainImageCrop = await resizeAndCropImage(imageWig.mainImage, 'mainImage.png', 'main');
+      const subImageCrops = await Promise.all(
+        imageWig.subImages.map((subImage, index) => {
+          if (!(subImage instanceof File)) {
+            throw new Error(`Invalid file object at index ${index + 1}`);
+          }
+          return resizeAndCropImage(subImage, `subImage.png`, 'sub');
+        })
+      );
+
+
       const arImageName = imageWig.arImage.name;
-      const mainImageName = imageWig.mainImage.name;
-      const subImageNames = (imageWig.subImages as File[]).map((subImage) => subImage.name);
+      const mainImageName = mainImageCrop.name;
+      const subImageNames = (subImageCrops as File[]).map((subImage) => subImage.name);
 
       const arImageRef = ref(
         storage,
@@ -349,22 +430,23 @@ const AddWig = () => {
         `wig_images/${title}/${'MAIN_' + mainImageName}`
       );
       const subImageRefs = subImageNames.map((name, i) =>
-        ref(storage, `wig_images/${title}/sub_images/${'SUB_' + i + '_' + name}`)
+        ref(storage, `wig_images/${title}/sub_images/${'SUB_' + i + 1 + '_' + name}`)
       );
 
       const arUploadTask = uploadBytesResumable(
         arImageRef,
         imageWig.arImage
       );
-      const mainUploadTask = uploadBytesResumable(
-        mainImageRef,
-        imageWig.mainImage
-      );
-      const subUploadTasks = imageWig.subImages.map((subImage, index) => {
+      const mainUploadTask = uploadBytesResumable(mainImageRef, mainImageCrop, {
+        contentType: 'image/png'
+      });
+      const subUploadTasks = subImageCrops.map((subImage, index) => {
         if (!(subImage instanceof File)) {
           throw new Error(`Invalid file object at index ${index}`);
         }
-        return uploadBytesResumable(subImageRefs[index], subImage);
+        return uploadBytesResumable(subImageRefs[index], subImage, {
+          contentType: 'image/png'
+        });
       });
       // Wait for all images to finish uploading
       const [arSnapshot, mainSnapshot, ...subSnapshots] = await Promise.all([
@@ -406,7 +488,8 @@ const AddWig = () => {
       }
     } catch (error) {
       console.error(error);
-
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -427,6 +510,13 @@ const AddWig = () => {
               </Typography>
             </Grid>
           </Grid>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={uploading}
+          >
+            <CircularProgress color="inherit" />
+            <Typography>&nbsp;Uploading...</Typography>
+          </Backdrop>
           <form onSubmit={handleSubmit} onReset={handleResetAll}>
             <Grid container spacing={1} className="flex items-center justify-start py-6">
               <Grid item xs={12} sm={6} md={3}>
@@ -595,11 +685,11 @@ const AddWig = () => {
                   )}
                 </Grid>
               ))}
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} className='flex justify-center items-center'>
                 {imageWig.subImages.length < MAX_SUB_IMAGES && (
                   <Tooltip title="Add Sub Image (Max 6)">
                     <IconButton onClick={handleAddSubImage} className='text-gray-400'>
-                      <AddCircleIcon className="w-10 h-10" fontSize='large' />
+                      <AddCircleIcon className="w-20 h-20 max-[599px]:w-12 max-[599px]:h-12" fontSize='large' />
                     </IconButton>
                   </Tooltip>
                 )}
@@ -806,7 +896,7 @@ const AddWig = () => {
             </Grid>
             <Grid container spacing={1} className="flex justify-center">
               <Grid item>
-                <Button type="submit" className="bg-[#f0ca83] hover:bg-[#f6b741] font-bold text-[#303030] py-2 px-3">
+                <Button type="submit" disabled={uploading} className="bg-[#f0ca83] hover:bg-[#f6b741] font-bold text-[#303030] py-2 px-3">
                   Submit
                 </Button>
               </Grid>
