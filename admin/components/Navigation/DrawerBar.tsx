@@ -96,12 +96,6 @@ export default function DrawerBar() {
             <ListItemText primary="Wigs Manage" />
           </ListItemButton>
         </ListItem>
-        <ListItem key="AR Manage" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../ARManage')}>
-            <AspectRatioIcon className="mr-3" />
-            <ListItemText primary="AR Manage" />
-          </ListItemButton>
-        </ListItem>
         <ListItem key="Member Manage" className="py-3">
           <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../MemberManage')}>
             <GroupsIcon className="mr-3" />

@@ -27,7 +27,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportToCsv } from 'export-to-csv';
-
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 import { useRouter } from 'next/router';
@@ -332,59 +332,28 @@ export default function MemberManage(props: Props) {
                 </Box>
               )}
               renderTopToolbarCustomActions={({ table }) => (
-                <Box
-                  sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
-                >
-                  <Button
-                    className="bg-[#303030] hover:bg-[#666666] text-white"
-                    onClick={() => setCreateModalOpen(true)}
-                    variant="contained"
-                  >
-                    Create New Member
-                  </Button>
-                  <Button
-                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                    //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
-                    onClick={handleExportData}
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export All Data
-                  </Button>
-                  {/* <Button
-                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                    disabled={table.getPrePaginationRowModel().rows.length === 0}
-                    //export all rows, including from the next page, (still respects filtering and sorting)
-                    onClick={() =>
-                      handleExportRows(table.getPrePaginationRowModel().rows)
-                    }
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export All Rows
-                  </Button>
-                  <Button
-                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                    disabled={table.getRowModel().rows.length === 0}
-                    //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-                    onClick={() => handleExportRows(table.getRowModel().rows)}
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export Page Rows
-                  </Button> */}
-                  <Button
-                    className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                    disabled={
-                      !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-                    }
-                    //only export selected rows
-                    onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export Selected Rows
-                  </Button>
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  <Tooltip title="Create Member">
+                    <IconButton
+                      onClick={() => setCreateModalOpen(true)}
+                    >
+                      <PersonAddIcon className='h-8 w-8' />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Export">
+                    <span>
+                      <Button
+                        className="bg-[#ffffff] hover:bg-[#5c5c5c] pt-2 text-[#303030] hover:text-white"
+                        disabled={
+                          !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+                        }
+                        //only export selected rows
+                        onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+                      >
+                        <FileDownloadIcon className='h-8 w-8' />
+                      </Button>
+                    </span>
+                  </Tooltip>
                 </Box>
               )}
             />

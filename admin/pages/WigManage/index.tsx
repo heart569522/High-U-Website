@@ -31,6 +31,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete, Edit } from '@mui/icons-material';
 import PreviewIcon from '@mui/icons-material/Preview';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { ExportToCsv } from 'export-to-csv';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -423,14 +424,14 @@ export default function WigManage(props: Props) {
                                     <Modal
                                         open={openDetailModal}
                                         onClose={handleCloseDetailModal}
-                                        className="flex justify-center items-center max-lg:overflow-scroll"
+                                        className="flex justify-center items-center"
                                     >
-                                        <Box className="w-full h-auto bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-fit">
+                                        <Box className="w-full bg-gray-100 rounded-lg p-5 max-w-5xl max-lg:max-w-3xl max-[899px]:w-[90%] max-[899px]:h-[90%] max-[899px]:overflow-y-scroll">
                                             <Grid container spacing={2}>
-                                                <Grid item sm={12} md={6}>
-                                                    <Box className="w-full flex content-center items-center justify-center max-[899px]:max-w-sm">
+                                                <Grid item xs={12} sm={12} md={6}>
+                                                    <Box className="w-full flex content-center items-center justify-center">
                                                         <Grid container spacing={2}>
-                                                            <Grid item md={6}>
+                                                            <Grid item xs={6} md={6}>
                                                                 <Tooltip arrow title="Main&nbsp;Image">
                                                                     <Image
                                                                         src={selectedRow?.main_image || defaultARImage}
@@ -441,7 +442,7 @@ export default function WigManage(props: Props) {
                                                                     />
                                                                 </Tooltip>
                                                             </Grid>
-                                                            <Grid item md={6}>
+                                                            <Grid item xs={6} md={6}>
                                                                 <Tooltip arrow title="AR&nbsp;Image">
                                                                     <Image
                                                                         src={selectedRow?.ar_image || defaultARImage}
@@ -452,7 +453,7 @@ export default function WigManage(props: Props) {
                                                                     />
                                                                 </Tooltip>
                                                             </Grid>
-                                                            <Grid item md={12}>
+                                                            <Grid item xs={12} md={12}>
                                                                 <Swiper
                                                                     style={{
                                                                         "--swiper-navigation-color": "#fff",
@@ -481,12 +482,12 @@ export default function WigManage(props: Props) {
                                                         </Grid>
                                                     </Box>
                                                 </Grid>
-                                                <Grid item sm={12} md={6} className="text-[#303030]">
+                                                <Grid item xs={12} md={6} className="text-[#303030]">
                                                     <Typography className="text-2xl font-bold max-lg:text-lg">{selectedRow?.title}</Typography>
                                                     <Divider className="my-2 border-[#303030]" />
                                                     <Typography className="text-base text-[#696969] max-lg:text-sm">{selectedRow?.desc}</Typography>
                                                     <Grid container spacing={2} className="py-2">
-                                                        <Grid item md={4}>
+                                                        <Grid item xs={12} md={4}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Style</Typography>
                                                             <TextField
                                                                 type='text'
@@ -499,7 +500,7 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={4}>
+                                                        <Grid item xs={6} md={4}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Type</Typography>
                                                             <TextField
                                                                 type='text'
@@ -512,7 +513,7 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={4}>
+                                                        <Grid item xs={6} md={4}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Color</Typography>
                                                             <TextField
                                                                 type='text'
@@ -525,10 +526,10 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={12}>
+                                                        <Grid item xs={12} md={12}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Size (Inch)</Typography>
                                                             <Grid container spacing={2}>
-                                                                <Grid item md={3}>
+                                                                <Grid item xs={6} md={3}>
                                                                     <TextField
                                                                         type='text'
                                                                         label="Length"
@@ -541,7 +542,7 @@ export default function WigManage(props: Props) {
                                                                         }}
                                                                     />
                                                                 </Grid>
-                                                                <Grid item md={3}>
+                                                                <Grid item xs={6} md={3}>
                                                                     <TextField
                                                                         type='text'
                                                                         label="Circumference"
@@ -554,7 +555,7 @@ export default function WigManage(props: Props) {
                                                                         }}
                                                                     />
                                                                 </Grid>
-                                                                <Grid item md={3}>
+                                                                <Grid item xs={6} md={3}>
                                                                     <TextField
                                                                         type='text'
                                                                         label="Ear-to-Ear"
@@ -567,7 +568,7 @@ export default function WigManage(props: Props) {
                                                                         }}
                                                                     />
                                                                 </Grid>
-                                                                <Grid item md={3}>
+                                                                <Grid item xs={6} md={3}>
                                                                     <TextField
                                                                         type='text'
                                                                         label="Front-to-Back"
@@ -582,7 +583,7 @@ export default function WigManage(props: Props) {
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
-                                                        <Grid item md={3}>
+                                                        <Grid item xs={6} md={3}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Price(฿)</Typography>
                                                             <TextField
                                                                 type='text'
@@ -595,7 +596,7 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={3}>
+                                                        <Grid item xs={6} md={3}>
                                                             <Typography className="text-[#303030] font-bold pb-1">View</Typography>
                                                             <TextField
                                                                 type='text'
@@ -608,7 +609,7 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={3}>
+                                                        <Grid item xs={6} md={3}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Favorite</Typography>
                                                             <TextField
                                                                 type='text'
@@ -621,7 +622,7 @@ export default function WigManage(props: Props) {
                                                                 }}
                                                             />
                                                         </Grid>
-                                                        <Grid item md={3}>
+                                                        <Grid item xs={6} md={3}>
                                                             <Typography className="text-[#303030] font-bold pb-1">Try&nbsp;AR</Typography>
                                                             <TextField
                                                                 type='text'
@@ -640,13 +641,11 @@ export default function WigManage(props: Props) {
                                         </Box>
                                     </Modal>
                                     <Tooltip arrow placement="bottom" title="Edit">
-                                        <>
-                                            <Link href={`./WigManage/[id]`} as={`./WigManage/${row.original._id}`}>
-                                                <IconButton className="hover:text-amber-500">
-                                                    <Edit />
-                                                </IconButton>
-                                            </Link>
-                                        </>
+                                        <Link href={`./WigManage/[id]`} as={`./WigManage/${row.original._id}`}>
+                                            <IconButton className="hover:text-amber-500">
+                                                <Edit />
+                                            </IconButton>
+                                        </Link>
                                     </Tooltip>
                                     <Tooltip arrow placement="right" title="Delete">
                                         <IconButton className="hover:text-red-500" onClick={() => handleDeleteRow(row)}>
@@ -656,36 +655,28 @@ export default function WigManage(props: Props) {
                                 </Box>
                             )}
                             renderTopToolbarCustomActions={({ table }) => (
-                                <Box sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}>
+                                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                                     <Link href="./WigManage/AddWig" target='_blank'>
-                                        <Button
-                                            className="bg-[#303030] hover:bg-[#666666] text-white"
-                                            variant="contained"
-                                        >
-                                            Create New Wig
-                                        </Button>
+                                        <Tooltip title="Create Wig">
+                                            <IconButton>
+                                                <AddCircleIcon className='h-8 w-8' />
+                                            </IconButton>
+                                        </Tooltip>
                                     </Link>
-                                    <Button
-                                        className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                                        //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
-                                        onClick={handleExportData}
-                                        startIcon={<FileDownloadIcon />}
-                                        variant="contained"
-                                    >
-                                        Export All Data
-                                    </Button>
-                                    <Button
-                                        className="bg-[#ffffff] hover:bg-[#303030] text-black hover:text-white"
-                                        disabled={
-                                            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-                                        }
-                                        //only export selected rows
-                                        onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-                                        startIcon={<FileDownloadIcon />}
-                                        variant="contained"
-                                    >
-                                        Export Selected Rows
-                                    </Button>
+                                    <Tooltip title="Export">
+                                        <span>
+                                            <Button
+                                                className="bg-[#ffffff] pt-2 hover:bg-[#5c5c5c] text-[#303030] hover:text-white"
+                                                disabled={
+                                                    !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+                                                }
+                                                //only export selected rows
+                                                onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+                                            >
+                                                <FileDownloadIcon className='h-8 w-8' />
+                                            </Button>
+                                        </span>
+                                    </Tooltip>
                                 </Box>
                             )}
                         />
