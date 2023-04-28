@@ -641,7 +641,7 @@ export default function WigManage(props: Props) {
                                         </Box>
                                     </Modal>
                                     <Tooltip arrow placement="bottom" title="Edit">
-                                        <Link href={`./WigManage/[id]`} as={`./WigManage/${row.original._id}`}>
+                                        <Link target='_blank' href={`./WigManage/[id]`} as={`./WigManage/${row.original._id}`}>
                                             <IconButton className="hover:text-amber-500">
                                                 <Edit />
                                             </IconButton>

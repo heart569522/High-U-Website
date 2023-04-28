@@ -10,7 +10,7 @@ const userSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
         const { email, password } = req.body;
 
         // Look up the user in the database by their email
-        const member = await db.collection("member").findOne({ email });
+        const member = await db.collection("admin").findOne({ email });
 
         if (!member) {
             // User with the given email not found

@@ -168,6 +168,85 @@ a {
   object-fit: cover;
 }
 
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  transition: .3s;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #b5b5b5;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* border-radius: 10px; */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  transition: .3s;
+}
+
+/* Arrow buttons (up/down) */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Corner between vertical and horizontal scrollbars */
+::-webkit-scrollbar-corner {
+  background: #b5b5b5;
+}
+
+/* Width of the horizontal scrollbar */
+::-webkit-scrollbar-horizontal {
+  height: 8px;
+}
+
+/* Track of the horizontal scrollbar */
+::-webkit-scrollbar-horizontal-track {
+  background: #b5b5b5;
+}
+
+/* Handle of the horizontal scrollbar */
+::-webkit-scrollbar-horizontal-thumb {
+  background: #888;
+  /* border-radius: 10px; */
+}
+
+/* Handle on hover of the horizontal scrollbar */
+::-webkit-scrollbar-horizontal-thumb:hover {
+  background: #555;
+  transition: .3s;
+}
+
+/* Width of the vertical scrollbar */
+::-webkit-scrollbar-vertical {
+  width: 8px;
+}
+
+/* Track of the vertical scrollbar */
+::-webkit-scrollbar-vertical-track {
+  background: #b5b5b5;
+}
+
+/* Handle of the vertical scrollbar */
+::-webkit-scrollbar-vertical-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover of the vertical scrollbar */
+::-webkit-scrollbar-vertical-thumb:hover {
+  background: #555;
+  transition: .3s;
+}
+
+
+
 
 @tailwind base;
 @tailwind components;

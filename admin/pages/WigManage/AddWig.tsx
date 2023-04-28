@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   Box,
   Typography,
@@ -14,6 +14,8 @@ import {
   IconButton,
   Backdrop,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { storage } from '../../pages/api/firebaseConfig';
@@ -86,50 +88,66 @@ const AddWig = () => {
   const [subImage, setSubImage] = useState<File | undefined>(undefined) // define subImage state variable
 
   const [messageImage, setMessageImage] = useState('');
-
   const [uploading, setUploading] = useState(false);
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
 
+  const handleCloseAlertSuccess = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertSuccess(false);
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+  const handleCloseAlertError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertError(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | undefined = undefined) => {
     const { name } = e.target;
+    console.log('index:', index);
 
-    if (name === "subImage" && typeof index !== "undefined" && e.target.files) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            const srcRatio = img.width / img.height;
-            const destRatio = 525 / 700;
-            let cropWidth = img.width;
-            let cropHeight = img.height;
-            let offsetX = 0;
-            let offsetY = 0;
+    if (name === 'subImage' && typeof index !== 'undefined') {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              const srcRatio = img.width / img.height;
+              const destRatio = 525 / 700;
+              let cropWidth = img.width;
+              let cropHeight = img.height;
+              let offsetX = 0;
+              let offsetY = 0;
 
-            if (srcRatio > destRatio) {
-              cropWidth = img.height * destRatio;
-              offsetX = (img.width - cropWidth) / 2;
-            } else if (srcRatio < destRatio) {
-              cropHeight = img.width / destRatio;
-              offsetY = (img.height - cropHeight) / 2;
+              if (srcRatio > destRatio) {
+                cropWidth = img.height * destRatio;
+                offsetX = (img.width - cropWidth) / 2;
+              } else if (srcRatio < destRatio) {
+                cropHeight = img.width / destRatio;
+                offsetY = (img.height - cropHeight) / 2;
+              }
+
+              canvas.width = 525;
+              canvas.height = 700;
+              ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
+              const updatedSubImagePreviews = [...subImagePreviews];
+              updatedSubImagePreviews[index] = canvas.toDataURL();
+              console.log('updatedSubImagePreviews:', updatedSubImagePreviews);
+              setSubImagePreviews(updatedSubImagePreviews);
             }
-
-            canvas.width = 525;
-            canvas.height = 700;
-            ctx.drawImage(img, offsetX, offsetY, cropWidth, cropHeight, 0, 0, 525, 700);
-            const croppedDataURL = canvas.toDataURL();
-            setSubImagePreviews(prevPreviews => {
-              const updatedPreviews = [...prevPreviews];
-              updatedPreviews[index] = croppedDataURL;
-              return updatedPreviews;
-            });
-          }
+          };
+          img.src = reader.result as string;
         };
-        img.src = reader.result as string;
-      };
-      reader.readAsDataURL(e.target.files[0]);
+        reader.readAsDataURL(file);
+      }
     } else if (e.target.files) {
       setImageWig({
         ...imageWig,
@@ -394,6 +412,7 @@ const AddWig = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setAlertSuccess(false);
     setUploading(true);
     e.preventDefault();
 
@@ -423,14 +442,14 @@ const AddWig = () => {
 
       const arImageRef = ref(
         storage,
-        `wig_images/${title}/${'AR_' + arImageName}`
+        `wig_images/${title}/${'AR_Image'}`
       );
       const mainImageRef = ref(
         storage,
-        `wig_images/${title}/${'MAIN_' + mainImageName}`
+        `wig_images/${title}/${'MAIN_Image'}`
       );
       const subImageRefs = subImageNames.map((name, i) =>
-        ref(storage, `wig_images/${title}/sub_images/${'SUB_' + i + 1 + '_' + name}`)
+        ref(storage, `wig_images/${title}/sub_images/${'SUB_Image_' + i}`)
       );
 
       const arUploadTask = uploadBytesResumable(
@@ -490,6 +509,7 @@ const AddWig = () => {
       console.error(error);
     } finally {
       setUploading(false);
+      setAlertSuccess(true);
     }
   }
 
@@ -515,8 +535,18 @@ const AddWig = () => {
             open={uploading}
           >
             <CircularProgress color="inherit" />
-            <Typography>&nbsp;Uploading...</Typography>
+            <Typography>&nbsp;Creating...</Typography>
           </Backdrop>
+          <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
+            <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
+              Create New Wig Successfully!
+            </Alert>
+          </Snackbar>
+          <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError}>
+            <Alert onClose={handleCloseAlertError} severity="error" sx={{ width: '100%' }}>
+              Create New Wig Error!
+            </Alert>
+          </Snackbar>
           <form onSubmit={handleSubmit} onReset={handleResetAll}>
             <Grid container spacing={1} className="flex items-center justify-start py-6">
               <Grid item xs={12} sm={6} md={3}>

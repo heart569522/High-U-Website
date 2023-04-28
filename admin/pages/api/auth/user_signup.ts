@@ -14,7 +14,7 @@ const userSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
       password
     } = req.body;
 
-    const member = await db.collection("member").insertOne({
+    const member = await db.collection("admin").insertOne({
       image,
       firstname: firstname,
       lastname: lastname,

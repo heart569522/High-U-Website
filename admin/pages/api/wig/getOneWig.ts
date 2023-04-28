@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb"
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../../lib/mongodb';
 
-const getOneMember = async (req: NextApiRequest, res: NextApiResponse) => {
+const getOneWig = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const client = await clientPromise;
         const db = client.db("high_u");
@@ -13,16 +13,16 @@ const getOneMember = async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
 
-        const member = await db.collection("member").findOne({
+        const wig = await db.collection("wig").findOne({
             _id: new ObjectId(id)
         });
 
-        if (!member) {
-            res.status(404).json({ message: 'Member not found' });
+        if (!wig) {
+            res.status(404).json({ message: 'Wig not found' });
             return;
         }
 
-        res.status(200).json(member);
+        res.status(200).json(wig);
 
     } catch (e: any) {
         console.error(e);
@@ -30,4 +30,4 @@ const getOneMember = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 }
 
-export default getOneMember;
+export default getOneWig;

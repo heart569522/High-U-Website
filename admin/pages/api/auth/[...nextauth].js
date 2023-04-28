@@ -20,7 +20,7 @@ export default NextAuth({
         try {
           const client = await clientPromise;
           const db = client.db("high_u");
-          const collection = db.collection("member");
+          const collection = db.collection("admin");
           const user = await collection.findOne({ email: credentials.email });
           if (user && user.password === credentials.password) {
             console.log("User authenticated successfully.");
