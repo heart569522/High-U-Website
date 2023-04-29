@@ -263,7 +263,6 @@ const AddWig = () => {
     }
   };
 
-
   const previewImage = (file: File, previewId: string) => {
     const reader = new FileReader();
     const preview = document.getElementById(previewId) as HTMLImageElement;
@@ -501,15 +500,16 @@ const AddWig = () => {
       });
       console.log(response);
       handleResetAll();
+      setAlertSuccess(true);
 
       if (!response.ok) {
         throw new Error(await response.text());
       }
     } catch (error) {
       console.error(error);
+      setAlertError(true)
     } finally {
       setUploading(false);
-      setAlertSuccess(true);
     }
   }
 

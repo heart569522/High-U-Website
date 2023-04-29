@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Typography,
@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { storage } from '../../pages/api/firebaseConfig';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { ref, uploadBytesResumable, getDownloadURL, UploadTaskSnapshot } from 'firebase/storage'
 import Head from 'next/head';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -145,9 +145,9 @@ export async function getStaticPaths() {
 }
 
 type ImageWig = {
-  arImage: File | String | null;
-  mainImage: File | String | null;
-  subImages: (File | String | undefined | null)[];
+  arImage: File | null;
+  mainImage: File | null;
+  subImages: (File | undefined | {})[]; // Allow for null values
 };
 
 function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, type, color, size, price, desc } }: ContentPageProps) {
@@ -170,14 +170,54 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
     }
   };
 
-  const [imageWig, setImageWig] = useState<ImageWig>({
-    arImage: ar_image,
-    mainImage: main_image,
-    subImages: sub_image ? sub_image.map((url) => ({ url })) : new Array(INITIAL_SUB_IMAGES_COUNT).fill({}), // initialize with empty objects if sub_image is not defined
-  });
+  async function createFileFromUrl(url: string, fileName: string): Promise<File> {
+    const response = await fetch(url);
+    const data = await response.blob();
+    const type = response.headers.get("content-type");
+    return new File([data], fileName, { type: type !== null ? type : undefined });
+  }
 
-  const [arImagePreview, setArImagePreview] = useState<string>(ar_image);
-  const [mainImagePreview, setMainImagePreview] = useState<string>(main_image);
+  const [imageWig, setImageWig] = useState<ImageWig>({
+    arImage: null,
+    mainImage: null,
+    subImages: sub_image
+      ? sub_image.map((url) => ({ url, file: null })) // initialize with null file values
+      : new Array(INITIAL_SUB_IMAGES_COUNT).fill({}), // initialize with empty objects if sub_image is not defined
+  });
+  
+  useEffect(() => {
+    // Fetch and set the arImage
+    if (ar_image) {
+      createFileFromUrl(ar_image, "arImage.png").then((file) => {
+        setImageWig((prevState) => ({ ...prevState, arImage: file }));
+      });
+    }
+  
+    // Fetch and set the mainImage
+    if (main_image) {
+      createFileFromUrl(main_image, "mainImage.png").then((file) => {
+        setImageWig((prevState) => ({ ...prevState, mainImage: file }));
+      });
+    }
+  
+    // Upload and set the subImages
+    if (sub_image) {
+      Promise.all(
+        sub_image.map(async (url) => {
+          const file = await createFileFromUrl(url, "subImage.png");
+          return file; // only return the File object, not an object with url and file properties
+        })
+      ).then((subImages) => {
+        setImageWig((prevState) => ({
+          ...prevState,
+          subImages: subImages,
+        }));
+      });
+    }
+  }, [ar_image, main_image, sub_image, setImageWig]);
+
+  const [arImagePreview, setArImagePreview] = useState<string | null>(ar_image ? ar_image.toString() : null);
+  const [mainImagePreview, setMainImagePreview] = useState<string | null>(main_image ? main_image.toString() : null);
   const [subImagePreviews, setSubImagePreviews] = useState<string[]>(sub_image.map(image => image.toString()));
 
   const arImageRef = useRef<HTMLInputElement>(null);
@@ -394,7 +434,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
 
   const handleSubImageReset = (index: number) => {
     setImageWig((prevImageWig) => {
-      const updatedSubImages: (String | File | null | undefined)[] = [...prevImageWig.subImages];
+      const updatedSubImages: (File | undefined | {})[] = [...prevImageWig.subImages];
       updatedSubImages[index] = undefined; // set to undefined
       return {
         ...prevImageWig,
@@ -425,6 +465,188 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
       return updatedSubImagePreviews;
     });
   };
+
+  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'main' | 'sub', width = 525, height = 700): Promise<File> => {
+    if (type === 'main' || type === 'sub') {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(imageFile);
+        reader.onload = (event) => {
+          const image = new Image();
+          image.src = event.target?.result as string;
+          image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              const aspectRatio = image.width / image.height;
+              let newWidth = width;
+              let newHeight = height;
+              if (aspectRatio > width / height) {
+                // Image is wider than the target aspect ratio, so reduce its width
+                newWidth = Math.round(height * aspectRatio);
+              } else {
+                // Image is taller than the target aspect ratio, so reduce its height
+                newHeight = Math.round(width / aspectRatio);
+              }
+              canvas.width = newWidth;
+              canvas.height = newHeight;
+              ctx.drawImage(image, 0, 0, newWidth, newHeight);
+              const croppedCanvas = document.createElement('canvas');
+              const croppedCtx = croppedCanvas.getContext('2d');
+              if (croppedCtx) {
+                const x = (newWidth - width) / 2;
+                const y = (newHeight - height) / 2;
+                croppedCanvas.width = width;
+                croppedCanvas.height = height;
+                croppedCtx.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+                croppedCanvas.toBlob((blob) => {
+                  if (blob) {
+                    const typeParts = blob.type.split('/');
+                    const fileType = typeParts[1];
+                    const customType = `${fileType};name=${fileName}`;
+                    const customBlob = new Blob([blob], { type: 'image/png' });
+                    resolve(new File([customBlob], fileName));
+                  } else {
+                    reject(new Error('Failed to convert canvas to blob'));
+                  }
+                }, 'image/png', 1);
+              } else {
+                reject(new Error('Failed to get canvas context'));
+              }
+            } else {
+              reject(new Error('Failed to get canvas context'));
+            }
+          };
+          image.onerror = (error) => {
+            reject(error);
+          };
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    } else {
+      return Promise.reject(new Error('Invalid image type'));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setAlertSuccess(false);
+    setUploading(true);
+    e.preventDefault();
+
+    try {
+      if (!imageWig.arImage) {
+        throw new Error('File is required')
+      }
+
+      if (!imageWig.mainImage) {
+        throw new Error('File is required')
+      }
+
+      const mainImageCrop = await resizeAndCropImage(imageWig.mainImage, 'mainImage.png', 'main');
+      const subImageCrops = await Promise.all(
+        imageWig.subImages.map((subImage, index) => {
+          if (typeof subImage === 'string') {
+            return subImage;
+          } else if (!(subImage instanceof File || subImage === null || subImage === undefined)) {
+            throw new Error(`Invalid file object at index ${index + 1}`);
+          } else if (subImage instanceof File) {
+            return resizeAndCropImage(subImage, `subImage_${index}.png`, 'sub');
+          } else {
+            return subImage;
+          }
+        })
+      );
+
+      const arImageName = imageWig.arImage.name;
+      const mainImageName = mainImageCrop.name;
+      const subImageNames = (subImageCrops as (File | string)[]).map((subImage, i) =>
+        typeof subImage === 'string' ? `subImage_${i}.png` : subImage.name
+      );
+
+      const arImageRef = ref(
+        storage,
+        `wig_images/${title}/${'AR_Image'}`
+      );
+      const mainImageRef = ref(
+        storage,
+        `wig_images/${title}/${'MAIN_Image'}`
+      );
+      const subImageRefs = subImageNames.map((name, i) =>
+        ref(storage, `wig_images/${title}/sub_images/${name}`)
+      );
+
+      const arUploadTask = uploadBytesResumable(
+        arImageRef,
+        imageWig.arImage
+      );
+      const mainUploadTask = uploadBytesResumable(mainImageRef, mainImageCrop, {
+        contentType: 'image/png'
+      });
+      const subUploadTasks = subImageCrops.map((subImage, index) => {
+        if (!(subImage instanceof File)) {
+          return subImage;
+        }
+        return uploadBytesResumable(subImageRefs[index], subImage, {
+          contentType: 'image/png'
+        });
+      });
+      // Wait for all images to finish uploading
+      const [arSnapshot, mainSnapshot, ...subSnapshots] = await Promise.all([
+        arUploadTask,
+        mainUploadTask,
+        ...subUploadTasks,
+      ]);
+
+      const arImageUrl = await getDownloadURL(arSnapshot.ref);
+      const mainImageUrl = await getDownloadURL(mainSnapshot.ref);
+      const subImageUrls = await Promise.all(
+        subSnapshots.map((snapshot) => {
+          if (typeof snapshot === "string") {
+            return snapshot; // return the string value as is
+          } else if (snapshot && snapshot.ref) {
+            return getDownloadURL(snapshot.ref);
+          } else {
+            throw new Error(`Invalid snapshot object: ${snapshot}`);
+          }
+        })
+      );
+
+      // Add wig data to database
+      const response = await fetch(`${API_URL}/api/wig/updateWig?id=` + _id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: wigTitle,
+          style: wigStyle,
+          type: wigType,
+          color: wigColor,
+          size: wigSize,
+          price: wigPrice,
+          desc: wigDesc,
+          arImage: arImageUrl,
+          mainImage: mainImageUrl,
+          subImages: subImageUrls,
+        }),
+      });
+      console.log(response);
+      // handleResetAll();
+      setAlertSuccess(true);
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+      window.location.href = '../WigManage'
+    } catch (error) {
+      console.error(error);
+      setAlertError(true)
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -460,7 +682,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
               Update Wig Error!
             </Alert>
           </Snackbar>
-          <form >
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={1} className="flex items-center justify-start py-6">
               <Grid item xs={12} sm={6} md={3}>
                 <Box className="px-6 pt-4 pb-8 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer">
@@ -483,7 +705,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                     <center>
                       <picture>
                         <img
-                          src={arImagePreview}
+                          src={arImagePreview || ar_image}
                           alt="AR Image Preview"
                           className="rounded-lg object-contain h-[300px] w-52 py-2"
                         />
@@ -532,7 +754,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                     <center>
                       <picture>
                         <img
-                          src={mainImagePreview}
+                          src={mainImagePreview || main_image}
                           alt="Main Image Preview"
                           className="rounded-lg object-contain h-[300px] w-52 py-2"
                         />
@@ -717,7 +939,9 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                       onChange={(e) => {
                         const parsedValue = parseInt(e.target.value);
                         if (!isNaN(parsedValue) && parsedValue >= 0) {
-                          setWigSize([parsedValue, size[1], size[2], size[3]]);
+                          setWigSize([parsedValue, wigSize[1], wigSize[2], wigSize[3]]);
+                        } else {
+                          setWigSize([0, wigSize[1], wigSize[2], wigSize[3]]);
                         }
                       }}
                       onKeyDown={handleKeyPress}
@@ -740,7 +964,9 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                       onChange={(e) => {
                         const parsedValue = parseInt(e.target.value);
                         if (!isNaN(parsedValue) && parsedValue >= 0) {
-                          setWigSize([size[0], parsedValue, size[2], size[3]]);
+                          setWigSize([wigSize[0], parsedValue, wigSize[2], wigSize[3]]);
+                        } else {
+                          setWigSize([wigSize[0], 0, wigSize[2], wigSize[3]]);
                         }
                       }}
                       onKeyDown={handleKeyPress}
@@ -763,7 +989,9 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                       onChange={(e) => {
                         const parsedValue = parseInt(e.target.value);
                         if (!isNaN(parsedValue) && parsedValue >= 0) {
-                          setWigSize([size[0], size[1], parsedValue, size[3]]);
+                          setWigSize([wigSize[0], wigSize[1], parsedValue, wigSize[3]]);
+                        } else {
+                          setWigSize([wigSize[0], wigSize[1], 0, wigSize[3]]);
                         }
                       }}
                       onKeyDown={handleKeyPress}
@@ -786,7 +1014,9 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                       onChange={(e) => {
                         const parsedValue = parseInt(e.target.value);
                         if (!isNaN(parsedValue) && parsedValue >= 0) {
-                          setWigSize([size[0], size[1], size[2], parsedValue]);
+                          setWigSize([wigSize[0], wigSize[1], wigSize[2], parsedValue]);
+                        } else {
+                          setWigSize([wigSize[0], wigSize[1], wigSize[2], 0]);
                         }
                       }}
                       onKeyDown={handleKeyPress}
@@ -811,6 +1041,8 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
                     const parsedValue = parseInt(e.target.value);
                     if (!isNaN(parsedValue) && parsedValue >= 0) {
                       setWigPrice(parsedValue);
+                    } else {
+                      setWigPrice(0);
                     }
                   }}
                   onKeyDown={handleKeyPress}
