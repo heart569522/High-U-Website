@@ -42,13 +42,7 @@ const updateWig = async (req: NextApiRequest, res: NextApiResponse) => {
                     size: size,
                     price: price,
                     desc: desc,
-                    updatedAt: new Date(Date.now()).toLocaleString("en-GB", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    }),
+                    updatedAt: new Date()
                 },
             }
         );

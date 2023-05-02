@@ -22,22 +22,23 @@ import {
   InputLabel,
   MenuItem,
   Stack,
-  Pagination
+  Pagination,
+  Checkbox,
+  IconButton,
+  Drawer
 
 } from '@mui/material'
 import Select from '@mui/material/Select';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
+import { createTheme, ThemeProvider, styled} from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
+import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link'
-
 import EmptyWig from '../../components/Other/EmptyWig';
 import Navbar from '../../components/Navigation/Navigation';
 import WigBanner from "../../components/Wig/WigBanner"
 import Footer from '../../components/Footer/Footer';
-import Head from 'next/head';
-import Image from 'next/image';
+
 
 const theme = createTheme({
   palette: {
@@ -77,6 +78,16 @@ type Wig = {
 
 type Anchor = 'left';
 
+interface Filters {
+  length: {
+    min?: number;
+    max?: number;
+  };
+  color: string | number;
+  type: string | number;
+  price: number;
+}
+
 export async function getServerSideProps() {
   try {
     let wigsResponse = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
@@ -91,6 +102,17 @@ export async function getServerSideProps() {
     props: { wigs: [] }
   };
 }
+
+const drawerWidth = 300;
+
+const DrawerHeader = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
 
 export default function Wig(props: Props) {
   const [wigData, setWigData] = useState<Wig[]>(props.wigs);
@@ -132,56 +154,136 @@ export default function Wig(props: Props) {
     setSortedWigData(sortedData);
   };
 
+  const [filters, setFilters] = useState<Filters>({
+    length: { min: undefined, max: undefined },
+    color: '',
+    type: '',
+    price: Number.MAX_VALUE
+  });
 
-  const [state, setState] = useState({ left: false });
+  const [open, setOpen] = useState(false);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
+  const handleFilterChange = (filterType: string, value: string | number) => {
+    switch (filterType) {
+      case 'length':
+        let minLength: number | undefined, maxLength: number | undefined;
+        if (value === 'Short') {
+          minLength = 6;
+          maxLength = 10;
+        } else if (value === 'Medium') {
+          minLength = 12;
+          maxLength = 16;
+        } else if (value === 'Long') {
+          minLength = 18;
+          maxLength = undefined;
+        }
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          length: { min: minLength || 0, max: maxLength || Number.MAX_VALUE },
+        }));
+        break;
+      case 'color':
+        setFilters((prevFilters) => ({ ...prevFilters, color: value.toString() }));
+        break;
+      case 'type':
+        setFilters((prevFilters) => ({ ...prevFilters, type: value.toString() }));
+        break;
+      case 'price':
+        setFilters((prevFilters) => ({ ...prevFilters, price: Number(value) }));
+        break;
+      default:
+        break;
+    }
+  };
 
-      setState({ ...state, [anchor]: open });
-    };
 
-  const list = (anchor: Anchor) => (
+  const filterWigs = (wigs: Wig[], filters: Filters): Wig[] => {
+    return wigs.filter((wig) => {
+      const lengthFilter = filters.length;
+      const size = wig.size[0];
+      return (
+        size >= (lengthFilter?.min || 0) &&
+        size <= (lengthFilter?.max || Number.MAX_VALUE) &&
+        wig.color === filters.color &&
+        wig.type === filters.type &&
+        wig.price <= filters.price
+      );
+    });
+  };
+
+  const uniqueColors = Array.from(new Set(wigData.map((wig) => wig.color)));
+  const uniqueTypes = Array.from(new Set(wigData.map((wig) => wig.type)));
+
+  const list = (
     <Box
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+        <ListItem disablePadding>
+          <ListItemText primary="Filter by Length" />
+        </ListItem>
+        {['Short', 'Medium', 'Long'].map((text, i) => (
+          <ListItem key={i} disablePadding>
+            <Checkbox
+              checked={filters.length.min === (text === 'Short' ? 6 : text === 'Medium' ? 12 : 18)}
+              onChange={() => handleFilterChange('length', text)}
+              color="primary"
+            />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemText primary="Filter by Color" />
+        </ListItem>
+        {uniqueColors.map((color, i) => (
+          <ListItem key={i} disablePadding>
+            <Checkbox
+              checked={filters.color === color}
+              onChange={() => handleFilterChange('color', color)}
+              color="primary"
+            />
+            <ListItemText primary={color} />
+          </ListItem>
+        ))}
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemText primary="Filter by Type" />
+        </ListItem>
+        {uniqueTypes.map((type, i) => (
+          <ListItem key={i} disablePadding>
+            <Checkbox
+              checked={filters.type === type}
+              onChange={() => handleFilterChange('type', type)}
+              color="primary"
+            />
+            <ListItemText primary={type} />
+          </ListItem>
+        ))}
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemText primary="Filter by Price" />
+        </ListItem>
+        <ListItem>
+          <input type="range" onChange={(e) => handleFilterChange('price', e.target.value)} />
+        </ListItem>
       </List>
       <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Button
+        className="bg-[#F0CA83] hover:bg-[#ffc457] px-3 py-2 text-[#303030] font-bold"
+        onClick={handleDrawerClose}
+      >
+        OK
+      </Button>
     </Box>
   );
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -195,20 +297,36 @@ export default function Wig(props: Props) {
             <Grid item xs={12}>
               <Typography className="text-6xl text-center font-bold max-md:text-5xl max-sm:text-4xl">High-U Wig</Typography>
               <Divider className="py-4 w-full" />
+              <Drawer
+                className="shadow-md"
+                sx={{
+                  width: drawerWidth,
+                  flexShrink: 0,
+                  '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                    boxSizing: 'border-box',
+                  },
+                }}
+                variant="persistent"
+                anchor="left"
+                open={open}
+              >
+                <DrawerHeader>
+                  <IconButton onClick={handleDrawerClose}>
+                    <CloseIcon />
+                  </IconButton>
+                </DrawerHeader>
+                {list}
+              </Drawer>
               <Box className="flex justify-between">
-                {(['left'] as const).map((anchor, i) => (
-                  <Box className="pt-6" key={i}>
-                    <Button className="bg-[#F0CA83] hover:bg-[#ffc457] px-3 py-2 text-[#303030] font-bold" onClick={toggleDrawer(anchor, true)}>Show&nbsp;Filters</Button>
-                    <SwipeableDrawer
-                      anchor={anchor}
-                      open={state[anchor]}
-                      onClose={toggleDrawer(anchor, false)}
-                      onOpen={toggleDrawer(anchor, true)}
-                    >
-                      {list(anchor)}
-                    </SwipeableDrawer>
-                  </Box>
-                ))}
+                <Box className="w-[200px] items-center pt-6">
+                  <Button
+                    className="bg-[#F0CA83] p-2 hover:bg-[#ffc457] text-[#303030] font-bold"
+                    onClick={handleDrawerOpen}
+                  >
+                    Show&nbsp;Filters
+                  </Button>
+                </Box>
                 <Box className="w-[200px] items-center pt-6">
                   <FormControl fullWidth size='small'>
                     <InputLabel id="demo-simple-select-label">Sorting</InputLabel>
@@ -236,7 +354,7 @@ export default function Wig(props: Props) {
               .slice((page - 1) * pageSize, page * pageSize)
               .map((item, i) => (
                 <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
-                  <Link href="/WigProduct">
+                  <Link href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
                     <Card variant="outlined" sx={{ maxWidth: 320 }}>
                       <CardActionArea>
                         <Image

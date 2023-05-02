@@ -32,13 +32,7 @@ const addWig = async (req: NextApiRequest, res: NextApiResponse) => {
       view: 0,
       favorite: 0,
       use: 0,
-      createdAt: new Date(Date.now()).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      })
+      createdAt: new Date()
     });
 
     res.status(201).json(wig);

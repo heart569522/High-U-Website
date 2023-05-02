@@ -633,7 +633,6 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         }),
       });
       console.log(response);
-      // handleResetAll();
       setAlertSuccess(true);
 
       if (!response.ok) {

@@ -23,7 +23,6 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 // IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
 
-import AR_Data from '../helper/AR_Data.json';
 import Head from 'next/head';
 import Image from 'next/image';
 
