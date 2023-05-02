@@ -29,8 +29,10 @@ import {
 
 } from '@mui/material'
 import Select from '@mui/material/Select';
-import { createTheme, ThemeProvider, styled} from '@mui/material/styles';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link'
@@ -76,16 +78,14 @@ type Wig = {
   createdAt: string;
 }
 
-type Anchor = 'left';
-
 interface Filters {
   length: {
     min?: number;
     max?: number;
   };
-  color: string | number;
-  type: string | number;
-  price: number;
+  color: string;
+  type: string;
+  [key: string]: any;
 }
 
 export async function getServerSideProps() {
@@ -103,15 +103,12 @@ export async function getServerSideProps() {
   };
 }
 
-const drawerWidth = 300;
+const drawerWidth = 240;
 
 const DrawerHeader = styled('div')(() => ({
-  display: 'flex',
-  alignItems: 'center',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
 }));
 
 export default function Wig(props: Props) {
@@ -119,14 +116,25 @@ export default function Wig(props: Props) {
   const [selectSort, setSelectSort] = useState("");
   const [sortedWigData, setSortedWigData] = useState<Wig[]>([]);
   const [hoverWigImage, setHoverWigImage] = useState<string>("");
+  const [isFavorite, setIsFavorite] = useState(false);
+
   const [page, setPage] = useState(1);
+  const pageSize = 9;
+  const pageCount = Math.ceil(sortedWigData.length / pageSize);
+
+  const [filters, setFilters] = useState<Filters>({
+    length: { min: undefined, max: undefined },
+    color: '',
+    type: '',
+  });
+
+  const handleToggleFavorite = () => {
+    setIsFavorite(true)
+  }
 
   const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
     setPage(newPage);
   };
-
-  const pageSize = 9;
-  const pageCount = Math.ceil(sortedWigData.length / pageSize);
 
   const handleSortChange = (event: { target: { value: string; }; }) => {
     setSelectSort(event.target.value as string);
@@ -134,6 +142,24 @@ export default function Wig(props: Props) {
 
     let sortedData: Wig[] = [...wigData];
 
+    // Apply filters
+    sortedData = sortedData.filter((wig) => {
+      if (filters.length.min !== undefined && wig.size[0] < filters.length.min) {
+        return false;
+      }
+      if (filters.length.max !== undefined && wig.size[0] > filters.length.max) {
+        return false;
+      }
+      if (filters.color !== '' && wig.color !== filters.color) {
+        return false;
+      }
+      if (filters.type !== '' && wig.type !== filters.type) {
+        return false;
+      }
+      return true;
+    });
+
+    // Apply sorting
     switch (value) {
       case 'priceHighToLow':
         sortedData = sortedData.sort((a, b) => b.price - a.price);
@@ -154,12 +180,13 @@ export default function Wig(props: Props) {
     setSortedWigData(sortedData);
   };
 
-  const [filters, setFilters] = useState<Filters>({
-    length: { min: undefined, max: undefined },
-    color: '',
-    type: '',
-    price: Number.MAX_VALUE
-  });
+  const handleResetFilters = () => {
+    setFilters({
+      length: { min: undefined, max: undefined },
+      color: '',
+      type: '',
+    });
+  };
 
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
@@ -169,53 +196,75 @@ export default function Wig(props: Props) {
     setOpen(false);
   };
 
-  const handleFilterChange = (filterType: string, value: string | number) => {
-    switch (filterType) {
-      case 'length':
-        let minLength: number | undefined, maxLength: number | undefined;
-        if (value === 'Short') {
-          minLength = 6;
-          maxLength = 10;
-        } else if (value === 'Medium') {
-          minLength = 12;
-          maxLength = 16;
-        } else if (value === 'Long') {
-          minLength = 18;
-          maxLength = undefined;
-        }
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          length: { min: minLength || 0, max: maxLength || Number.MAX_VALUE },
-        }));
-        break;
-      case 'color':
-        setFilters((prevFilters) => ({ ...prevFilters, color: value.toString() }));
-        break;
-      case 'type':
-        setFilters((prevFilters) => ({ ...prevFilters, type: value.toString() }));
-        break;
-      case 'price':
-        setFilters((prevFilters) => ({ ...prevFilters, price: Number(value) }));
-        break;
-      default:
-        break;
-    }
-  };
-
-
-  const filterWigs = (wigs: Wig[], filters: Filters): Wig[] => {
-    return wigs.filter((wig) => {
-      const lengthFilter = filters.length;
-      const size = wig.size[0];
-      return (
-        size >= (lengthFilter?.min || 0) &&
-        size <= (lengthFilter?.max || Number.MAX_VALUE) &&
-        wig.color === filters.color &&
-        wig.type === filters.type &&
-        wig.price <= filters.price
-      );
+  const handleFilterChange = (filterType: string, value: string | number, isChecked: boolean) => {
+    setFilters((prevFilters) => {
+      let updatedFilters = { ...prevFilters };
+      switch (filterType) {
+        case 'size':
+          let minLength: number | undefined, maxLength: number | undefined;
+          const stringValue = value.toString(); // cast to string
+          if (stringValue === 'Short') {
+            minLength = 0;
+            maxLength = 10;
+          } else if (stringValue === 'Medium') {
+            minLength = 11;
+            maxLength = 17;
+          } else if (stringValue === 'Long') {
+            minLength = 18;
+            maxLength = undefined;
+          }
+          updatedFilters.length = { min: minLength || 0, max: maxLength || Number.MAX_VALUE };
+          break;
+        case 'color':
+          updatedFilters.color = value.toString();
+          break;
+        case 'type':
+          updatedFilters.type = value.toString();
+          break;
+        default:
+          break;
+      }
+      if (isChecked) {
+        return updatedFilters;
+      } else {
+        // If a checkbox is unchecked, remove its value from filters
+        return Object.keys(updatedFilters).reduce((acc: any, key: string) => {
+          if (key !== filterType) {
+            acc[key] = updatedFilters[key];
+          }
+          return acc;
+        }, {});
+      }
     });
   };
+
+  useEffect(() => {
+    const filteredData = wigData.filter((item) => {
+      const { length, color, type } = filters;
+
+      const wigSize = item.size[0];
+      if (
+        length &&
+        typeof length.min !== 'undefined' &&
+        typeof length.max !== 'undefined' &&
+        (wigSize < length.min || wigSize > length.max)
+      ) {
+        return false;
+      }
+
+      if (color && color !== item.color.toString()) {
+        return false;
+      }
+
+      if (type && type !== item.type) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setSortedWigData(filteredData);
+  }, [filters, wigData]);
 
   const uniqueColors = Array.from(new Set(wigData.map((wig) => wig.color)));
   const uniqueTypes = Array.from(new Set(wigData.map((wig) => wig.type)));
@@ -225,62 +274,75 @@ export default function Wig(props: Props) {
       role="presentation"
     >
       <List>
-        <ListItem disablePadding>
-          <ListItemText primary="Filter by Length" />
+        <ListItem>
+          <Typography variant="h6" className="font-bold" sx={{ letterSpacing: '.1rem', }}>
+            Length
+          </Typography>
         </ListItem>
         {['Short', 'Medium', 'Long'].map((text, i) => (
           <ListItem key={i} disablePadding>
             <Checkbox
-              checked={filters.length.min === (text === 'Short' ? 6 : text === 'Medium' ? 12 : 18)}
-              onChange={() => handleFilterChange('length', text)}
+              checked={
+                filters.length.min === (text === 'Short' ? 0 : text === 'Medium' ? 11 : text === 'Long' ? 18 : undefined)
+              }
+              onChange={() => handleFilterChange('size', text, true)}
               color="primary"
+              sx={{ color: '#F0CA83' }}
             />
             <ListItemText primary={text} />
           </ListItem>
         ))}
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemText primary="Filter by Color" />
+        <Divider className='bg-[#F0CA83] my-3' />
+        <ListItem>
+          <Typography variant="h6" className="font-bold" sx={{ letterSpacing: '.1rem', }}>
+            Color
+          </Typography>
         </ListItem>
-        {uniqueColors.map((color, i) => (
+        {uniqueColors.map((text, i) => (
           <ListItem key={i} disablePadding>
             <Checkbox
-              checked={filters.color === color}
-              onChange={() => handleFilterChange('color', color)}
+              checked={filters.color === text}
+              onChange={() => handleFilterChange('color', text, true)}
               color="primary"
+              sx={{ color: '#F0CA83' }}
             />
-            <ListItemText primary={color} />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemText primary="Filter by Type" />
+        <Divider className='bg-[#F0CA83] my-3' />
+        <ListItem>
+          <Typography variant="h6" className="font-bold" sx={{ letterSpacing: '.1rem', }}>
+            Type
+          </Typography>
         </ListItem>
         {uniqueTypes.map((type, i) => (
           <ListItem key={i} disablePadding>
             <Checkbox
               checked={filters.type === type}
-              onChange={() => handleFilterChange('type', type)}
+              onChange={() => handleFilterChange('type', type, true)}
               color="primary"
+              sx={{ color: '#F0CA83' }}
             />
             <ListItemText primary={type} />
           </ListItem>
         ))}
-        <Divider />
-        <ListItem disablePadding>
-          <ListItemText primary="Filter by Price" />
-        </ListItem>
-        <ListItem>
-          <input type="range" onChange={(e) => handleFilterChange('price', e.target.value)} />
-        </ListItem>
       </List>
-      <Divider />
-      <Button
-        className="bg-[#F0CA83] hover:bg-[#ffc457] px-3 py-2 text-[#303030] font-bold"
-        onClick={handleDrawerClose}
-      >
-        OK
-      </Button>
+      <Divider className='bg-[#F0CA83] my-3' />
+      <ListItem className="flex justify-center gap-1">
+        <Button
+          className="bg-[#F0CA83] hover:bg-[#ffc457] px-3 py-2 text-[#303030] font-bold"
+          onClick={handleDrawerClose}
+        >
+          OK
+        </Button>
+        <Button
+          className="hover:bg-[#5e5138] px-3 py-2 text-[#F0CA83] font-bold"
+          variant='outlined'
+          onClick={handleResetFilters}
+        >
+          RESET
+        </Button>
+      </ListItem>
     </Box>
   );
 
@@ -298,24 +360,45 @@ export default function Wig(props: Props) {
               <Typography className="text-6xl text-center font-bold max-md:text-5xl max-sm:text-4xl">High-U Wig</Typography>
               <Divider className="py-4 w-full" />
               <Drawer
-                className="shadow-md"
                 sx={{
                   width: drawerWidth,
                   flexShrink: 0,
                   '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
+                    backgroundColor: '#303030',
+                    color: '#F0CA83'
                   },
                 }}
-                variant="persistent"
+                variant="temporary"
                 anchor="left"
                 open={open}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
               >
-                <DrawerHeader>
-                  <IconButton onClick={handleDrawerClose}>
-                    <CloseIcon />
-                  </IconButton>
+                <DrawerHeader className="py-3">
+                  <Box className="flex absolute ml-12 justify-center items-center pt-2">
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontFamily: 'monospace',
+                        fontWeight: 600,
+                        letterSpacing: '.2rem',
+                        color: '#F0CA83',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      FILTERS
+                    </Typography>
+                  </Box>
+                  <Box className="flex justify-end items-center pt-1">
+                    <IconButton onClick={handleDrawerClose}>
+                      <CloseIcon className='text-[#F0CA83]' />
+                    </IconButton>
+                  </Box>
                 </DrawerHeader>
+                <Divider className='bg-[#F0CA83]' />
                 {list}
               </Drawer>
               <Box className="flex justify-between">
@@ -350,12 +433,12 @@ export default function Wig(props: Props) {
           </Grid>
           {/* WIG PRODUCT */}
           <Grid container spacing={2}>
-            {(sortedWigData.length > 0 ? sortedWigData : wigData)
-              .slice((page - 1) * pageSize, page * pageSize)
-              .map((item, i) => (
+            {sortedWigData.length > 0 ? (
+              sortedWigData.slice((page - 1) * pageSize, page * pageSize).map((item, i) => (
                 <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
-                  <Link href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
-                    <Card variant="outlined" sx={{ maxWidth: 320 }}>
+
+                  <Card variant="outlined" sx={{ maxWidth: 320 }}>
+                    <Link href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
                       <CardActionArea>
                         <Image
                           className={`transition duration-400 ease-in-out hover:opacity-90`}
@@ -368,23 +451,31 @@ export default function Wig(props: Props) {
                           onMouseOut={() => setHoverWigImage("")}
                         />
                         <CardContent>
-                          <Typography gutterBottom component="div" className="text-base mb-2 max-sm:text-xs">
+                          <Typography gutterBottom component="div" className="text-base max-sm:text-xs">
                             {item.title}
-                          </Typography>
-                          <Typography variant="body2" className="flex justify-end font-bold text-base max-sm:text-xs">
-                            {item.price?.toLocaleString()}&nbsp;฿
                           </Typography>
                         </CardContent>
                       </CardActionArea>
-                    </Card>
-                  </Link>
+                    </Link>
+                    <Box className="flex justify-between items-center px-2 py-1">
+                      <IconButton onClick={handleToggleFavorite}>
+                        {isFavorite ? <FavoriteIcon className="text-[#F87170]"/> : <FavoriteBorderIcon />}
+                      </IconButton>
+                      <Button className="bg-[#555555]">
+                        <Typography variant="body2" className="font-bold tracking-widest text-white text-base max-sm:text-xs">
+                          {item.price?.toLocaleString()}&nbsp;฿
+                        </Typography>
+                      </Button>
+                    </Box>
+                  </Card>
                 </Grid>
-              ))}
-            {!sortedWigData && (
+              ))
+            ) : (
               <Grid item xs={12} className="flex items-center justify-center my-10">
                 <center><EmptyWig /></center>
               </Grid>
             )}
+
           </Grid>
           <Box className="flex justify-center mt-6">
             <Stack spacing={2}>
