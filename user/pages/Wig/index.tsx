@@ -41,6 +41,9 @@ import Navbar from '../../components/Navigation/Navigation';
 import WigBanner from "../../components/Wig/WigBanner"
 import Footer from '../../components/Footer/Footer';
 
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -88,6 +91,16 @@ interface Filters {
   [key: string]: any;
 }
 
+type FavoriteState = {
+  [wigId: string]: boolean
+}
+
+type Member = {
+  _id: string
+}
+
+const API_URL = "http://localhost:3000"
+
 export async function getServerSideProps() {
   try {
     let wigsResponse = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
@@ -116,7 +129,9 @@ export default function Wig(props: Props) {
   const [selectSort, setSelectSort] = useState("");
   const [sortedWigData, setSortedWigData] = useState<Wig[]>([]);
   const [hoverWigImage, setHoverWigImage] = useState<string>("");
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<FavoriteState>({});
+  const { data: session } = useSession()
+  const router = useRouter()
 
   const [page, setPage] = useState(1);
   const pageSize = 9;
@@ -128,9 +143,105 @@ export default function Wig(props: Props) {
     type: '',
   });
 
-  const handleToggleFavorite = () => {
-    setIsFavorite(true)
-  }
+  const [member, setMember] = useState<Member | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+        setMember(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchFavoriteWigs = async () => {
+      if (!member) return;
+
+      try {
+        const favorites = await axios.get(`${API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
+
+        const favoriteState = favorites.data.reduce((acc: FavoriteState, favorite: any) => {
+          const wigId = favorite.wig_id.toString(); // Convert wig ID to string for indexing
+          acc[wigId] = true;
+          return acc;
+        }, {});
+
+        setIsFavorite(favoriteState);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchFavoriteWigs();
+  }, [member]);
+
+  const handleToggleFavorite = async (wigId: string) => {
+    if (!session) {
+      router.push("/SignIn");
+      return;
+    }
+
+    try {
+      const apiUrl = `${API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
+
+      // Check if the wig is already marked as favorite
+      if (isFavorite[wigId]) {
+        // Remove the wig from the database
+        const res = await fetch(apiUrl, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            member_id: member?._id,
+            wig_id: wigId,
+          }),
+        });
+
+        if (res.ok) {
+          // Update the state to reflect that the wig is no longer a favorite
+          setIsFavorite((prevState) => ({
+            ...prevState,
+            [wigId]: false,
+          }));
+        } else {
+          // Handle error response from server
+          console.error("Error removing favorite:", res.status);
+        }
+      } else {
+        // Add the wig to the database
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            member_id: member?._id,
+            wig_id: wigId,
+          }),
+        });
+
+        if (res.ok) {
+          // Update the state to reflect that the wig is now a favorite
+          setIsFavorite((prevState) => ({
+            ...prevState,
+            [wigId]: true,
+          }));
+        } else {
+          // Handle error response from server
+          console.error("Error adding favorite:", res.status);
+        }
+      }
+    } catch (error) {
+      // Handle fetch error
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
   const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
     setPage(newPage);
@@ -458,8 +569,8 @@ export default function Wig(props: Props) {
                       </CardActionArea>
                     </Link>
                     <Box className="flex justify-between items-center px-2 py-1">
-                      <IconButton onClick={handleToggleFavorite}>
-                        {isFavorite ? <FavoriteIcon className="text-[#F87170]"/> : <FavoriteBorderIcon />}
+                      <IconButton onClick={() => handleToggleFavorite(item._id)}>
+                        {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon />}
                       </IconButton>
                       <Button className="bg-[#555555]">
                         <Typography variant="body2" className="font-bold tracking-widest text-white text-base max-sm:text-xs">

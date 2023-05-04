@@ -2,48 +2,37 @@ import { useEffect, useRef, useState } from 'react'
 import {
     Box,
     Typography,
-    Toolbar,
     Grid,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Button,
     Tooltip,
-    IconButton,
-    Backdrop,
-    CircularProgress,
-    Snackbar,
-    Alert,
     Paper,
     Card,
     CardActionArea,
     CardContent,
-    CardMedia,
     Container,
-    ImageList,
-    ImageListItem,
-    Skeleton,
     Breadcrumbs,
+    Stack,
+    Chip,
+    IconButton,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { storage } from '../api/firebaseConfig';
-import { ref, uploadBytesResumable, getDownloadURL, UploadTaskSnapshot } from 'firebase/storage'
 import Head from 'next/head';
-import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import RemoveCircleSharpIcon from '@mui/icons-material/RemoveCircleSharp';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/Favorite';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import Image from 'next/image';
 import Navbar from '../../components/Navigation/Navigation';
 import Footer from '../../components/Footer/Footer';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from "swiper";
+import { Navigation } from "swiper";
 import 'swiper/css';
 import "swiper/css/navigation";
 import Link from 'next/link';
+import cache from 'memory-cache';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const API_URL = "http://localhost:3000"
 
@@ -83,6 +72,9 @@ type Wig = {
     size: number[];
     price: number;
     desc: string;
+    view: number;
+    favorite: number;
+    use: number;
 }
 
 type GetOneWigRequest = {
@@ -93,7 +85,14 @@ type GetOneWigResponse = ResponseFromServer;
 
 type ResponseFromServer = Wig;
 
-import cache from 'memory-cache';
+type FavoriteState = {
+    [wigId: string]: boolean
+}
+
+type Member = {
+    _id: string
+}
+
 
 export async function getStaticProps({ params }: GetStaticPropsContext<PageParams>): Promise<GetStaticPropsResult<ContentPageProps>> {
     console.log('getStaticProps called');
@@ -111,7 +110,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
             id: params?.id || ""
         };
 
-        const response = await fetch(`${API_URL}/api/wig_data/getOneWig?id=` + request.id)
+        const response = await fetch(`${process.env.API_URL}/api/wig_data/getOneWig?id=` + request.id)
 
         const responseFromServer: GetOneWigResponse = await response.json()
         cache.put(cacheKey, responseFromServer, 60000); // cache for 1 minute
@@ -131,6 +130,10 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
                     size: responseFromServer.size,
                     price: responseFromServer.price,
                     desc: responseFromServer.desc,
+                    view: responseFromServer.view,
+                    favorite: responseFromServer.favorite,
+                    use: responseFromServer.use
+
                 }
             }
         }
@@ -149,7 +152,10 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
                     color: '',
                     size: [0],
                     price: 0,
-                    desc: ''
+                    desc: '',
+                    view: 0,
+                    favorite: 0,
+                    use: 0
                 }
             }
         }
@@ -157,7 +163,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
 }
 
 export async function getStaticPaths() {
-    let wigs = await fetch(`${API_URL}/api/wig_data/getAllWigs`);
+    let wigs = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
 
     let wigFromServer: [Wig] = await wigs.json();
 
@@ -173,9 +179,13 @@ export async function getStaticPaths() {
     }
 }
 
-export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image, title, style, type, color, size, price, desc } }: ContentPageProps) {
+export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image, title, style, type, color, size, price, desc, view, favorite, use } }: ContentPageProps) {
 
     const [wigsData, setWigsData] = useState<Wig[]>([]);
+    const [isFavorite, setIsFavorite] = useState<FavoriteState>({});
+    const { data: session } = useSession()
+    const router = useRouter()
+    const [member, setMember] = useState<Member | null>(null);
 
     useEffect(() => {
         async function fetchWigsData() {
@@ -191,6 +201,124 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
         fetchWigsData();
     }, []);
 
+    async function addViewToWig(wigId: string): Promise<void> {
+        const response = await fetch(`${API_URL}/api/wig_data/addViewWig`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: wigId }),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+    }
+
+    useEffect(() => {
+        addViewToWig(_id);
+    }, [_id]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+                setMember(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        const fetchFavoriteWigs = async () => {
+            if (!member) return;
+
+            try {
+                const favorites = await axios.get(`${API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
+
+                const favoriteState = favorites.data.reduce((acc: FavoriteState, favorite: any) => {
+                    const wigId = favorite.wig_id.toString(); // Convert wig ID to string for indexing
+                    acc[wigId] = true;
+                    return acc;
+                }, {});
+
+                setIsFavorite(favoriteState);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchFavoriteWigs();
+    }, [member]);
+
+    const handleToggleFavorite = async (wigId: string) => {
+        if (!session) {
+            router.push("/SignIn");
+            return;
+        }
+
+        try {
+            const apiUrl = `${API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
+
+            // Check if the wig is already marked as favorite
+            if (isFavorite[wigId]) {
+                // Remove the wig from the database
+                const res = await fetch(apiUrl, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        member_id: member?._id,
+                        wig_id: wigId,
+                    }),
+                });
+
+                if (res.ok) {
+                    // Update the state to reflect that the wig is no longer a favorite
+                    setIsFavorite((prevState) => ({
+                        ...prevState,
+                        [wigId]: false,
+                    }));
+                } else {
+                    // Handle error response from server
+                    console.error("Error removing favorite:", res.status);
+                }
+            } else {
+                // Add the wig to the database
+                const res = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        member_id: member?._id,
+                        wig_id: wigId,
+                    }),
+                });
+
+                if (res.ok) {
+                    // Update the state to reflect that the wig is now a favorite
+                    setIsFavorite((prevState) => ({
+                        ...prevState,
+                        [wigId]: true,
+                    }));
+                } else {
+                    // Handle error response from server
+                    console.error("Error adding favorite:", res.status);
+                }
+            }
+        } catch (error) {
+            // Handle fetch error
+            console.error("Error toggling favorite:", error);
+        }
+    };
+
+
     return (
         <ThemeProvider theme={theme}>
             <Head><title>{title} | High U</title></Head>
@@ -199,20 +327,31 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
                 <Container maxWidth="xl" >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <div role="presentation">
-                                <Breadcrumbs aria-label="breadcrumb" className='py-2'>
-                                    <Link color="inherit" href="../">
-                                        Home
-                                    </Link>
-                                    <Link
-                                        color="inherit"
-                                        href="./"
-                                    >
-                                        Wig List
-                                    </Link>
-                                    <Typography color="text.primary" aria-current="page">{title}</Typography>
-                                </Breadcrumbs>
-                            </div>
+                            <Box className="flex justify-between">
+                                <div role="presentation">
+                                    <Breadcrumbs aria-label="breadcrumb" className='py-2'>
+                                        <Link color="inherit" href="../">
+                                            Home
+                                        </Link>
+                                        <Link
+                                            color="inherit"
+                                            href="./"
+                                        >
+                                            Wig List
+                                        </Link>
+                                        <Typography color="text.primary" aria-current="page">{title}</Typography>
+                                    </Breadcrumbs>
+                                </div>
+                                <Stack direction="row" spacing={1} className='py-1'>
+                                    <Tooltip title="View">
+                                        <Chip icon={<RemoveRedEyeIcon />} label={view.toFixed(0)} />
+                                    </Tooltip>
+                                    <Tooltip title="Favorite">
+                                        <Chip icon={<FavoriteIcon />} label={favorite} />
+                                    </Tooltip>
+                                </Stack>
+                            </Box>
+
                         </Grid>
                     </Grid>
                     <Grid container spacing={4}>
@@ -318,9 +457,20 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
                                     </Box>
                                 </Grid>
                             </Grid>
-                            <Grid item className="mt-8 max-sm:text-center" >
-                                <Button variant="contained" className="w-[50%] p-3 bg-red-400 hover:bg-red-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Add&nbsp;to&nbsp;Favorite</Button>
-                                <Link href="/TryAR"><Button variant="contained" className="w-[50%] p-3 bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try&nbsp;AR</Button></Link>
+                            <Grid item className="mt-8 max-sm:text-center">
+                                <Button
+                                    variant="contained"
+                                    className={`w-[50%] p-3 ${isFavorite[_id] ? 'bg-red-400 hover:bg-red-500 ' : 'bg-gray-400 hover:bg-gray-500 text-gray-800'
+                                        }`}
+                                    onClick={() => handleToggleFavorite(_id)}
+                                >
+                                    {isFavorite[_id] ?
+                                        <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Your&nbsp;Favorite</Typography>
+                                        :
+                                        <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Add&nbsp;to&nbsp;Favorite</Typography>
+                                    }
+                                </Button>
+                                <Link href="/TryAR"><Button variant="contained" className="w-[50%] p-3 bg-[#F0CA83] tracking-wider hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try&nbsp;AR</Button></Link>
                             </Grid>
                         </Grid>
                     </Grid>

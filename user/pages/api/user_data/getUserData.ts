@@ -6,7 +6,7 @@ const getUserData = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req });
 
     if (!session) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json(session);
         return;
     }
 
