@@ -9,7 +9,7 @@ import '@tremor/react/dist/esm/tremor.css'
 
 import type { AppProps } from 'next/app'
 
-export default function App({ Component, pageProps: {session, ...pageProps} }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {
     AOS.init({
       duration: 1250

@@ -3,7 +3,6 @@ import {
     Metric,
     Text,
     Button,
-    Block,
     Icon,
     Flex,
 } from '@tremor/react';
@@ -15,33 +14,61 @@ import Face3Icon from '@mui/icons-material/Face3';
 import GroupsIcon from '@mui/icons-material/Groups';
 import OutboundIcon from '@mui/icons-material/Outbound';
 
-import Website_View from '../../helper/Website_View.json'
-import Wig_Product from '../../helper/Wig_Product.json'
-import Member_Data from '../../helper/Member_Data.json'
+import { useEffect, useState } from 'react';
+
+const API_URL = "http://localhost:8000"
 
 export default function SummaryCard_Chart() {
-    const totalViews = Website_View.reduce((acc, current) => {
-        return acc + current.view;
-    }, 0);
-    const totalWigs = Wig_Product.length;
-    const totalMembers = Member_Data.length;
+    const [wigCount, setWigCount] = useState(0);
+    const [memberCount, setMemberCount] = useState(0);
+    const [viewCount, setViewCount] = useState(0);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/web_data/countAllWebView`)
+            .then((response) => response.json())
+            .then(data => {
+                const view = data.totalVisitors;
+                setViewCount(view)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/wig/countAllWigs`)
+            .then((response) => response.json())
+            .then(data => {
+                const wig = data.count;
+                setWigCount(wig)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/member/countAllMembers`)
+            .then((response) => response.json())
+            .then(data => {
+                const member = data.count;
+                setMemberCount(member)
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
                 <Card decoration="top" decorationColor="yellow">
                     <Box data-aos="fade-zoom-in">
-                        <Flex justifyContent="justify-start" spaceX="space-x-4">
+                        <Flex className='justify-start'>
                             <Icon
                                 icon={TravelExploreIcon}
                                 variant="light"
                                 size="xl"
                                 color="yellow"
                             />
-                            <Block truncate={true}>
+                            <div className="truncate">
                                 <Text>Total Website Views</Text>
-                                <Metric>{totalViews}</Metric>
-                            </Block>
+                                <Metric>{viewCount}</Metric>
+                            </div>
                         </Flex>
                     </Box>
                 </Card>
@@ -49,17 +76,19 @@ export default function SummaryCard_Chart() {
             <Grid item xs={12} md={4}>
                 <Card decoration="top" decorationColor="amber">
                     <Box data-aos="fade-zoom-in">
-                        <Flex justifyContent="justify-start" spaceX="space-x-4">
-                            <Icon
-                                icon={Face3Icon}
-                                variant="light"
-                                size="xl"
-                                color="amber"
-                            />
-                            <Block truncate={true}>
-                                <Text>Total Wigs</Text>
-                                <Metric>{totalWigs}</Metric>
-                            </Block>
+                        <Flex className='justify-between'>
+                            <Box className="flex justify-start gap-4">
+                                <Icon
+                                    icon={Face3Icon}
+                                    variant="light"
+                                    size="xl"
+                                    color="amber"
+                                />
+                                <div className="truncate">
+                                    <Text>Total Wigs</Text>
+                                    <Metric>{wigCount}</Metric>
+                                </div>
+                            </Box>
                             <Tooltip title="View Detail">
                                 <Link href="/WigManage">
                                     <Button
@@ -78,17 +107,19 @@ export default function SummaryCard_Chart() {
             <Grid item xs={12} md={4}>
                 <Card decoration="top" decorationColor="orange">
                     <Box data-aos="fade-zoom-in">
-                        <Flex justifyContent="justify-start" spaceX="space-x-4">
-                            <Icon
-                                icon={GroupsIcon}
-                                variant="light"
-                                size="xl"
-                                color="orange"
-                            />
-                            <Block truncate={true}>
-                                <Text>Total Members</Text>
-                                <Metric>{totalMembers}</Metric>
-                            </Block>
+                        <Flex className='justify-between'>
+                            <Box className="flex justify-start gap-4">
+                                <Icon
+                                    icon={GroupsIcon}
+                                    variant="light"
+                                    size="xl"
+                                    color="orange"
+                                />
+                                <div className="truncate">
+                                    <Text>Total Members</Text>
+                                    <Metric>{memberCount}</Metric>
+                                </div>
+                            </Box>
                             <Tooltip title="View Detail">
                                 <Link href="/MemberManage">
                                     <Button

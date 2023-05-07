@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head';
 import {
   Box,
@@ -12,13 +12,14 @@ import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 
 // IMPORT COMPONENT
-import WebsiteView_AreaChart from '../components/Chart/WebsiteView_AreaChart';
-import TopFiveWigView_DonutChart from '../components/Chart/TopFiveWigView_DonutChart';
-import TopFiveWigView_List from '../components/Chart/TopFiveWigView_List';
-import SummaryCard_Chart from '../components/Chart/SummaryCard_Chart';
-import TopThreeFavWig from '../components/Chart/TopThreeFavWig';
+import WebsiteView_AreaChart from '@/components/Chart/WebsiteView_AreaChart';
+import TopFiveWigView_DonutChart from '@/components/Chart/TopFiveWigView_DonutChart';
+import TopFiveWigView_List from '@/components/Chart/TopFiveWigView_List';
+import SummaryCard_Chart from '@/components/Chart/SummaryCard_Chart';
+import TopThreeFavWig from '@/components/Chart/TopThreeFavWig';
 
 const drawerWidth = 240;
+const API_URL = "http://localhost:8000"
 
 const theme = createTheme({
   palette: {
@@ -59,18 +60,14 @@ function Dashboard() {
                 Website Views
               </Typography>
               <Typography variant='subtitle1' className="text-[#656565]">
-                The number of visitors to the website each day.
+                The number of visitors to the website.
               </Typography>
               <WebsiteView_AreaChart />
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
-              <Flex
-                spaceX="space-x-8"
-                justifyContent="justify-between"
-                alignItems="items-center"
-              >
+              <Box className="flex justify-between items-center space-x-8">
                 <Box className='flex-col'>
                   <Typography className="text-[#303030] font-bold text-xl">
                     Top 5 Wigs View
@@ -87,14 +84,15 @@ function Dashboard() {
                   <ToggleItem value="chart" icon={PieChartOutlinedIcon} />
                   <ToggleItem value="list" icon={ViewListOutlinedIcon} />
                 </Toggle>
-              </Flex>
+              </Box>
               {selectedView === 'chart' ? (
-                <TopFiveWigView_DonutChart />
+                <Box className="flex justify-between items-center">
+                  <TopFiveWigView_DonutChart />
+                </Box>
               ) : (
-                <>
-                  <TopFiveWigView_List />
-                </>
+                <TopFiveWigView_List />
               )}
+
             </Box>
           </Grid>
           <Grid item xs={12}>

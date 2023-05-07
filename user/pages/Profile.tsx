@@ -18,6 +18,9 @@ import {
   Avatar,
   Skeleton,
   CircularProgress,
+  Backdrop,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import {
   TabContext,
@@ -99,6 +102,24 @@ export default function Profile() {
   const [progress, setProgress] = useState(0)
   const [url, setUrl] = useState<string | null>(null)
 
+  const [uploading, setUploading] = useState(false);
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+
+  const handleCloseAlertSuccess = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertSuccess(false);
+  };
+
+  const handleCloseAlertError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertError(false);
+  };
+
   useEffect(() => {
     if (!previewUrl) {
       return;
@@ -118,6 +139,8 @@ export default function Profile() {
   }
 
   const handleUpdateProfile = async (e: any) => {
+    setAlertSuccess(false);
+    setUploading(true);
     e.preventDefault();
 
     try {
@@ -161,10 +184,8 @@ export default function Profile() {
             })
 
             response = await response.json();
-            console.log(response)
-            // setMessage("Member Edited Successfully!");
+            setAlertSuccess(true);
             window.location.href = './Profile'
-            // setOpenAlert(true);
             if (!response.ok) {
               Error('no response')
             }
@@ -187,18 +208,17 @@ export default function Profile() {
         })
 
         response = await response.json();
-        console.log(response)
-        // setMessage("Member Edited Successfully!");
+        setAlertSuccess(true);
         window.location.href = './Profile'
-        // setOpenAlert(true);
         if (!response.ok) {
           Error('no response')
         }
       }
     } catch (error: any) {
       console.error(error)
-      // setError("An error occurred while updating the member. Please try again later.");
-      // setOpenAlert(true);
+      setAlertError(true)
+    } finally {
+      setUploading(false);
     }
   }
 
@@ -264,18 +284,16 @@ export default function Profile() {
       // Check the response from the server
       const data = await response.json();
       if (response.ok) {
-        // Password updated successfully
-        console.log(data);
-        // setMessage("Password updated successfully!");
+        setAlertSuccess(true);
         window.location.href = './Profile';
       } else {
-        // Error updating password
-        console.log(data);
-        // setError(data.error);
+        setAlertError(true);
       }
     } catch (error) {
       console.error(error);
-      // setError("Error updating password");
+      setAlertError(true);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -286,6 +304,23 @@ export default function Profile() {
         <Navbar />
         <Container maxWidth="xl" >
           <UserHeader />
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={uploading}
+          >
+            <CircularProgress color="inherit" />
+            <Typography>&nbsp;Updating...</Typography>
+          </Backdrop>
+          <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
+            <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
+              Update Profile Successfully!
+            </Alert>
+          </Snackbar>
+          <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError}>
+            <Alert onClose={handleCloseAlertError} severity="error" sx={{ width: '100%' }}>
+              Update Profile Error!
+            </Alert>
+          </Snackbar>
           <Box className="w-full py-6" sx={{ typography: 'body1' }}>
             <TabContext value={value}>
               {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 bg-[#f0ca8350] rounded-md" />) : (

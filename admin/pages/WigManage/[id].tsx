@@ -536,9 +536,6 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
     e.preventDefault();
 
     try {
-      if (!imageWig.arImage) {
-        throw new Error('File is required')
-      }
 
       if (!imageWig.mainImage) {
         throw new Error('File is required')
@@ -559,7 +556,6 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         })
       );
 
-      const arImageName = imageWig.arImage.name;
       const mainImageName = mainImageCrop.name;
       const subImageNames = (subImageCrops as (File | string)[]).map((subImage, i) =>
         typeof subImage === 'string' ? `subImage_${i}.png` : subImage.name
@@ -577,10 +573,17 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         ref(storage, `wig_images/${title}/sub_images/${name}`)
       );
 
-      const arUploadTask = uploadBytesResumable(
-        arImageRef,
-        imageWig.arImage
-      );
+      let arSnapshot = null;
+      let arImageUrl = null;
+      if (imageWig.arImage) {
+        const arUploadTask = uploadBytesResumable(
+          arImageRef,
+          imageWig.arImage
+        );
+        arSnapshot = await arUploadTask;
+        arImageUrl = await getDownloadURL(arSnapshot.ref);
+      }
+
       const mainUploadTask = uploadBytesResumable(mainImageRef, mainImageCrop, {
         contentType: 'image/png'
       });
@@ -593,13 +596,11 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         });
       });
       // Wait for all images to finish uploading
-      const [arSnapshot, mainSnapshot, ...subSnapshots] = await Promise.all([
-        arUploadTask,
+      const [mainSnapshot, ...subSnapshots] = await Promise.all([
         mainUploadTask,
         ...subUploadTasks,
       ]);
 
-      const arImageUrl = await getDownloadURL(arSnapshot.ref);
       const mainImageUrl = await getDownloadURL(mainSnapshot.ref);
       const subImageUrls = await Promise.all(
         subSnapshots.map((snapshot) => {

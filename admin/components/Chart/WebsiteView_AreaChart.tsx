@@ -1,32 +1,52 @@
-import React from 'react'
-import { AreaChart, } from "@tremor/react";
-import _ from 'lodash'
+import React, { useState, useEffect } from 'react';
+import { BarChart, SelectBox, SelectBoxItem } from '@tremor/react';
+import _ from 'lodash';
 
-import Website_View from '../../helper/Website_View.json'
+interface ChartData {
+    totalVisitors: number;
+    totalMonth: number;
+    totalYear: number;
+    totalDay: number;
+    chartDayData: { day: string; view: number }[];
+    chartMonthData: { month: string; view: number }[];
+}
+
+const API_URL = "http://localhost:8000"
 
 export default function WebsiteView_AreaChart() {
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const groupByDay = _.groupBy(Website_View, data => {
-        let date = new Date(data.date);
-        return days[date.getUTCDay()]
+    const [chartData, setChartData] = useState<ChartData>({
+        totalVisitors: 0,
+        totalMonth: 0,
+        totalYear: 0,
+        totalDay: 0,
+        chartDayData: [],
+        chartMonthData: [],
     });
-    let chartDayData: any[] = []
-    Object.keys(groupByDay).forEach(day => {
-        let totalViews = groupByDay[day].reduce((acc, curr) => acc + curr.view, 0)
-        chartDayData.push({ day, view: totalViews })
-    })
-    chartDayData.sort((a, b) => days.indexOf(a.day) - days.indexOf(b.day))
+    const [showDaily, setShowDaily] = useState<boolean>(true);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/web_data/getViewWebsite`)
+            .then((response) => response.json())
+            .then((data) => {
+                setChartData(data);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    const chartDataToUse = showDaily ? chartData.chartDayData : chartData.chartMonthData;
 
     return (
-        <div>
-            <AreaChart
-                data={chartDayData}
-                dataKey="day"
-                categories={["view"]}
-                colors={["red",]}
-                marginTop="mt-6"
-                yAxisWidth="w-12"
+        <div className='pt-2'>
+            <SelectBox className="py-2" onValueChange={(selectedValue) => setShowDaily(selectedValue === 'Daily')}>
+                <SelectBoxItem value="Daily">Daily</SelectBoxItem>
+                <SelectBoxItem value="Monthly">Monthly</SelectBoxItem>
+            </SelectBox>
+            <BarChart
+                data={chartDataToUse}
+                index={showDaily ? 'day' : 'month'}
+                categories={['view']}
+                colors={[showDaily ? 'red' : 'amber']}
             />
         </div>
-    )
+    );
 }

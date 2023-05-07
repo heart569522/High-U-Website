@@ -5,11 +5,11 @@ import { SessionProvider } from "next-auth/react"
 import 'aos/dist/aos.css';
 import '../styles/globals.css'
 import '../styles/lodingStyle.css'
-import '@tremor/react/dist/esm/tremor.css'
 import Layout from '@/components/Layout';
 
 import type { AppProps } from 'next/app'
 import index from '.';
+import test from './test';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {

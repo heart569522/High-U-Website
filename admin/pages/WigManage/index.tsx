@@ -601,7 +601,7 @@ export default function WigManage(props: Props) {
                                                             <TextField
                                                                 type='text'
                                                                 fullWidth
-                                                                value={selectedRow?.view}
+                                                                value={selectedRow?.view.toFixed(0)}
                                                                 variant='filled'
                                                                 className="font-bold rounded text-[#303030]"
                                                                 inputProps={{

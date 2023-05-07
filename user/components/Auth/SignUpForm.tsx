@@ -11,6 +11,8 @@ import {
     TextField,
     Button,
     ButtonGroup,
+    Backdrop,
+    CircularProgress,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -30,6 +32,8 @@ const theme = createTheme({
     },
 });
 
+const API_URL = "http://localhost:3000"
+
 
 export default function SignUpForm() {
     const router = useRouter()
@@ -42,6 +46,8 @@ export default function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+    const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -98,6 +104,7 @@ export default function SignUpForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setLoading(true);
         e.preventDefault();
 
         if (!checkPasswordsMatch()) {
@@ -113,7 +120,7 @@ export default function SignUpForm() {
             const sanitizedUsername = DOMPurify.sanitize(username);
             const sanitizedPassword = DOMPurify.sanitize(password);
 
-            const response = await fetch(`${process.env.API_URL}/api/auth/user_signup`, {
+            const response = await fetch(`${API_URL}/api/auth/user_signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -142,6 +149,8 @@ export default function SignUpForm() {
         } catch (error: any) {
             console.error(error);
             setErrorMessage("Sign Up Error, Try again later.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -157,6 +166,13 @@ export default function SignUpForm() {
                     <Container component="main" maxWidth="sm">
                         {/* <CssBaseline /> */}
                         <Box className="dropShadow mt-8 flex flex-col items-center bg-white p-5 rounded-lg" data-aos="fade-zoom-in">
+                            <Backdrop
+                                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                                open={loading}
+                            >
+                                <CircularProgress color="inherit" />
+                                <Typography>&nbsp;Loading...</Typography>
+                            </Backdrop>
                             <Typography component="h1" variant="h5" color="primary" className="font-bold">
                                 High U - Sign Up
                             </Typography>

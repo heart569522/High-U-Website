@@ -1,24 +1,44 @@
-import React from 'react'
-import Button from '@mui/material/Button';
-import { Box, Toolbar } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { DonutChart, Legend } from "@tremor/react";
+import { Grid } from '@mui/material';
 
-const drawerWidth = 240;
+const API_URL = "http://localhost:8000"
 
 export default function test() {
+    const [topWig, setTopWig] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/wig/getTop5ViewWigs`)
+            .then((response) => response.json())
+            .then(data => {
+                const wig = data;
+                setTopWig(wig)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    // console.log(topWig);
+    
 
     return (
-        <Box
-            component="main"
-            className="p-5 ml-[240px] max-[899px]:ml-0"
-            sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
-        >
-            <Toolbar />
-            <Box className="bg-white w-full h-full rounded-xl pt-5 pb-5 px-5 shadow-md max-[899px]:pb-3">
-                <Button variant="contained" className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'>Contained</Button>
-                
-            </Box>
-
-        </Box>
-
+        <div>
+            <Grid container spacing={1}>
+                <Grid item xs={12}>
+                    <Legend
+                        categories={topWig.map((item) => item.title)}
+                        className="mt-6"
+                        colors={["yellow", "amber", "orange", "red", "rose"]}
+                    />
+                    <DonutChart
+                        data={topWig}
+                        category="view"
+                        variant="pie"
+                        index="title"
+                        className="mt-6 h-72"
+                        colors={["yellow", "amber", "orange", "red", "rose"]}
+                    />
+                </Grid>
+            </Grid>
+        </div>
     )
 }

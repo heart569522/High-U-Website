@@ -1,18 +1,43 @@
 import { Box, Grid, Typography } from '@mui/material'
-import React from 'react'
-import Wig_Product from '../../helper/Wig_Product.json'
+import React, { useEffect, useState } from 'react'
+import Image from 'next/image';
+
+const API_URL = "http://localhost:8000"
+interface Wig {
+    title: string;
+    favorite: number;
+    main_image: string;
+}
 
 export default function TopThreeFavWig() {
-    const topThreeFav = Wig_Product.sort((item1, item2) => item2.favorite - item1.favorite).slice(0, 3);
+    const [topWig, setTopWig] = useState<Wig[]>([]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/wig/getTop3FavWigs`)
+            .then((response) => response.json())
+            .then(data => {
+                const wig = data;
+                setTopWig(wig)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    const topWigFav = topWig.map((wig) => ({ main_image: wig.main_image, favorite: wig.favorite, title: wig.title }));
 
     return (
         <Grid container spacing={2}>
-            {topThreeFav.map((item, i) => (
+            {topWigFav.map((item, i) => (
                 <Grid item xs={12} sm={12} md={12} xl={4} key={i} className="mt-4" data-aos="fade-zoom-in">
                     <Box className="bg-slate-100 rounded-lg p-4">
                         <Grid container spacing={1}>
                             <Grid item xs={6}>
-                                <img src={item.image} alt={item.title} className="rounded-lg w-52 h-auto max-[590px]:w-44 max-[440px]:w-32" />
+                                <Image
+                                    src={item.main_image}
+                                    alt={item.title}
+                                    width={200}
+                                    height={300}
+                                    className="rounded-lg w-52 h-auto max-[590px]:w-44 max-[440px]:w-32"
+                                />
                             </Grid>
                             <Grid item xs={6}>
                                 <Box className="flex-col text-center ">

@@ -1,24 +1,43 @@
-import React, { useState } from 'react'
-import { DonutChart, Flex, List, ListItem, Title, Toggle, ToggleItem, } from "@tremor/react";
-import { Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { List, ListItem } from "@tremor/react";
+import { Box, Grid } from '@mui/material';
 
-import Wig_Product from '../../helper/Wig_Product.json'
+const API_URL = "http://localhost:8000"
+interface Wig {
+    title: string;
+    view: number;
+}
 
 export default function TopFiveWigView_List() {
-    const topFiveViews = Wig_Product.sort((item1, item2) => item2.view - item1.view).slice(0, 5);
-    
+    const [topWig, setTopWig] = useState<Wig[]>([]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/wig/getTop5ViewWigs`)
+            .then((response) => response.json())
+            .then(data => {
+                const wig = data;
+                setTopWig(wig)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    const topWigViews = topWig.map((wig) => ({ view: wig.view, title: wig.title }));
+
     return (
         <div>
             <Grid container spacing={1}>
-                <Grid item xs={12} className="flex items-center">
-                    <List marginTop="mt-6">
-                        {topFiveViews.map((item, i) => (
-                            <ListItem key={i}>
-                                <span className="text-base">{item.title}</span>
-                                <span className="text-base font-bold">{item.view}</span>
-                            </ListItem>
-                        ))}
-                    </List>
+                <Grid item xs={12}>
+                    <Box className="flex justify-center items-center">
+                        <List className="mt-6">
+                            {topWigViews.map((item, i) => (
+                                <ListItem key={i}>
+                                    <span className="text-base">{item.title}</span>
+                                    <span className="text-base font-bold">{item.view}</span>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+
                 </Grid>
             </Grid>
 
