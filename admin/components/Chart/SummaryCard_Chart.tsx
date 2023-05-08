@@ -59,16 +59,18 @@ export default function SummaryCard_Chart() {
                 <Card decoration="top" decorationColor="yellow">
                     <Box data-aos="fade-zoom-in">
                         <Flex className='justify-start'>
-                            <Icon
-                                icon={TravelExploreIcon}
-                                variant="light"
-                                size="xl"
-                                color="yellow"
-                            />
-                            <div className="truncate">
-                                <Text>Total Website Views</Text>
-                                <Metric>{viewCount}</Metric>
-                            </div>
+                            <Box className="flex justify-start gap-4">
+                                <Icon
+                                    icon={TravelExploreIcon}
+                                    variant="light"
+                                    size="xl"
+                                    color="yellow"
+                                />
+                                <div className="truncate">
+                                    <Text>Total Website Views</Text>
+                                    <Metric>{viewCount}</Metric>
+                                </div>
+                            </Box>
                         </Flex>
                     </Box>
                 </Card>

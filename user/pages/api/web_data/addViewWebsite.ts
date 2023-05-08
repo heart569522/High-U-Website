@@ -7,24 +7,26 @@ const addViewWebsite = async (req: NextApiRequest, res: NextApiResponse) => {
     const db = client.db('high_u');
     const collection = db.collection('web_statistic');
 
-    // Increment the visitor_count field for the current day, or create a new document if none exists.
+    // Get today's date.
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-    const existingDoc = await collection.findOneAndUpdate(
-      { created_at: { $gte: todayStart, $lt: todayEnd } },
-      { $inc: { visitor_count: 1 } },
-      { upsert: true }
-    );
 
-    // If a document was found and updated, return a success message.
-    if (existingDoc.value) {
-      return res.status(200).json({ message: 'Added website view' });
+    // Try to find a document for today.
+    const existingDoc = await collection.findOne({ created_at: { $gte: todayStart, $lt: todayEnd } });
+
+    // If a document was found, update it with a new visitor count.
+    if (existingDoc) {
+      await collection.updateOne(
+        { created_at: { $gte: todayStart, $lt: todayEnd } },
+        { $inc: { visitor_count: 1 } }
+      );
+      return res.status(200).json({ message: 'Updated website view' });
     }
 
     // If no document was found, create a new one with visitor_count = 1.
     await collection.insertOne({
-      created_at: new Date(),
+      created_at: today,
       visitor_count: 1,
     });
 

@@ -1,6 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Divider, InputBase, List, ListItem, ListItemAvatar, ListItemText, Typography, alpha, styled } from '@mui/material';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react'
 
 interface Wig {
@@ -26,6 +27,10 @@ const Search = styled('div')(({ theme }) => ({
         marginLeft: theme.spacing(1),
         width: 'auto',
     },
+    [theme.breakpoints.up('xs')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -45,10 +50,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
+        [theme.breakpoints.down('sm')]: {
+            width: '25ch',
             '&:focus': {
-                width: '20ch',
+                width: '30ch',
+            },
+        },
+        [theme.breakpoints.up('xs')]: {
+            width: '10ch',
+            '&:focus': {
+                width: '15ch',
             },
         },
     },
@@ -88,34 +99,34 @@ export default function SearchBox() {
                     }}
                 />
             </Search>
-            <List className="preview-results bg-[#303030d5] rounded-md absolute pt-4 pb-2 items-center">
-                {previewResults.map((result, i) => (
-                    <Box key={i}>
-                        <ListItem alignItems="flex-start" className="flex gap-1 py-1 px-2">
+            <List className="preview-results bg-[#303030d5] rounded-md absolute pt-4 items-center">
+                {previewResults.map((item, i) => (
+                    <Link key={i} target='_blank' href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
+                        <ListItem alignItems="flex-start" className="flex gap-1 py-1 px-2 hover:bg-[#303030cb]">
                             <ListItemAvatar>
                                 <Image
                                     alt='preview'
-                                    src={result.main_image}
+                                    src={item.main_image}
                                     width={32}
                                     height={32}
                                     className="w-10 h-10 rounded-full object-cover"
                                 />
                             </ListItemAvatar>
                             <ListItemText
-                                primary={result.title}
+                                primary={item.title}
                                 secondary={
                                     <Typography
                                         className="text-sm"
                                         sx={{ display: 'inline' }}
                                         component="span"
                                     >
-                                        {result.color} — {result.price.toLocaleString()} ฿
+                                        {item.color} — {item.price.toLocaleString()} ฿
                                     </Typography>
                                 }
                             />
                         </ListItem >
                         <Divider variant="inset" component="li" />
-                    </Box>
+                    </Link>
                 ))}
             </List>
         </Box >

@@ -23,7 +23,7 @@ export default NextAuth({
           const collection = db.collection("admin");
           const user = await collection.findOne({ email: credentials.email });
           if (user && user.password === credentials.password) {
-            console.log("User authenticated successfully.");
+            console.log("Admin authenticated successfully.");
             return {
               id: user._id.toString(),
               name: user.username,

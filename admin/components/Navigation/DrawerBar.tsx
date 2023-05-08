@@ -23,6 +23,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Face3Icon from '@mui/icons-material/Face3';
 import GroupsIcon from '@mui/icons-material/Groups';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import MenuIcon from '@mui/icons-material/Menu';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 
@@ -102,12 +103,12 @@ export default function DrawerBar() {
             <ListItemText primary="Member Manage" />
           </ListItemButton>
         </ListItem>
-        {/* <ListItem key="Test" className="py-3">
-          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('./test')}>
-            <GroupsIcon className="mr-3" />
-            <ListItemText primary="Test" />
+        <ListItem key="Admin Manage" className="py-3">
+          <ListItemButton className="rounded-lg text-[#303030] hover:bg-[#ebb859] hover:text-white" onClick={() => handleMenuItemClick('../AdminManage')}>
+            <AssignmentIndIcon className="mr-3" />
+            <ListItemText primary="Admin Manage" />
           </ListItemButton>
-        </ListItem> */}
+        </ListItem>
       </List>
     </div>
   );

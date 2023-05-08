@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
-import Wig_Product from '../../helper/Wig_Product.json';
 import Image from 'next/image';
 import axios from 'axios';
 
@@ -57,12 +56,6 @@ export default function HomeContent() {
 
     fetchUserData();
   }, []);
-
-  const router = useRouter()
-
-  const handleMenuItemClick = (path: string) => {
-    router.push(path)
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -121,7 +114,7 @@ export default function HomeContent() {
             <Grid container spacing={3} className="mb-8">
               {wigData?.map((item, i) =>
                 <Grid key={i} item xs={6} sm={6} md={3}>
-                  <Link href="/WigProduct">
+                  <Link target='_blank' href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
                     <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-zoom-in">
                       <CardActionArea>
                         <div className="content-overlay" />
@@ -131,6 +124,7 @@ export default function HomeContent() {
                           alt='reccomend_image'
                           height={500}
                           width={325}
+                          priority={true}
                         />
                         <CardContent className="content-details fadeIn-bottom">
                           <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
