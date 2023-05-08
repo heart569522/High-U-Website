@@ -24,6 +24,7 @@ import NavbarSignInUpButton from './NavbarSignInUpButton';
 import { Avatar, Button, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText, Tooltip } from '@mui/material';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import Image from 'next/image';
+import SearchBox from '../Other/SearchBox';
 
 // Create Theme
 const theme = createTheme({
@@ -33,49 +34,6 @@ const theme = createTheme({
     ].join(','),
   },
 });
-
-// Search Input
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '35%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
 
 // Scroll Navbar 
 function HideOnScroll(props: { children: any; window: any; }) {
@@ -297,22 +255,9 @@ export default function Navbar() {
 
               <Box className="flex justify-end items-center">
                 {/* SEARCH MENU */}
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon sx={{ color: '#F0CA83', }} />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onKeyPress={handleKeyPress}
-                    sx={{
-                      color: '#F0CA83',
-                      fontFamily: 'Prompt, sans-serif',
-                    }}
-                  />
-                </Search>
-                {/* If Login OR Non-Login */}
+                <SearchBox />
 
+                {/* If Login OR Non-Login */}
                 {session?.user ?
                   <Box className='flex justify-end items-center'>
                     {/* LIKE MENU */}

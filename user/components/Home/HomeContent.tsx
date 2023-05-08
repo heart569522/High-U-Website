@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 import Wig_Product from '../../helper/Wig_Product.json';
 import Image from 'next/image';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -33,8 +34,30 @@ const theme = createTheme({
   },
 
 });
+const API_URL = "http://localhost:3000"
+
+type Wig = {
+  _id: string;
+  main_image: string;
+  title: string;
+}
 
 export default function HomeContent() {
+  const [wigData, setWigData] = useState<Wig[]>();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/wig_data/get4WigOnHome`);
+        setWigData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const router = useRouter()
 
   const handleMenuItemClick = (path: string) => {
@@ -96,29 +119,29 @@ export default function HomeContent() {
         <Box className="colorBackgroundContentGold h-max py-10">
           <Container maxWidth="xl">
             <Grid container spacing={3} className="mb-8">
-              {
-                Wig_Product.slice(0, 4).map((item, i) =>
-                  <Grid key={i} item xs={6} sm={6} md={3}>
-                    <Link href="/WigProduct">
-                      <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-zoom-in">
-                        <CardActionArea>
-                          <div className="content-overlay" />
-                          <CardMedia
-                            className="content-image"
-                            component="img"
-                            image={item.image}
-                          />
-                          <CardContent className="content-details fadeIn-bottom">
-                            <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
-                              {item.title}
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
-                  </Grid>
-                )
-              }
+              {wigData?.map((item, i) =>
+                <Grid key={i} item xs={6} sm={6} md={3}>
+                  <Link href="/WigProduct">
+                    <Card variant="outlined" className="content rounded-lg" sx={{ maxWidth: 'auto', }} data-aos="fade-zoom-in">
+                      <CardActionArea>
+                        <div className="content-overlay" />
+                        <Image
+                          className="content-image"
+                          src={item.main_image}
+                          alt='reccomend_image'
+                          height={500}
+                          width={325}
+                        />
+                        <CardContent className="content-details fadeIn-bottom">
+                          <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
+                            {item.title}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Link>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12} data-aos="fade-zoom-in">
               <center>
