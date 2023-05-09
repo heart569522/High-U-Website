@@ -11,6 +11,8 @@ const addViewWebsite = async (req: NextApiRequest, res: NextApiResponse) => {
     const today = new Date();
     const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    todayEnd.setMilliseconds(todayEnd.getMilliseconds() - 1);
+
 
     // Try to find a document for today.
     const existingDoc = await collection.findOne({ created_at: { $gte: todayStart, $lt: todayEnd } });
