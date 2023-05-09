@@ -120,7 +120,7 @@ export default function AdminManage(props: Props) {
         setRoles(data);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [roles]);
 
   const handleCreateNewRow = (values: Admin) => {
     const lastRowId = tableData[tableData.length - 1]._id;
@@ -295,7 +295,7 @@ export default function AdminManage(props: Props) {
         },
       },
     ],
-    [getCommonEditTextFieldProps],
+    [getCommonEditTextFieldProps, roles],
   );
 
   const csvOptions = {

@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import { v4 as uuidv4 } from "uuid";
 import CredentialsProvider from "next-auth/providers/credentials";
 import clientPromise from "../../../lib/mongodb";
+import { encryption } from "./encryption";
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
@@ -43,16 +44,19 @@ export default NextAuth({
     async jwt({ token, admin }) {
       console.log("jwt: Original Token:", token);
       if (admin) {
-        token.accessToken = uuidv4();
-        token.exp = Math.floor(Date.now() / 1000) + ONE_HOUR_IN_SECONDS;
-        console.log("jwt: New Token:", token);
+        const encryptedToken = await encryption.encrypt(JSON.stringify(token));
+        const signedToken = await encryption.sign(encryptedToken);
+        return signedToken;
       }
       return token;
     },
+
     async session({ session, token }) {
       console.log("session: Session:", session);
       if (token?.accessToken) {
-        session.accessToken = token.accessToken;
+        const decryptedToken = await encryption.verify(token.accessToken);
+        const decryptedPayload = JSON.parse(decryptedToken.payload);
+        session.accessToken = decryptedPayload.accessToken;
         console.log("session: New Session:", session);
       }
       return session;
