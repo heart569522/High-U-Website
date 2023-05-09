@@ -256,7 +256,7 @@ export default function Navbar() {
               <Box className="flex absolute right-0 items-center">
                 {/* SEARCH MENU */}
                 <SearchBox />
-                {session?.user ?
+                {session?.user?
                   <>
                     <Box sx={{ paddingLeft: 1 }}>
                       <Tooltip title="Favorites">

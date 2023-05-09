@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../lib/mongodb";
 
-const userSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
+const adminSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         const client = await clientPromise;
@@ -33,4 +33,4 @@ const userSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-export default userSignIn
+export default adminSignIn

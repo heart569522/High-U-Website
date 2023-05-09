@@ -38,6 +38,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from "swiper";
 import 'swiper/css';
 import "swiper/css/navigation";
+import { GetSessionParams, getSession } from 'next-auth/react';
 
 type Props = {
     wigs: [Wig]
@@ -60,19 +61,41 @@ type Wig = {
     use: number;
 }
 
-export async function getServerSideProps() {
-    try {
-        let wigsResponse = await fetch(`${process.env.API_URL}/api/wig/getAllWigs`);
-        let wigs = await wigsResponse.json();
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+    const session = await getSession(context);
+
+    if (!session) {
         return {
-            props: { wigs: JSON.parse(JSON.stringify(wigs)) }
-        }
-    } catch (e) {
-        console.error(e);
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
     }
-    return {
-        props: { wigs: [] }
-    };
+
+    try {
+        const response = await fetch(`${process.env.API_URL}/api/wig/getAllWigs`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${session.accessToken}`,
+            },
+        });
+
+        if (response.ok) {
+            const wigs = await response.json();
+            return {
+                props: { wigs: JSON.parse(JSON.stringify(wigs)) }
+            };
+        } else {
+            throw new Error('Failed to fetch data');
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            props: { wigs: [] },
+        };
+    }
 }
 
 const drawerWidth = 240;

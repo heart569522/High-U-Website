@@ -9,7 +9,6 @@ import Layout from '@/components/Layout';
 
 import type { AppProps } from 'next/app'
 import index from '.';
-import test from './test';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   useEffect(() => {

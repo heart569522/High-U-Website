@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  IconButton,
   Container,
   Typography,
   Box,
   Grid,
-  Link,
   TextField,
-  CssBaseline,
   Button,
   Paper,
   Tab,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActionArea,
-  Avatar,
   Skeleton,
   CircularProgress,
   Backdrop,
@@ -40,6 +32,24 @@ import axios from 'axios';
 import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
 
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+  const session = await getSession(context)
+
+  // If the user doesn't have an active session, redirect to the login page
+  if (!session) {
+    return {
+      redirect: {
+        destination: './',
+        permanent: false,
+      },
+    }
+  }
+
+  // If the user has an active session, render the protected page
+  return {
+    props: { session },
+  }
+}
 
 interface User {
   _id: string;
@@ -81,8 +91,8 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
-        setUser(response.data);
+        const res = await axios.get(`${API_URL}/api/user_data/getUserData`);
+        setUser(res.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -325,7 +335,7 @@ export default function Profile() {
             <TabContext value={value}>
               {loading ? (<Skeleton animation="wave" variant="rectangular" className="w-full h-16 bg-[#f0ca8350] rounded-md" />) : (
                 <Box className="border-b border-[#886828]">
-                  <TabList onChange={handleMenuChange} aria-label="Favorite Menu">
+                  <TabList onChange={handleMenuChange} aria-label="Profile Menu">
                     <Tab label="My Profile" className="text-[#F0CA83] font-bold" value="1" />
                     <Tab label="Edit Profile" className="text-[#F0CA83] font-bold" value="2" />
                     <Tab label="Change Password" className="text-[#F0CA83] font-bold" value="3" />
@@ -603,21 +613,3 @@ export default function Profile() {
   );
 }
 
-export async function getServerSideProps(context: GetSessionParams | undefined) {
-  const session = await getSession(context)
-
-  // If the user doesn't have an active session, redirect to the login page
-  if (!session) {
-    return {
-      redirect: {
-        destination: './',
-        permanent: false,
-      },
-    }
-  }
-
-  // If the user has an active session, render the protected page
-  return {
-    props: { session },
-  }
-}

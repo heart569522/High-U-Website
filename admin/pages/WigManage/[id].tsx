@@ -26,6 +26,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleSharpIcon from '@mui/icons-material/RemoveCircleSharp';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
+import withProtectedPage from "../../lib/withProtectedPage";
 
 const MAX_SUB_IMAGES = 6;
 const INITIAL_SUB_IMAGES_COUNT = 3;
@@ -184,7 +185,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
       ? sub_image.map((url) => ({ url, file: null })) // initialize with null file values
       : new Array(INITIAL_SUB_IMAGES_COUNT).fill({}), // initialize with empty objects if sub_image is not defined
   });
-  
+
   useEffect(() => {
     // Fetch and set the arImage
     if (ar_image) {
@@ -192,14 +193,14 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         setImageWig((prevState) => ({ ...prevState, arImage: file }));
       });
     }
-  
+
     // Fetch and set the mainImage
     if (main_image) {
       createFileFromUrl(main_image, "mainImage.png").then((file) => {
         setImageWig((prevState) => ({ ...prevState, mainImage: file }));
       });
     }
-  
+
     // Upload and set the subImages
     if (sub_image) {
       Promise.all(
@@ -1089,4 +1090,4 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
   )
 }
 
-export default WigEdit
+export default withProtectedPage(WigEdit);

@@ -25,6 +25,7 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RemoveCircleSharpIcon from '@mui/icons-material/RemoveCircleSharp';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import { GetSessionParams, getSession } from 'next-auth/react';
 
 type ImageWig = {
   arImage: File | null;
@@ -52,6 +53,25 @@ const theme = createTheme({
     }
   },
 });
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+  const session = await getSession(context)
+
+  // If the user doesn't have an active session, redirect to the login page
+  if (!session) {
+    return {
+      redirect: {
+        destination: './',
+        permanent: false,
+      },
+    }
+  }
+
+  // If the user has an active session, render the protected page
+  return {
+    props: { session },
+  }
+}
 
 const AddWig = () => {
   const [title, setTitle] = useState("");

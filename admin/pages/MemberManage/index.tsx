@@ -31,6 +31,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
 import { useRouter } from 'next/router';
+import { GetSessionParams, getSession } from 'next-auth/react';
 
 type Props = {
   members: [Member]
@@ -46,19 +47,43 @@ type Member = {
   password: string;
 }
 
-export async function getServerSideProps() {
-  try {
-    let membersResponse = await fetch("http://localhost:8000/api/member/getAllMember");
-    let members = await membersResponse.json();
-    return {
-      props: { members: JSON.parse(JSON.stringify(members)) }
-    }
-  } catch (e) {
-    console.error(e);
+const API_URL = "http://localhost:8000"
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+  const session = await getSession(context);
+
+  if (!session) {
+      return {
+          redirect: {
+              destination: '/',
+              permanent: false,
+          },
+      };
   }
-  return {
-    props: { members: [] },
-  };
+
+  try {
+      const response = await fetch(`${process.env.API_URL}/api/member/getAllMember`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              // Authorization: `Bearer ${session.accessToken}`,
+          },
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          return {
+              props: { members: JSON.parse(JSON.stringify(data)) }
+          };
+      } else {
+          throw new Error('Failed to fetch data');
+      }
+  } catch (error) {
+      console.error(error);
+      return {
+          props: { members: [] },
+      };
+  }
 }
 
 const drawerWidth = 240;
@@ -92,7 +117,7 @@ export default function MemberManage(props: Props) {
 
   const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
     try {
-      const response = await fetch("http://localhost:8000/api/member/updateMember?id=" + values._id, {
+      const response = await fetch(`${API_URL}/api/member/updateMember?id=` + values._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -138,7 +163,7 @@ export default function MemberManage(props: Props) {
 
   const handleDeleteMember = async (memberId: string) => {
     try {
-      let response = await fetch("http://localhost:8000/api/member/deleteMember?id=" + memberId, {
+      let response = await fetch(`${API_URL}/api/member/deleteMember?id=` + memberId, {
         method: "DELETE",
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -308,7 +333,7 @@ export default function MemberManage(props: Props) {
               columns={columns}
               data={tableData}
               editingMode="modal"
-              initialState={{ columnVisibility: { _id: false } }}
+              initialState={{ columnVisibility: { _id: false, password: false } }}
               // enableColumnVirtualization
               enableGlobalFilterModes
               enableEditing
@@ -402,7 +427,7 @@ export const CreateNewAccountModal = ({
 
     try {
       const formData = { ...values, image: defaultImage };
-      const response = await fetch('http://localhost:8000/api/member/addMember', {
+      const response = await fetch(`${API_URL}/api/member/addMember`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

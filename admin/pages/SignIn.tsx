@@ -10,10 +10,10 @@ import {
     TextField,
     CssBaseline,
     Button,
+    Paper,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-import Admin_Data from '../helper/Admin_Data.json'
+import { signIn, SignInResponse } from 'next-auth/react';
 
 const theme = createTheme({
     typography: {
@@ -40,11 +40,11 @@ export const SignIn = React.memo(() => {
 
     const handleUsernameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
-    }, []);
+    }, [setUsername]);
 
     const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
-    }, []);
+    }, [setPassword]);
 
     const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
         if (event.key === ' ') {
@@ -52,24 +52,27 @@ export const SignIn = React.memo(() => {
         }
     }, []);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        try {
-            const admin = Admin_Data.find(
-                (admin: { username: string, password: string }) => admin.username === username && admin.password === password
-            )
+    const handleSubmit = useCallback(async (event: FormEvent) => {
+        event.preventDefault();
 
-            if (admin) {
-                localStorage.setItem('admin', JSON.stringify(admin))
-                router.push('/Dashboard');
+        try {
+            const result: SignInResponse = await signIn('credentials', {
+                redirect: false,
+                username,
+                password
+              }) as SignInResponse;
+
+            if (result.error) {
+                throw new Error('Login failed. Please check your credentials and try again.');
             } else {
-                console.error('Invalid username or password')
-                setErrorMessage("Invalid Username or Password");
+                router.push('./Dashboard');
             }
-        } catch (err) {
-            console.error(err)
+        } catch (e: any) {
+            console.error(e);
+            // alert(e.message);
+            setErrorMessage("Username or Password is Wrong")
         }
-    }
+    }, [username, password, router]);
 
     return (
 
@@ -77,7 +80,7 @@ export const SignIn = React.memo(() => {
             <Box className="bg-[#e8e8e8] h-full w-full bg-cover fixed">
                 <Container component="main" maxWidth="sm">
                     <CssBaseline />
-                    <Box className="my-12 shadow-lg top-0 rounded-lg bg-white p-5" data-aos="fade-zoom-in">
+                    <Paper elevation={3} className="my-12 shadow-lg top-0 rounded-lg bg-white p-5" data-aos="fade-zoom-in">
                         <Typography variant="h5" color="black" className="font-bold text-center">
                             High U - Administrator
                         </Typography>
@@ -119,7 +122,7 @@ export const SignIn = React.memo(() => {
                                 Sign In
                             </Button>
                         </form>
-                    </Box>
+                    </Paper>
                 </Container>
             </Box>
         </ThemeProvider>

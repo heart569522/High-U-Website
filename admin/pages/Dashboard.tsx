@@ -17,6 +17,7 @@ import TopFiveWigView_DonutChart from '@/components/Chart/TopFiveWigView_DonutCh
 import TopFiveWigView_List from '@/components/Chart/TopFiveWigView_List';
 import SummaryCard_Chart from '@/components/Chart/SummaryCard_Chart';
 import TopThreeFavWig from '@/components/Chart/TopThreeFavWig';
+import { GetSessionParams, getSession } from 'next-auth/react';
 
 const drawerWidth = 240;
 const API_URL = "http://localhost:8000"
@@ -37,6 +38,25 @@ const theme = createTheme({
   },
 
 });
+
+export async function getServerSideProps(context: GetSessionParams | undefined) {
+  const session = await getSession(context)
+
+  // If the user doesn't have an active session, redirect to the login page
+  if (!session) {
+    return {
+      redirect: {
+        destination: './',
+        permanent: false,
+      },
+    }
+  }
+
+  // If the user has an active session, render the protected page
+  return {
+    props: { session },
+  }
+}
 
 function Dashboard() {
   const [selectedView, setSelectedView] = useState('chart');
