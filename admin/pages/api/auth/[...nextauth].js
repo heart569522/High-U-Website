@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { v4 as uuidv4 } from "uuid";
 import CredentialsProvider from "next-auth/providers/credentials";
 import clientPromise from "../../../lib/mongodb";
-import { encryption } from "./encryption";
+import { encrypt } from "./encryption";
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
@@ -41,23 +41,18 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, admin }) {
-      console.log("jwt: Original Token:", token);
-      if (admin) {
-        const encryptedToken = await encryption.encrypt(JSON.stringify(token));
-        const signedToken = await encryption.sign(encryptedToken);
-        return signedToken;
+    async jwt({ token, account }) {
+      // Persist the OAuth access_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
       }
       return token;
     },
-
-    async session({ session, token }) {
-      console.log("session: Session:", session);
-      if (token?.accessToken) {
-        const decryptedToken = await encryption.verify(token.accessToken);
-        const decryptedPayload = JSON.parse(decryptedToken.payload);
-        session.accessToken = decryptedPayload.accessToken;
-        console.log("session: New Session:", session);
+    async session({ session, token, user }) {
+      // Encrypt and store the access token in the session
+      if (token && token.accessToken) {
+        const encryptedToken = await encrypt(token.accessToken);
+        session.accessToken = encryptedToken;
       }
       return session;
     },

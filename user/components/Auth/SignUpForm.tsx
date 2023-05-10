@@ -159,7 +159,6 @@ export default function SignUpForm() {
     }
 
     return (
-
         <ThemeProvider theme={theme}>
             <Box className="bg-[#948975] h-full w-full bg-cover fixed">
                 <Box className="colorBackgroundGold h-full w-full bg-cover fixed" >
