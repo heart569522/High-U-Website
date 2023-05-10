@@ -21,7 +21,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import Navbar from "../components/Navigation/Navigation"
+import Navbar from "../../components/Navigation/Navigation"
 
 import Head from 'next/head';
 import Image from 'next/image';
@@ -92,13 +92,15 @@ export default function TryAR(props: Props) {
   }, []);
 
   function handleMessage(event: any) {
-    console.log(event.data);
+    console.log("handleMessage called with event:", event);
 
     if (event.data.type === "screenshot") {
+      console.log("Received screenshot:", event.data.image);
       setImage(event.data.image);
+      console.log("Screenshot image state:", image);
       setModalOpen(true);
     } else {
-
+      console.log("Received unknown message type:", event.data.type);
     }
   }
 
@@ -141,7 +143,7 @@ export default function TryAR(props: Props) {
                 <center>
                   <iframe
                     ref={iframeRef}
-                    src="/trywig2D/index.html"
+                    src="index.html"
                     className="w-full h-[650px] object-cover"
                   />
                   <Grid item xs={12} className="pt-5 text-center">
@@ -169,7 +171,6 @@ export default function TryAR(props: Props) {
                         alt={item.title}
                         width={224}
                         height={224}
-                        priority
                       />
                     </CardActionArea>
                   </Card>
@@ -184,11 +185,11 @@ export default function TryAR(props: Props) {
               <Box className="text-right">
                 {image ?
                   <Image
-                    src={image || 'Image Error'}
+                    src={image || 'https://via.placeholder.com/600x600.png?text=No+screenshot'}
                     alt="Screenshot"
+                    className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
                     width={600}
                     height={600}
-                    className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
                   />
                   : <h1>Error image captured!!!</h1>
                 }

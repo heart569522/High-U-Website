@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.147.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.147.0/examples/jsm/",
+          "mindar-face-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-face-three.prod.js"
+        }
+      }
+    </script>
+    <style>
+      body {
+        margin: 0;
+      }
+      #container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        transform: rotateY(180deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="module">
+      import * as THREE from "three";
+      import { MindARThree } from "mindar-face-three";
+
+      const container = document.querySelector("#container");
+      const mindarThree = new MindARThree({
+        container: container,
+      });
+      const renderer = mindarThree.renderer;
+      const scene = mindarThree.scene;
+      const camera = mindarThree.camera;
+
+      const anchor = mindarThree.addAnchor(1);
+      const texture = new THREE.TextureLoader().load("./ar_empty.png");
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+      });
+      const geometry = new THREE.PlaneGeometry(2, 2.4);
+      const plane = new THREE.Mesh(geometry, material);
+      anchor.group.add(plane);
+
+      const start = async () => {
+        await mindarThree.start();
+        renderer.setAnimationLoop(() => {
+          renderer.render(scene, camera);
+        });
+      };
+
+      start();
+
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "select") {
+          const texture = new THREE.TextureLoader().load(event.data.image);
+          material.map = texture;
+        }
+        if (event.data.type === "capture") {
+          const canvas = renderer.domElement;
+          const width = container.offsetWidth;
+          const height = container.offsetHeight;
+          const context = canvas.getContext("webgl2", { antialias: true });
+          const buffer = new Uint8Array(width * height * 4);
+          context.readPixels(
+            0,
+            0,
+            width,
+            height,
+            context.RGBA,
+            context.UNSIGNED_BYTE,
+            buffer
+          );
+          const imageData = new ImageData(
+            new Uint8ClampedArray(buffer),
+            width,
+            height
+          );
+          const screenshotCanvas = document.createElement("canvas");
+          screenshotCanvas.width = width;
+          screenshotCanvas.height = height;
+          screenshotCanvas.getContext("2d").putImageData(imageData, 0, 0);
+          const dataUrl = screenshotCanvas.toDataURL("image/png");
+          event.source.postMessage(
+            { type: "screenshot", image: dataUrl },
+            event.origin
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
