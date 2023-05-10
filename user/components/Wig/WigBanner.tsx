@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper";
 import { Box, } from '@mui/material';
 import Image from 'next/image';
-import Banner_Item from '../../helper/Banner_Item.json';
+import Banner_Item from './Banner_Item.json';
 
 type Banner = {
     id: string;

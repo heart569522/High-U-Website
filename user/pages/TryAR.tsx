@@ -66,8 +66,7 @@ type Wig = {
 
 export async function getServerSideProps() {
   try {
-    let apiUrl = process.env.API_URL;
-    let wigsResponse = await fetch(`${apiUrl}/api/wig_data/getAllWigs`);
+    let wigsResponse = await fetch(`${process.env.API_URL}/api/wig_data/getARWigs`);
     let wigs = await wigsResponse.json();
     return {
       props: { wigs: JSON.parse(JSON.stringify(wigs)) }
@@ -118,6 +117,8 @@ export default function TryAR(props: Props) {
     }
   }
 
+  const wigsWithValidArImage = wigData.filter(wig => wig.ar_image !== null);
+
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -157,7 +158,7 @@ export default function TryAR(props: Props) {
               </Box>
             </Grid>
             <Grid item sm={12} md={6}>
-              {wigData.map((item, i) =>
+              {wigsWithValidArImage.map((item, i) =>
                 <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                   <Card variant="outlined" className="content">
                     <CardActionArea onClick={() => handleSelectWig(item.ar_image)}>
@@ -194,11 +195,8 @@ export default function TryAR(props: Props) {
                 <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
                   <FavoriteIcon />
                 </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-green-700 hover:text-white">
-                  <DownloadIcon />
-                </IconButton>
                 <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
-                  <ShareIcon />
+                  <DownloadIcon />
                 </IconButton>
                 <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
                   <ClearIcon />

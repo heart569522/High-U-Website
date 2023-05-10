@@ -48,7 +48,6 @@ const theme = createTheme({
 });
 
 const drawerWidth = 240;
-const API_URL = "http://localhost:8000"
 
 interface Admin {
   _id: string;
@@ -62,7 +61,7 @@ export default function DrawerBar() {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/admin/getAdminData`);
+        const res = await axios.get(`${process.env.API_URL}/api/admin/getAdminData`);
         setAdminData(res.data);
       } catch (error) {
         console.error(error);

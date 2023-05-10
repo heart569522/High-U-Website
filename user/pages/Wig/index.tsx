@@ -99,8 +99,6 @@ type Member = {
   _id: string
 }
 
-const API_URL = "http://localhost:3000"
-
 export async function getServerSideProps() {
   try {
     let wigsResponse = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
@@ -148,7 +146,7 @@ export default function Wig(props: Props) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+        const response = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
         setMember(response.data);
       } catch (error) {
         console.error(error);
@@ -163,7 +161,7 @@ export default function Wig(props: Props) {
       if (!member) return;
 
       try {
-        const favorites = await axios.get(`${API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
+        const favorites = await axios.get(`${process.env.API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
 
         const favoriteState = favorites.data.reduce((acc: FavoriteState, favorite: any) => {
           const wigId = favorite.wig_id.toString(); // Convert wig ID to string for indexing
@@ -187,7 +185,7 @@ export default function Wig(props: Props) {
     }
 
     try {
-      const apiUrl = `${API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
+      const apiUrl = `${process.env.API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
 
       // Check if the wig is already marked as favorite
       if (isFavorite[wigId]) {

@@ -34,8 +34,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-const API_URL = "http://localhost:3000"
-
 const theme = createTheme({
     typography: {
         fontFamily: [
@@ -190,7 +188,7 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
     useEffect(() => {
         async function fetchWigsData() {
             try {
-                const response = await fetch(`${API_URL}/api/wig_data/getAllWigs`);
+                const response = await fetch(`${process.env.API_URL}/api/wig_data/getAllWigs`);
                 const data = await response.json();
                 setWigsData(data);
             } catch (error) {
@@ -202,7 +200,7 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
     }, []);
 
     async function addViewToWig(wigId: string): Promise<void> {
-        const response = await fetch(`${API_URL}/api/wig_data/addViewWig`, {
+        const response = await fetch(`${process.env.API_URL}/api/wig_data/addViewWig`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -223,7 +221,7 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+                const response = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
                 setMember(response.data);
             } catch (error) {
                 console.error(error);
@@ -238,7 +236,7 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
             if (!member) return;
 
             try {
-                const favorites = await axios.get(`${API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
+                const favorites = await axios.get(`${process.env.API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
 
                 const favoriteState = favorites.data.reduce((acc: FavoriteState, favorite: any) => {
                     const wigId = favorite.wig_id.toString(); // Convert wig ID to string for indexing
@@ -262,7 +260,7 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
         }
 
         try {
-            const apiUrl = `${API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
+            const apiUrl = `${process.env.API_URL}/api/favorite/favoriteWig?id=${member?._id}`;
 
             // Check if the wig is already marked as favorite
             if (isFavorite[wigId]) {

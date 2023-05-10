@@ -20,7 +20,6 @@ import TopThreeFavWig from '@/components/Chart/TopThreeFavWig';
 import { GetSessionParams, getSession } from 'next-auth/react';
 
 const drawerWidth = 240;
-const API_URL = "http://localhost:8000"
 
 const theme = createTheme({
   palette: {

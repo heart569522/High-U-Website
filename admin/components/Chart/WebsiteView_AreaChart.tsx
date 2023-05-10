@@ -11,8 +11,6 @@ interface ChartData {
     chartMonthData: { month: string; view: number }[];
 }
 
-const API_URL = "http://localhost:8000"
-
 export default function WebsiteView_AreaChart() {
     const [chartData, setChartData] = useState<ChartData>({
         totalVisitors: 0,
@@ -25,7 +23,7 @@ export default function WebsiteView_AreaChart() {
     const [showDaily, setShowDaily] = useState<boolean>(true);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/web_data/getViewWebsite`)
+        fetch(`${process.env.API_URL}/api/web_data/getViewWebsite`)
             .then((response) => response.json())
             .then((data) => {
                 setChartData(data);

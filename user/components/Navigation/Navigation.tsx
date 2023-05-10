@@ -19,7 +19,6 @@ import { useRouter } from 'next/router'
 import { useSession, signOut } from "next-auth/react"
 
 // Import Components
-import NavbarLikeProfile from './NavbarLikeProfile';
 import NavbarSignInUpButton from './NavbarSignInUpButton';
 import { Avatar, Button, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText, Tooltip } from '@mui/material';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
@@ -308,12 +307,9 @@ export default function Navbar() {
                       </Menu>
                     </Box>
                   </>
-
                   :
                   <NavbarSignInUpButton />
                 }
-
-
               </Box>
             </Toolbar>
           </Container>

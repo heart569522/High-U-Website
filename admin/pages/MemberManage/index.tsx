@@ -47,8 +47,6 @@ type Member = {
   password: string;
 }
 
-const API_URL = "http://localhost:8000"
-
 export async function getServerSideProps(context: GetSessionParams | undefined) {
   const session = await getSession(context);
 
@@ -117,7 +115,7 @@ export default function MemberManage(props: Props) {
 
   const handleSaveRowEdits: MaterialReactTableProps<Member>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
     try {
-      const response = await fetch(`${API_URL}/api/member/updateMember?id=` + values._id, {
+      const response = await fetch(`${process.env.API_URL}/api/member/updateMember?id=` + values._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -163,7 +161,7 @@ export default function MemberManage(props: Props) {
 
   const handleDeleteMember = async (memberId: string) => {
     try {
-      let response = await fetch(`${API_URL}/api/member/deleteMember?id=` + memberId, {
+      let response = await fetch(`${process.env.API_URL}/api/member/deleteMember?id=` + memberId, {
         method: "DELETE",
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -427,7 +425,7 @@ export const CreateNewAccountModal = ({
 
     try {
       const formData = { ...values, image: defaultImage };
-      const response = await fetch(`${API_URL}/api/member/addMember`, {
+      const response = await fetch(`${process.env.API_URL}/api/member/addMember`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

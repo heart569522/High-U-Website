@@ -35,7 +35,6 @@ type ImageWig = {
 
 const MAX_SUB_IMAGES = 6;
 const INITIAL_SUB_IMAGES_COUNT = 3;
-const API_URL = "http://localhost:8000"
 
 const drawerWidth = 240;
 const theme = createTheme({
@@ -501,7 +500,7 @@ const AddWig = () => {
       );
 
       // Add wig data to database
-      const response = await fetch(`${API_URL}/api/wig/addWig`, {
+      const response = await fetch(`${process.env.API_URL}/api/wig/addWig`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -33,7 +33,6 @@ const theme = createTheme({
   },
 
 });
-const API_URL = "http://localhost:3000"
 
 type Wig = {
   _id: string;
@@ -47,7 +46,7 @@ export default function HomeContent() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/wig_data/get4WigOnHome`);
+        const response = await axios.get(`${process.env.API_URL}/api/wig_data/get4WigOnHome`);
         setWigData(response.data);
       } catch (error) {
         console.error(error);

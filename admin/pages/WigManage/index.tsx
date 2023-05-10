@@ -370,7 +370,7 @@ export default function WigManage(props: Props) {
 
     const handleDeleteWig = async (wigId: string) => {
         try {
-            let response = await fetch("http://localhost:8000/api/wig/deleteWig?id=" + wigId, {
+            let response = await fetch(`${process.env.API_URL}/api/wig/deleteWig?id=` + wigId, {
                 method: "DELETE",
                 headers: {
                     Accept: "application/json, text/plain, */*",

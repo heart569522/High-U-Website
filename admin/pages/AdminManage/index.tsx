@@ -49,8 +49,6 @@ type Admin = {
   role: string;
 }
 
-const API_URL = "http://localhost:8000"
-
 export async function getServerSideProps(context: GetSessionParams | undefined) {
   const session = await getSession(context);
 
@@ -114,7 +112,7 @@ export default function AdminManage(props: Props) {
 
   const [roles, setRoles] = useState([]);
   useEffect(() => {
-    fetch(`${API_URL}/api/admin/getRoleAdmin`)
+    fetch(`${process.env.API_URL}/api/admin/getRoleAdmin`)
       .then((response) => response.json())
       .then((data) => {
         setRoles(data);
@@ -130,7 +128,7 @@ export default function AdminManage(props: Props) {
 
   const handleSaveRowEdits: MaterialReactTableProps<Admin>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
     try {
-      const response = await fetch(`${API_URL}/api/admin/updateAdmin?id=` + values._id, {
+      const response = await fetch(`${process.env.API_URL}/api/admin/updateAdmin?id=` + values._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -175,7 +173,7 @@ export default function AdminManage(props: Props) {
 
   const handleDeleteAdmin = async (adminId: string) => {
     try {
-      let response = await fetch(`${API_URL}/api/admin/deleteAdmin?id=` + adminId, {
+      let response = await fetch(`${process.env.API_URL}/api/admin/deleteAdmin?id=` + adminId, {
         method: "DELETE",
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -450,7 +448,7 @@ export const CreateNewAccountModal = ({
 
     try {
       const formData = { ...values, image: defaultImage };
-      const response = await fetch(`${API_URL}/api/admin/addAdmin`, {
+      const response = await fetch(`${process.env.API_URL}/api/admin/addAdmin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

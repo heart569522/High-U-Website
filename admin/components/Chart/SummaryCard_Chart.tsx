@@ -16,15 +16,13 @@ import OutboundIcon from '@mui/icons-material/Outbound';
 
 import { useEffect, useState } from 'react';
 
-const API_URL = "http://localhost:8000"
-
 export default function SummaryCard_Chart() {
     const [wigCount, setWigCount] = useState(0);
     const [memberCount, setMemberCount] = useState(0);
     const [viewCount, setViewCount] = useState(0);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/web_data/countAllWebView`)
+        fetch(`${process.env.API_URL}/api/web_data/countAllWebView`)
             .then((response) => response.json())
             .then(data => {
                 const view = data.totalVisitors;
@@ -34,7 +32,7 @@ export default function SummaryCard_Chart() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/wig/countAllWigs`)
+        fetch(`${process.env.API_URL}/api/wig/countAllWigs`)
             .then((response) => response.json())
             .then(data => {
                 const wig = data.count;
@@ -44,7 +42,7 @@ export default function SummaryCard_Chart() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/member/countAllMembers`)
+        fetch(`${process.env.API_URL}/api/member/countAllMembers`)
             .then((response) => response.json())
             .then(data => {
                 const member = data.count;

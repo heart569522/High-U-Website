@@ -46,7 +46,6 @@ interface Admin {
     password: string;
 }
 
-const API_URL = "http://localhost:8000";
 const drawerWidth = 240;
 const theme = createTheme({
     typography: {
@@ -74,7 +73,7 @@ export default function Profile() {
     useEffect(() => {
         const fetchAdminData = async () => {
             try {
-                const res = await axios.get(`${API_URL}/api/admin/getAdminData`);
+                const res = await axios.get(`${process.env.API_URL}/api/admin/getAdminData`);
                 setAdminUser(res.data);
             } catch (error) {
                 console.error(error);
@@ -160,7 +159,7 @@ export default function Profile() {
                         setUrl(imageUrl)
 
                         // Update the member with the new image URL
-                        let response = await fetch(`${API_URL}/api/admin/updateAdminProfile?id=` + adminData?._id, {
+                        let response = await fetch(`${process.env.API_URL}/api/admin/updateAdminProfile?id=` + adminData?._id, {
                             method: 'POST',
                             headers: {
                                 Accept: "application/json, text/plain, */*",
@@ -184,7 +183,7 @@ export default function Profile() {
                 )
             } else {
                 // Update the member without changing the image URL
-                let response = await fetch(`${API_URL}/api/admin/updateAdminProfile?id=` + adminData?._id, {
+                let response = await fetch(`${process.env.API_URL}/api/admin/updateAdminProfile?id=` + adminData?._id, {
                     method: 'POST',
                     headers: {
                         Accept: "application/json, text/plain, */*",
@@ -259,7 +258,7 @@ export default function Profile() {
 
         try {
             // Call the API to update the user's password
-            const response = await fetch(`${API_URL}/api/admin/updateAdminPassword?id=` + adminData?._id, {
+            const response = await fetch(`${process.env.API_URL}/api/admin/updateAdminPassword?id=` + adminData?._id, {
                 method: 'POST',
                 headers: {
                     Accept: "application/json, text/plain, */*",
@@ -422,7 +421,6 @@ export default function Profile() {
                                                         <TextField
                                                             type='text'
                                                             defaultValue={adminData?.firstname || ''}
-                                                            // value={editFirstname}
                                                             fullWidth
                                                             name='editFirstname'
                                                             variant='outlined'

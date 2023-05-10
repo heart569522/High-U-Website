@@ -47,8 +47,6 @@ const theme = createTheme({
 
 });
 
-const API_URL = "http://localhost:3000"
-
 type Wig = {
     _id: string;
     main_image: string;
@@ -75,7 +73,7 @@ export default function Favorite() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/user_data/getUserData`);
+                const response = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
                 setMember(response.data);
             } catch (error) {
                 console.error(error);
@@ -90,7 +88,7 @@ export default function Favorite() {
             if (!member) return;
 
             try {
-                const favorites = await axios.get(`${API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
+                const favorites = await axios.get(`${process.env.API_URL}/api/favorite/getFavoriteData?member_id=${member._id}`);
 
                 const favoriteState = favorites.data.reduce((acc: FavoriteState, favorite: any) => {
                     const wigId = favorite.wig_id.toString(); // Convert wig ID to string for indexing
@@ -110,7 +108,7 @@ export default function Favorite() {
     useEffect(() => {
         const fetchWigs = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/wig_data/getAllWigs`);
+                const response = await axios.get(`${process.env.API_URL}/api/wig_data/getAllWigs`);
                 setWigs(response.data);
             } catch (error) {
                 console.error(error);

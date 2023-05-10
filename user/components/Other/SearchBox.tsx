@@ -12,8 +12,6 @@ interface Wig {
     color: string
 }
 
-const API_URL = "http://localhost:3000"
-
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -73,7 +71,7 @@ export default function SearchBox() {
         const searchText = event.target.value;
         setSearchText(searchText);
         if (searchText.trim() !== '') {
-            fetch(`${API_URL}/api/wig_data/searchWigs?q=${searchText}`)
+            fetch(`${process.env.API_URL}/api/wig_data/searchWigs?q=${searchText}`)
                 .then(response => response.json())
                 .then(data => setPreviewResults(data.results))
                 .catch(error => console.log(error));

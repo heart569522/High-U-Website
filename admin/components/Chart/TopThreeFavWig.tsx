@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 
-const API_URL = "http://localhost:8000"
 interface Wig {
     title: string;
     favorite: number;
@@ -13,7 +12,7 @@ export default function TopThreeFavWig() {
     const [topWig, setTopWig] = useState<Wig[]>([]);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/wig/getTop3FavWigs`)
+        fetch(`${process.env.API_URL}/api/wig/getTop3FavWigs`)
             .then((response) => response.json())
             .then(data => {
                 const wig = data;

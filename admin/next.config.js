@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    API_URL: 'http://localhost:8000'
+  },
   experimental: {
     appDir: false,
     serverComponentsExternalPackages: ["@tremor/react"],

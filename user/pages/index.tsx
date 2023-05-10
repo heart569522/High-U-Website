@@ -5,12 +5,10 @@ import Footer from "../components/Footer/Footer";
 import Head from "next/head";
 import { useEffect } from "react";
 
-const API_URL = "http://localhost:3000"
-
 export default function Index() {
 
   useEffect(() => {
-    fetch(`${API_URL}/api/web_data/addViewWebsite`, {
+    fetch(`${process.env.API_URL}/api/web_data/addViewWebsite`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -77,7 +77,7 @@ const theme = createTheme({
   },
 });
 
-const API_URL = "http://localhost:3000";
+let API_URL = process.env.API_URL;
 
 export default function Profile() {
   const [value, setValue] = useState('1');

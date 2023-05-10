@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { DonutChart, Legend } from "@tremor/react";
 import { Box, Grid } from '@mui/material';
 
-const API_URL = "http://localhost:8000"
 interface Wig {
     title: string;
     view: number;
@@ -12,7 +11,7 @@ export default function TopFiveWigView_DonutChart() {
     const [topWig, setTopWig] = useState<Wig[]>([]);
 
     useEffect(() => {
-        fetch(`${API_URL}/api/wig/getTop5ViewWigs`)
+        fetch(`${process.env.API_URL}/api/wig/getTop5ViewWigs`)
             .then((response) => response.json())
             .then(data => {
                 const wig = data;

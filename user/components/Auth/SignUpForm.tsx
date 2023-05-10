@@ -32,9 +32,6 @@ const theme = createTheme({
     },
 });
 
-const API_URL = "http://localhost:3000"
-
-
 export default function SignUpForm() {
     const router = useRouter()
     const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
@@ -120,7 +117,7 @@ export default function SignUpForm() {
             const sanitizedUsername = DOMPurify.sanitize(username);
             const sanitizedPassword = DOMPurify.sanitize(password);
 
-            const response = await fetch(`${API_URL}/api/auth/user_signup`, {
+            const response = await fetch(`${process.env.API_URL}/api/auth/user_signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
