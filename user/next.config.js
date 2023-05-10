@@ -2,7 +2,7 @@
 
 const nextConfig = {
   env: {
-    API_URL: 'http://localhost:3000'
+    API_URL: 'https://high-u-hairwig.vercel.app'
   },
   reactStrictMode: true,
   swcMinify: true,
@@ -12,8 +12,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
-        // port: '',
-        // pathname: '/account123/**',
       },
     ],
   },

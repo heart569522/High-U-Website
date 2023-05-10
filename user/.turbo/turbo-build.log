@@ -2,50 +2,77 @@
 > high-u@0.1.0 build
 > next build
 
+warn  - You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
 info  - Loaded env from D:\PAYAP\High-U-Website\user\.env.local
 info  - Linting and checking validity of types...
 info  - Creating an optimized production build...
 info  - Compiled successfully
 info  - Collecting page data...
-info  - Generating static pages (0/7)
-info  - Generating static pages (1/7)
-info  - Generating static pages (3/7)
-info  - Generating static pages (5/7)
-info  - Generating static pages (7/7)
+(node:30368) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+info  - Generating static pages (0/11)
+info  - Generating static pages (2/11)
+getStaticProps called
+cachedData: null
+getStaticProps called
+cachedData: null
+(node:5256) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28868) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+getStaticProps called
+cachedData: null
+(node:12592) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Data not found in cache
+Data not found in cache
+Data not found in cache
+Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
+    at title
+    at head
+    at Head (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:289:1)
+    at html
+    at Html (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:677:104)
+    at Document (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:24:1)
+Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
+    at title
+    at head
+    at Head (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:289:1)
+    at html
+    at Html (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:677:104)
+    at Document (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:24:1)
+Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
+    at title
+    at head
+    at Head (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:289:1)
+    at html
+    at Html (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:677:104)
+    at Document (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:24:1)
+info  - Generating static pages (5/11)
+getStaticProps called
+cachedData: null
+getStaticProps called
+cachedData: null
+(node:29616) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31876) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Data not found in cache
+Data not found in cache
+info  - Generating static pages (8/11)
+Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
+    at title
+    at head
+    at Head (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:289:1)
+    at html
+    at Html (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:677:104)
+    at Document (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:24:1)
+Warning: A title element received an array with more than 1 element as children. In browsers title Elements can only have Text Nodes as children. If the children being rendered output more than a single text node in aggregate the browser will display markup and comments as text in the title and hydration will likely fail and fall back to client rendering
+    at title
+    at head
+    at Head (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:289:1)
+    at html
+    at Html (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:677:104)
+    at Document (D:\PAYAP\High-U-Website\user\.next\server\pages\_document.js:24:1)
+info  - Generating static pages (11/11)
 info  - Finalizing page optimization...
-
-Route (pages)                              Size     First Load JS
-┌ ○ / (1738 ms)                            3.95 kB         170 kB
-├ ○ /404                                   181 B          88.3 kB
-├ λ /api/auth/[...nextauth]                0 B            88.1 kB
-├ λ /api/auth/user_signin                  0 B            88.1 kB
-├ λ /api/auth/user_signup                  0 B            88.1 kB
-├ λ /api/connect_db                        0 B            88.1 kB
-├ λ /api/firebaseConfig                    0 B            88.1 kB
-├ λ /api/old/arApi                         0 B            88.1 kB
-├ λ /api/old/hello                         0 B            88.1 kB
-├ λ /api/old/memberApi                     0 B            88.1 kB
-├ λ /api/old/wigApi                        0 B            88.1 kB
-├ λ /api/user_data/getUserData             0 B            88.1 kB
-├ λ /api/user_data/updateUserPassword      0 B            88.1 kB
-├ λ /api/user_data/updateUserProfile       0 B            88.1 kB
-├ λ /api/wig_data/getAllWigs               0 B            88.1 kB
-├   /_app                                  0 B            88.1 kB
-├ λ /Favorite                              5.46 kB         175 kB
-├ λ /Profile                               22.8 kB         201 kB
-├ ○ /SignIn (1738 ms)                      1.84 kB         173 kB
-├ ○ /SignUp (1724 ms)                      12 kB           183 kB
-├ λ /TryAR                                 3.03 kB         165 kB
-├ ○ /Wig (1880 ms)                         34.9 kB         201 kB
-├   └ css/4a73ea53987a5bb5.css             3.91 kB
-└ ○ /WigProduct (1786 ms)                  6.52 kB         173 kB
-+ First Load JS shared by all              124 kB
-  ├ chunks/framework-0271d0514da4f159.js   45.4 kB
-  ├ chunks/main-f2e125da23ccdc4a.js        26.7 kB
-  ├ chunks/pages/_app-c273cf066e70b368.js  15 kB
-  ├ chunks/webpack-6ef43a8d4a395f49.js     999 B
-  └ css/edfe88883a4e35cd.css               35.6 kB
-
-λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
-○  (Static)  automatically rendered as static HTML (uses no initial props)
-
