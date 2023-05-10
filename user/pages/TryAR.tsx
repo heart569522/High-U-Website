@@ -21,7 +21,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 
 // IMPORT COMPONENT
-import Navbar from "../../components/Navigation/Navigation"
+import Navbar from "../components/Navigation/Navigation"
 
 import Head from 'next/head';
 import Image from 'next/image';
@@ -143,7 +143,7 @@ export default function TryAR(props: Props) {
                 <center>
                   <iframe
                     ref={iframeRef}
-                    src="index.html"
+                    src="./ar_wig/index.html"
                     className="w-full h-[650px] object-cover"
                   />
                   <Grid item xs={12} className="pt-5 text-center">
