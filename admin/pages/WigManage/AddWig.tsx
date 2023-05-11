@@ -18,7 +18,7 @@ import {
   Alert,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { storage } from '../../pages/api/firebaseConfig';
+import { storage } from '../api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import Head from 'next/head';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
@@ -365,8 +365,8 @@ const AddWig = () => {
     setSubImagePreviews(new Array(INITIAL_SUB_IMAGES_COUNT).fill(""));
   };
 
-  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'main' | 'sub', width = 525, height = 700): Promise<File> => {
-    if (type === 'main' || type === 'sub') {
+  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'ar' | 'main' | 'sub', width = 525, height = 700): Promise<File> => {
+    if (type === 'ar' || type === 'main' || type === 'sub') {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
@@ -435,11 +435,15 @@ const AddWig = () => {
     e.preventDefault();
 
     try {
-
       if (!imageWig.mainImage) {
         throw new Error('File is required')
       }
 
+      // if (!imageWig.arImage) {
+      //   throw new Error('File is required')
+      // }
+
+      const arImageCrop = await resizeAndCropImage(imageWig.arImage as File, 'arImage.png', 'ar');
       const mainImageCrop = await resizeAndCropImage(imageWig.mainImage, 'mainImage.png', 'main');
       const subImageCrops = await Promise.all(
         imageWig.subImages.map((subImage, index) => {
@@ -450,7 +454,7 @@ const AddWig = () => {
         })
       );
 
-
+      const arImageName = arImageCrop.name;  
       const mainImageName = mainImageCrop.name;
       const subImageNames = (subImageCrops as File[]).map((subImage) => subImage.name);
 
@@ -466,17 +470,9 @@ const AddWig = () => {
         ref(storage, `wig_images/${title}/sub_images/${'SUB_Image_' + i}`)
       );
 
-      let arSnapshot = null;
-      let arImageUrl = null;
-      if (imageWig.arImage) {
-        const arUploadTask = uploadBytesResumable(
-          arImageRef,
-          imageWig.arImage
-        );
-        arSnapshot = await arUploadTask;
-        arImageUrl = await getDownloadURL(arSnapshot.ref);
-      }
-
+      const arUploadTask = uploadBytesResumable(arImageRef, arImageCrop, {
+        contentType: 'image/png'
+      });
       const mainUploadTask = uploadBytesResumable(mainImageRef, mainImageCrop, {
         contentType: 'image/png'
       });
@@ -489,11 +485,13 @@ const AddWig = () => {
         });
       });
       // Wait for all images to finish uploading
-      const [mainSnapshot, ...subSnapshots] = await Promise.all([
+      const [arSnapshot, mainSnapshot, ...subSnapshots] = await Promise.all([
+        arUploadTask,
         mainUploadTask,
         ...subUploadTasks,
       ]);
 
+      const arImageUrl = await getDownloadURL(arSnapshot.ref);
       const mainImageUrl = await getDownloadURL(mainSnapshot.ref);
       const subImageUrls = await Promise.all(
         subSnapshots.map((snapshot) => getDownloadURL(snapshot.ref))

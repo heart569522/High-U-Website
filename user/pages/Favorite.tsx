@@ -12,6 +12,8 @@ import {
     CardMedia,
     CardContent,
     CardActionArea,
+    Modal,
+    Tooltip,
 } from '@mui/material';
 import {
     TabContext,
@@ -19,12 +21,16 @@ import {
     TabPanel,
 } from '@mui/lab';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
-
+import ClearIcon from '@mui/icons-material/Clear';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
+import DownloadIcon from '@mui/icons-material/Download';
 import Navbar from "../components/Navigation/Navigation"
 import UserHeader from '../components/Auth/UserHeader';
 import EmptyARImage from '../components/Other/EmptyARImage';
 import Head from 'next/head';
 import { getSession, GetSessionParams } from 'next-auth/react';
+import { saveAs } from 'file-saver';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -61,14 +67,37 @@ type FavoriteState = {
     [key: string]: boolean;
 };
 
+type AR_Image = {
+    _id: string;
+    image: string;
+}
+
 export default function Favorite() {
     const [value, setValue] = React.useState('1');
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
     const [favoriteWigs, setFavoriteWigs] = useState<FavoriteState>({});
+    const [favoriteARImage, setFavoriteARImage] = useState<AR_Image[]>([]);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [member, setMember] = useState<Member | null>(null);
     const [wigs, setWigs] = useState<Wig[]>([]);
+    const [isHoverFavBtn, setIsHoverFavBtn] = useState(false);
+
+    const handleMouseEnter = () => {
+        setIsHoverFavBtn(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHoverFavBtn(false);
+    };
+
+
+    const handleClickImage = (image: string) => {
+        setSelectedImage(image);
+        setIsModalOpen(true);
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -81,6 +110,19 @@ export default function Favorite() {
         };
 
         fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        const fetchWigs = async () => {
+            try {
+                const response = await axios.get(`${process.env.API_URL}/api/wig_data/getAllWigs`);
+                setWigs(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchWigs();
     }, []);
 
     useEffect(() => {
@@ -106,20 +148,53 @@ export default function Favorite() {
     }, [member]);
 
     useEffect(() => {
-        const fetchWigs = async () => {
+        const fetchFavoriteImages = async () => {
+            if (!member) return;
+
             try {
-                const response = await axios.get(`${process.env.API_URL}/api/wig_data/getAllWigs`);
-                setWigs(response.data);
+                const res = await axios.get(`${process.env.API_URL}/api/favorite/getFavoriteARImage?member_id=${member._id}`);
+
+                setFavoriteARImage(res.data);
             } catch (error) {
                 console.error(error);
             }
         };
 
-        fetchWigs();
-    }, []);
+        fetchFavoriteImages();
+    }, [member]);
 
     const favoriteWigIds = Object.keys(favoriteWigs);
     const favoriteWigsList = wigs.filter((wig) => favoriteWigIds.includes(wig._id));
+
+    function convertURLtoImage(url: string, filename: string) {
+        const imgElement = document.createElement('img');
+        imgElement.crossOrigin = 'anonymous';
+        imgElement.src = url;
+
+        imgElement.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = imgElement.width;
+            canvas.height = imgElement.height;
+            const ctx = canvas.getContext('2d');
+
+            if (ctx) {
+                ctx.drawImage(imgElement, 0, 0);
+                canvas.toBlob(function (blob) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = URL.createObjectURL(blob as Blob);
+                    link.click();
+                });
+            }
+        };
+    }
+
+    function handleDownload() {
+        if (selectedImage) {
+            convertURLtoImage(selectedImage, "screenshot.png");
+        }
+    }
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -139,21 +214,23 @@ export default function Favorite() {
                             <TabPanel value="1">
                                 <Grid container spacing={3} className="mb-8">
                                     {favoriteWigsList.length ? (
-                                        favoriteWigsList.map((wig, i) => (
+                                        favoriteWigsList.map((item, i) => (
                                             <Grid key={i} item xs={4} sm={3} md={2}>
-                                                <Link href={`/Wig/${wig._id}`}>
+                                                <Link href={`/Wig/${item._id}`}>
                                                     <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
                                                         <CardActionArea>
                                                             <div className="content-overlay" />
                                                             <Image
-                                                                src={wig.main_image}
-                                                                alt={wig.title}
+                                                                src={item.main_image}
+                                                                alt={item.title}
                                                                 width={525}
                                                                 height={700}
+                                                                className="w-80 h-auto object-cover"
+                                                                priority
                                                             />
                                                             <CardContent className="content-details fadeIn-bottom">
                                                                 <Typography gutterBottom component="div" className="text-white font-bold text-base mb-2">
-                                                                    {wig.title}
+                                                                    {item.title}
                                                                 </Typography>
                                                             </CardContent>
                                                         </CardActionArea>
@@ -173,11 +250,76 @@ export default function Favorite() {
                                 </Grid>
                             </TabPanel>
                             <TabPanel value="2" >
-                                <Box className="mt-36">
-                                    <center>
-                                        <EmptyARImage />
-                                    </center>
-                                </Box>
+                                <Grid container spacing={3} className="mb-8">
+                                    {favoriteARImage.length ? (
+                                        favoriteARImage.map((item, i) => (
+                                            <Grid key={i} item xs={6} sm={4} md={3}>
+                                                <div onClick={() => handleClickImage(item.image)}>
+                                                    <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }}>
+                                                        <CardActionArea>
+                                                            <Image
+                                                                src={item.image}
+                                                                alt="image ar"
+                                                                width={525}
+                                                                height={700}
+                                                                className="w-[525px] h-auto object-cover hover:opacity-90 transition"
+                                                                priority
+                                                            />
+                                                        </CardActionArea>
+                                                    </Card>
+                                                </div>
+                                            </Grid>
+                                        ))
+                                    ) : (
+                                        <Box className="mt-36">
+                                            <center>
+                                                <EmptyARImage />
+                                            </center>
+                                        </Box>
+                                    )}
+                                    <Modal
+                                        className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"
+                                        open={isModalOpen}
+                                        onClose={() => setIsModalOpen(false)}
+                                    >
+                                        <Box className="text-right">
+                                            {selectedImage && (
+                                                <Image
+                                                    src={selectedImage}
+                                                    alt="Screenshot"
+                                                    className="border-[12px] border-[#646464] rounded w-[650px] h-[650px] object-center object-cover"
+                                                    width={650}
+                                                    height={650}
+                                                />
+                                            )}
+                                            <Tooltip title="Remove Favorite">
+                                                <IconButton
+                                                    className={isHoverFavBtn ? "mx-1 mt-2 bg-[#555555] text-white font-bold duration-200" : "bg-red-400 mx-1 mt-2 text-white font-bold duration-200"}
+                                                    onMouseEnter={handleMouseEnter}
+                                                    onMouseLeave={handleMouseLeave}
+                                                >
+                                                    {isHoverFavBtn ? <HeartBrokenIcon /> : <FavoriteIcon />}
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Download">
+                                                <IconButton
+                                                    className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white"
+                                                    onClick={handleDownload}
+                                                >
+                                                    <DownloadIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Close">
+                                                <IconButton
+                                                    className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white"
+                                                    onClick={() => setIsModalOpen(false)}
+                                                >
+                                                    <ClearIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
+                                    </Modal>
+                                </Grid>
                             </TabPanel>
                         </TabContext>
                     </Box>

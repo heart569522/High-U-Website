@@ -41,15 +41,74 @@
       const scene = mindarThree.scene;
       const camera = mindarThree.camera;
 
+      // Add video plane
+      const video = document.createElement("video");
+      video.width = 640;
+      video.height = 480;
+      video.autoplay = true;
+
+      const videoTexture = new THREE.VideoTexture(video);
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+
+      const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
+      const videoGeometry = new THREE.PlaneGeometry(2, 2.4);
+
+      const videoPlane = new THREE.Mesh(videoGeometry, videoMaterial);
+      videoPlane.rotation.y = Math.PI;
+      scene.add(videoPlane);
+
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // Add AR plane
       const anchor = mindarThree.addAnchor(1);
       const texture = new THREE.TextureLoader().load("./ar_empty.png");
-      const material = new THREE.MeshBasicMaterial({
+      const arMaterial = new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
       });
-      const geometry = new THREE.PlaneGeometry(2, 2.4);
-      const plane = new THREE.Mesh(geometry, material);
-      anchor.group.add(plane);
+      const arGeometry = new THREE.PlaneGeometry(2, 2.4);
+      const arPlane = new THREE.Mesh(arGeometry, arMaterial);
+      anchor.group.add(arPlane);
+
+      window.addEventListener("message", (event) => {
+        if (event.data.type === "select") {
+          const texture = new THREE.TextureLoader().load(event.data.image);
+          arMaterial.map = texture;
+        }
+        if (event.data.type === "capture") {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const context = canvas.getContext("2d");
+
+          // Flip the video horizontally
+          context.translate(canvas.width, 0);
+          context.scale(-1, 1);
+
+          // Draw the video onto the canvas
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          // Render the scene onto the canvas
+          renderer.render(scene, camera);
+
+          // Draw the rendered scene onto the canvas
+          context.drawImage(renderer.domElement, 0, 0);
+
+          const imageDataURL = canvas.toDataURL();
+          event.source.postMessage(
+            { type: "screenshot", image: imageDataURL },
+            event.origin
+          );
+        }
+      });
 
       const start = async () => {
         await mindarThree.start();
@@ -59,43 +118,6 @@
       };
 
       start();
-
-      window.addEventListener("message", (event) => {
-        if (event.data.type === "select") {
-          const texture = new THREE.TextureLoader().load(event.data.image);
-          material.map = texture;
-        }
-        if (event.data.type === "capture") {
-          const canvas = renderer.domElement;
-          const width = container.offsetWidth;
-          const height = container.offsetHeight;
-          const context = canvas.getContext("webgl2", { antialias: true });
-          const buffer = new Uint8Array(width * height * 4);
-          context.readPixels(
-            0,
-            0,
-            width,
-            height,
-            context.RGBA,
-            context.UNSIGNED_BYTE,
-            buffer
-          );
-          const imageData = new ImageData(
-            new Uint8ClampedArray(buffer),
-            width,
-            height
-          );
-          const screenshotCanvas = document.createElement("canvas");
-          screenshotCanvas.width = width;
-          screenshotCanvas.height = height;
-          screenshotCanvas.getContext("2d").putImageData(imageData, 0, 0);
-          const dataUrl = screenshotCanvas.toDataURL("image/png");
-          event.source.postMessage(
-            { type: "screenshot", image: dataUrl },
-            event.origin
-          );
-        }
-      });
     </script>
   </body>
 </html>

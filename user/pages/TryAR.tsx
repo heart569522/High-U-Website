@@ -11,20 +11,23 @@ import {
   Card,
   CardMedia,
   CardActionArea,
+  Backdrop,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Tooltip,
 } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import ClearIcon from '@mui/icons-material/Clear';
-import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
-import ShareIcon from '@mui/icons-material/Share';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
-
-// IMPORT COMPONENT
 import Navbar from "../components/Navigation/Navigation"
-
 import Head from 'next/head';
 import Image from 'next/image';
+import axios from 'axios';
+import { storage } from './api/firebaseConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 const theme = createTheme({
   palette: {
@@ -51,17 +54,12 @@ type Wig = {
   _id: string;
   ar_image: string;
   main_image: string;
-  sub_image: string[];
   title: string;
-  style: string;
-  type: string;
-  color: string;
-  size: number[];
-  price: number;
-  desc: string;
-  view: number;
-  favorite: number;
   use: number;
+}
+
+type Member = {
+  _id: string
 }
 
 export async function getServerSideProps() {
@@ -81,6 +79,39 @@ export async function getServerSideProps() {
 
 export default function TryAR(props: Props) {
   const [wigData, setWigData] = useState<Wig[]>(props.wigs);
+  const wigsWithValidArImage = wigData.filter(wig => wig.ar_image !== null);
+
+  const [uploading, setUploading] = useState(false);
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+
+  const handleCloseAlertSuccess = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertSuccess(false);
+  };
+
+  const handleCloseAlertError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertError(false);
+  };
+
+  const [member, setMember] = useState<Member | null>(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
+        setMember(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
@@ -92,15 +123,31 @@ export default function TryAR(props: Props) {
   }, []);
 
   function handleMessage(event: any) {
-    console.log("handleMessage called with event:", event);
-
     if (event.data.type === "screenshot") {
-      console.log("Received screenshot:", event.data.image);
       setImage(event.data.image);
-      console.log("Screenshot image state:", image);
       setModalOpen(true);
-    } else {
-      console.log("Received unknown message type:", event.data.type);
+    }
+  }
+
+  function handleSelectWig(arImage: string, id: string) {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      iframe.contentWindow?.postMessage({ type: 'select', image: arImage }, '*');
+      updateWigUse(id).catch(error => console.error(error));
+    }
+  }
+
+  async function updateWigUse(id: string) {
+    const response = await fetch(`${process.env.API_URL}/api/wig_data/useWigAR?id=${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ use: 1 }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update wig ${id} use count: ${response.status}`);
     }
   }
 
@@ -111,15 +158,78 @@ export default function TryAR(props: Props) {
     }
   };
 
-  const handleSelectWig = (arImage: string) => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      // setSelectedWig(arImage);
-      iframe.contentWindow?.postMessage({ type: 'select', image: arImage }, '*');
+  const handleDownload = () => {
+    if (image) {
+      const link = document.createElement("a");
+      link.download = "screenshot.png";
+      link.href = image;
+      link.click();
     }
+  };
+
+  function dataURItoBlob(dataURI: string): Blob {
+    const byteString = window.atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ia], { type: mimeString });
   }
 
-  const wigsWithValidArImage = wigData.filter(wig => wig.ar_image !== null);
+  const handleFavorite = async (_id: string | undefined) => {
+    setUploading(true);
+
+    if (!_id) {
+      alert('Please log in to favorite images.');
+      return;
+    }
+
+    if (!image) {
+      alert('Please capture an image first.');
+      return;
+    }
+
+    try {
+      // Convert data URI to blob
+      const blobImage = dataURItoBlob(image);
+      const gen_number = Math.floor(Math.random() * 1000000000);
+      const captureImageRef = ref(
+        storage,
+        `member_images/${_id}/${'ar_screenshot_' + gen_number}`
+      );
+      const uploadTask = uploadBytesResumable(captureImageRef, blobImage, {
+        contentType: 'image/png'
+      });
+      const snapshot = await uploadTask;
+      const imageUrl = await getDownloadURL(snapshot.ref);
+
+      const response = await fetch(`${process.env.API_URL}/api/favorite/favoriteARImage?id=${_id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: imageUrl,
+        }),
+      });
+
+      if (response.ok) {
+        setAlertSuccess(true);
+        setModalOpen(false);
+      } else {
+        setAlertError(true);
+        throw new Error(await response.text());
+      }
+
+    } catch (error) {
+      console.error(error);
+      setAlertError(true);
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -128,6 +238,17 @@ export default function TryAR(props: Props) {
       </Head>
       <Navbar />
       <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
+
+        <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
+          <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
+            Add to Favorite Success!
+          </Alert>
+        </Snackbar>
+        <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError}>
+          <Alert onClose={handleCloseAlertError} severity="error" sx={{ width: '100%' }}>
+            Add to Favorite Error!
+          </Alert>
+        </Snackbar>
         <Container maxWidth="xl" >
           <Grid container>
             <Grid item xs={12} className="pt-4 ">
@@ -163,7 +284,7 @@ export default function TryAR(props: Props) {
               {wigsWithValidArImage.map((item, i) =>
                 <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                   <Card variant="outlined" className="content">
-                    <CardActionArea onClick={() => handleSelectWig(item.ar_image)}>
+                    <CardActionArea onClick={() => handleSelectWig(item.ar_image, item._id)}>
                       <div className="content-overlay" />
                       <Image
                         className="content-image object-cover h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
@@ -182,27 +303,51 @@ export default function TryAR(props: Props) {
               open={modalOpen}
               onClose={() => setModalOpen(false)}
             >
-              <Box className="text-right">
-                {image ?
-                  <Image
-                    src={image || 'https://via.placeholder.com/600x600.png?text=No+screenshot'}
-                    alt="Screenshot"
-                    className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-fill"
-                    width={600}
-                    height={600}
-                  />
-                  : <h1>Error image captured!!!</h1>
-                }
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white">
-                  <DownloadIcon />
-                </IconButton>
-                <IconButton className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white" onClick={() => setModalOpen(false)}>
-                  <ClearIcon />
-                </IconButton>
-              </Box>
+              <>
+                <Backdrop
+                  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                  open={uploading}
+                >
+                  <CircularProgress color="inherit" />
+                  <Typography>&nbsp;Loading...</Typography>
+                </Backdrop>
+                <Box className="text-right">
+                  {image ?
+                    <Image
+                      src={image || 'https://via.placeholder.com/600x600.png?text=No+screenshot'}
+                      alt="Screenshot"
+                      className="border-[12px] border-[#646464] rounded w-[600px] h-[600px] object-center object-cover"
+                      width={600}
+                      height={600}
+                    />
+                    : <h1>Error image captured!!!</h1>
+                  }
+                  <Tooltip title="Favorite">
+                    <IconButton
+                      className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white"
+                      onClick={() => handleFavorite(member?._id)}
+                    >
+                      <FavoriteIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download">
+                    <IconButton
+                      className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white"
+                      onClick={handleDownload}
+                    >
+                      <DownloadIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Close">
+                    <IconButton
+                      className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-zinc-700 hover:text-white"
+                      onClick={() => setModalOpen(false)}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </>
             </Modal>
 
           </Grid>

@@ -466,8 +466,8 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
     });
   };
 
-  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'main' | 'sub', width = 525, height = 700): Promise<File> => {
-    if (type === 'main' || type === 'sub') {
+  const resizeAndCropImage = (imageFile: File, fileName: string, type: 'ar' | 'main' | 'sub', width = 525, height = 700): Promise<File> => {
+    if (type === 'ar' || type === 'main' || type === 'sub') {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
@@ -541,6 +541,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         throw new Error('File is required')
       }
 
+      const arImageCrop = await resizeAndCropImage(imageWig.arImage as File, 'arImage.png', 'ar');
       const mainImageCrop = await resizeAndCropImage(imageWig.mainImage, 'mainImage.png', 'main');
       const subImageCrops = await Promise.all(
         imageWig.subImages.map((subImage, index) => {
@@ -573,17 +574,9 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         ref(storage, `wig_images/${title}/sub_images/${name}`)
       );
 
-      let arSnapshot = null;
-      let arImageUrl = null;
-      if (imageWig.arImage) {
-        const arUploadTask = uploadBytesResumable(
-          arImageRef,
-          imageWig.arImage
-        );
-        arSnapshot = await arUploadTask;
-        arImageUrl = await getDownloadURL(arSnapshot.ref);
-      }
-
+      const arUploadTask = uploadBytesResumable(arImageRef, arImageCrop, {
+        contentType: 'image/png'
+      });
       const mainUploadTask = uploadBytesResumable(mainImageRef, mainImageCrop, {
         contentType: 'image/png'
       });
@@ -596,11 +589,13 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
         });
       });
       // Wait for all images to finish uploading
-      const [mainSnapshot, ...subSnapshots] = await Promise.all([
+      const [arSnapshot, mainSnapshot, ...subSnapshots] = await Promise.all([
+        arUploadTask,
         mainUploadTask,
         ...subUploadTasks,
       ]);
 
+      const arImageUrl = await getDownloadURL(arSnapshot.ref);
       const mainImageUrl = await getDownloadURL(mainSnapshot.ref);
       const subImageUrls = await Promise.all(
         subSnapshots.map((snapshot) => {
