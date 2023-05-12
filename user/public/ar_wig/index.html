@@ -59,7 +59,7 @@
       scene.add(videoPlane);
 
       navigator.mediaDevices
-        .getUserMedia({ video: true })
+        .getUserMedia({ video: { facingMode: "user" } })
         .then((stream) => {
           video.srcObject = stream;
         })
@@ -79,6 +79,42 @@
       anchor.group.add(arPlane);
 
       window.addEventListener("message", (event) => {
+        if (event.data.type === "switch") {
+          console.log("Switching camera...");
+
+          navigator.mediaDevices
+            .getUserMedia({ video: { facingMode: "user" } })
+            .then((stream) => {
+              const videoTrack = stream.getVideoTracks()[0];
+              const settings = videoTrack.getSettings();
+              videoTrack.stop();
+
+              navigator.mediaDevices
+                .getUserMedia({
+                  video: {
+                    facingMode:
+                      settings.facingMode === "user" ? "environment" : "user",
+                  },
+                })
+                .then((stream) => {
+                  console.log("Camera switched successfully!");
+
+                  // const iframe = iframeRef.current;
+                  // if (iframe) {
+                  //   iframe.contentWindow.postMessage(
+                  //     { type: "video", stream },
+                  //     "*"
+                  //   );
+                  // }
+                })
+                .catch((error) => {
+                  console.error("Error switching camera: ", error);
+                });
+            })
+            .catch((error) => {
+              console.error("Error accessing camera: ", error);
+            });
+        }
         if (event.data.type === "select") {
           const texture = new THREE.TextureLoader().load(event.data.image);
           arMaterial.map = texture;

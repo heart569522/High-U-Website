@@ -21,6 +21,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import ClearIcon from '@mui/icons-material/Clear';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DownloadIcon from '@mui/icons-material/Download';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import Navbar from "../components/Navigation/Navigation"
 import Head from 'next/head';
@@ -158,6 +159,13 @@ export default function TryAR(props: Props) {
     }
   };
 
+  const handleSwitchCamera = () => {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      iframe.contentWindow?.postMessage({ type: 'switch' }, '*');
+    }
+  }
+
   const handleDownload = () => {
     if (image) {
       const link = document.createElement("a");
@@ -270,14 +278,20 @@ export default function TryAR(props: Props) {
                   <Grid item xs={12} className="pt-5 text-center">
                     <IconButton
                       onClick={handleCapture}
-                      className="text-gray-800 m-auto bg-[#F0CA83] transition hover:bg-[#ffc14d]"
+                      className="text-gray-800 my-auto ml-10 bg-[#F0CA83] transition hover:bg-[#ffc14d]"
                       size="large"
                     >
                       <CameraAltIcon fontSize="large" />
                     </IconButton>
+                    <IconButton
+                      onClick={handleSwitchCamera}
+                      className="text-[#F0CA83] flex float-right m-auto transition hover:text-[#ffc14d]"
+                      size="large"
+                    >
+                      <CameraswitchIcon fontSize="large" />
+                    </IconButton>
                   </Grid>
                 </center>
-                {/* Caprture Result */}
               </Box>
             </Grid>
             <Grid item sm={12} md={6}>
