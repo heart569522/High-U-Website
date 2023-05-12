@@ -33,8 +33,8 @@ export default function Footer() {
                 textAlign: 'center',
             }}
         >
-            <Typography textAlign="center" variant="h4" sx={{ fontFamily: 'Prompt, sans-serif', fontWeight: 'bold', pb: 3 }}>
-                HIGH U
+            <Typography textAlign="center" variant="h4" className="tracking-widest" sx={{ fontFamily: 'Prompt, sans-serif', fontWeight: 'bold', pb: 3 }}>
+                HIGH-U
             </Typography>
             
             <IconButton href='#' size="large" aria-label="facebook" sx={{ color: '#F0CA83', fontSize: '24px', }}>

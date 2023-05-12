@@ -43,6 +43,7 @@ export default function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
@@ -84,6 +85,18 @@ export default function SignUpForm() {
         }
     };
 
+    const handleFormValidation = () => {
+        setIsFormValid(
+            !!firstname.trim() &&
+            !!lastname.trim() &&
+            !!username.trim() &&
+            !!email.trim() &&
+            !!password.trim() &&
+            !!confirmPassword.trim() &&
+            password === confirmPassword
+        );
+    };
+
     const handleReset = () => {
         setFirstname("");
         setLastname("");
@@ -94,6 +107,7 @@ export default function SignUpForm() {
         setError(null);
         setErrorMessage(null);
         setMessage(null);
+        setIsFormValid(false);
     };
 
     const checkPasswordsMatch = (): boolean => {
@@ -203,6 +217,7 @@ export default function SignUpForm() {
                                             label="First Name"
                                             autoFocus
                                             onChange={handleChange(setFirstname)}
+                                            onBlur={handleFormValidation}
                                             onKeyPress={handleKeyPress}
                                         />
                                     </Grid>
@@ -216,6 +231,7 @@ export default function SignUpForm() {
                                             name="lastname"
                                             autoComplete="family-name"
                                             onChange={handleChange(setLastname)}
+                                            onBlur={handleFormValidation}
                                             onKeyPress={handleKeyPress}
                                         />
                                     </Grid>
@@ -226,6 +242,7 @@ export default function SignUpForm() {
                                             id="username"
                                             name="username"
                                             onChange={handleChange(setUsername)}
+                                            onBlur={handleFormValidation}
                                             required
                                             fullWidth
                                             autoComplete="username"
@@ -244,6 +261,7 @@ export default function SignUpForm() {
                                             autoComplete="email"
                                             variant="outlined"
                                             onChange={handleChange(setEmail)}
+                                            onBlur={handleFormValidation}
                                             onKeyPress={handleKeyPress}
                                         />
                                     </Grid>
@@ -257,6 +275,7 @@ export default function SignUpForm() {
                                             type="password"
                                             autoComplete="current-password"
                                             onChange={handlePasswordChange}
+                                            onBlur={handleFormValidation}
                                             variant="outlined"
                                             fullWidth
                                             onKeyPress={handleKeyPress}
@@ -270,6 +289,7 @@ export default function SignUpForm() {
                                             value={confirmPassword}
                                             id="confirmPassword"
                                             onChange={handleConfirmPasswordChange}
+                                            onBlur={handleFormValidation}
                                             type="password"
                                             variant="outlined"
                                             onKeyPress={handleKeyPress}
@@ -283,10 +303,11 @@ export default function SignUpForm() {
                                             <Button
                                                 type="submit"
                                                 fullWidth
-                                                // variant="contained"
-                                                className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold text-white"
+                                                className={`bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold text-white ${!isFormValid ? "opacity-50 bg-slate-500 cursor-not-allowed" : ""
+                                                    }`}
+                                                disabled={!isFormValid}
                                             >
-                                                Sign&nbsp;Up
+                                                Sign Up
                                             </Button>
                                             <Button
                                                 type="reset"

@@ -36,11 +36,19 @@ export const SignInForm = React.memo(() => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const handleChange = (setState: (value: string) => void) => (
         event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         setState(event.target.value);
+    };
+
+    const handleFormValidation = () => {
+        setIsFormValid(
+            !!email.trim() &&
+            !!password.trim()
+        );
     };
 
     const handleKeyPress: KeyboardEventHandler<HTMLDivElement> = useCallback((event) => {
@@ -57,7 +65,7 @@ export const SignInForm = React.memo(() => {
                 redirect: false,
                 email,
                 password
-              }) as SignInResponse;
+            }) as SignInResponse;
 
             if (result.error) {
                 throw new Error('Login failed. Please check your credentials and try again.');
@@ -94,6 +102,7 @@ export const SignInForm = React.memo(() => {
                                     name="email"
                                     type="email"
                                     onChange={handleChange(setEmail)}
+                                    onBlur={handleFormValidation}
                                     onKeyPress={handleKeyPress}
                                     margin="normal"
                                     required
@@ -110,6 +119,7 @@ export const SignInForm = React.memo(() => {
                                     id="password"
                                     autoComplete="current-password"
                                     onChange={handleChange(setPassword)}
+                                    onBlur={handleFormValidation}
                                     onKeyPress={handleKeyPress}
                                     type='password'
                                     variant="outlined"
@@ -118,8 +128,9 @@ export const SignInForm = React.memo(() => {
                                 <Button
                                     type="submit"
                                     fullWidth
-                                    variant="contained"
-                                    className="bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold"
+                                    className={`bg-amber-400 hover:bg-amber-500 mt-3 mb-2 font-bold text-white ${!isFormValid ? "opacity-50 bg-slate-500 cursor-not-allowed" : ""
+                                        }`}
+                                    disabled={!isFormValid}
                                 >
                                     Sign In
                                 </Button>

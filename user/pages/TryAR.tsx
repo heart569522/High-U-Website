@@ -246,7 +246,6 @@ export default function TryAR(props: Props) {
       </Head>
       <Navbar />
       <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
-
         <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
           <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
             Add to Favorite Success!
