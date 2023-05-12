@@ -58,25 +58,14 @@
       videoPlane.rotation.y = Math.PI;
       scene.add(videoPlane);
 
-      let currentStream;
-
-      const startCamera = () => {
-        if (currentStream) {
-          currentStream.getTracks().forEach((track) => track.stop());
-        }
-
-        navigator.mediaDevices
-          .getUserMedia({ video: { facingMode: "user" } })
-          .then((stream) => {
-            video.srcObject = stream;
-            currentStream = stream;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
-
-      startCamera();
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       // Add AR plane
       const anchor = mindarThree.addAnchor(1);
@@ -90,17 +79,6 @@
       anchor.group.add(arPlane);
 
       window.addEventListener("message", (event) => {
-        if (event.data.type === "switch") {
-          navigator.mediaDevices
-            .getUserMedia({ video: { facingMode: "user" } })
-            .then((stream) => {
-              video.srcObject = stream;
-              currentStream = stream;
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
         if (event.data.type === "select") {
           const texture = new THREE.TextureLoader().load(event.data.image);
           arMaterial.map = texture;
@@ -111,14 +89,9 @@
           canvas.height = video.videoHeight;
           const context = canvas.getContext("2d");
 
-          // Flip the video horizontally if using the front camera
-          if (
-            currentStream &&
-            currentStream.getVideoTracks()[0].facingMode === "user"
-          ) {
-            context.translate(canvas.width, 0);
-            context.scale(-1, 1);
-          }
+          // Flip the video horizontally
+          context.translate(canvas.width, 0);
+          context.scale(-1, 1);
 
           // Draw the video onto the canvas
           context.drawImage(video, 0, 0, canvas.width, canvas.height);

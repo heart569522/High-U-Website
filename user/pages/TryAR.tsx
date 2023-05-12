@@ -159,12 +159,12 @@ export default function TryAR(props: Props) {
     }
   };
 
-  const handleSwitchCamera = () => {
-    const iframe = iframeRef.current;
-    if (iframe) {
-      iframe.contentWindow?.postMessage({ type: 'switch' }, '*');
-    }
-  }
+  // const handleSwitchCamera = () => {
+  //   const iframe = iframeRef.current;
+  //   if (iframe) {
+  //     iframe.contentWindow?.postMessage({ type: 'switch' }, '*');
+  //   }
+  // }
 
   const handleDownload = () => {
     if (image) {
@@ -278,18 +278,18 @@ export default function TryAR(props: Props) {
                   <Grid item xs={12} className="pt-5 text-center">
                     <IconButton
                       onClick={handleCapture}
-                      className="text-gray-800 my-auto ml-10 bg-[#F0CA83] transition hover:bg-[#ffc14d]"
+                      className="text-gray-800 my-auto bg-[#F0CA83] transition hover:bg-[#ffc14d]"
                       size="large"
                     >
                       <CameraAltIcon fontSize="large" />
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       onClick={handleSwitchCamera}
                       className="text-[#F0CA83] flex float-right m-auto transition hover:text-[#ffc14d]"
                       size="large"
                     >
                       <CameraswitchIcon fontSize="large" />
-                    </IconButton>
+                    </IconButton> */}
                   </Grid>
                 </center>
               </Box>
