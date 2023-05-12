@@ -58,14 +58,25 @@
       videoPlane.rotation.y = Math.PI;
       scene.add(videoPlane);
 
-      navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "user" } })
-        .then((stream) => {
-          video.srcObject = stream;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      let currentStream;
+
+      const startCamera = () => {
+        if (currentStream) {
+          currentStream.getTracks().forEach((track) => track.stop());
+        }
+
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "user" } })
+          .then((stream) => {
+            video.srcObject = stream;
+            currentStream = stream;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      startCamera();
 
       // Add AR plane
       const anchor = mindarThree.addAnchor(1);
@@ -83,26 +94,8 @@
           navigator.mediaDevices
             .getUserMedia({ video: { facingMode: "user" } })
             .then((stream) => {
-              const videoTrack = stream.getVideoTracks()[0];
-              const settings = videoTrack.getSettings();
-              videoTrack.stop();
-
-              navigator.mediaDevices
-                .getUserMedia({
-                  video: {
-                    facingMode:
-                      settings.facingMode === "user" ? "environment" : "user",
-                  },
-                })
-                .then((stream) => {
-                  const video = document.querySelector("video");
-                  if (video) {
-                    video.srcObject = stream;
-                  }
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
+              video.srcObject = stream;
+              currentStream = stream;
             })
             .catch((error) => {
               console.error(error);
@@ -118,9 +111,14 @@
           canvas.height = video.videoHeight;
           const context = canvas.getContext("2d");
 
-          // Flip the video horizontally
-          context.translate(canvas.width, 0);
-          context.scale(-1, 1);
+          // Flip the video horizontally if using the front camera
+          if (
+            currentStream &&
+            currentStream.getVideoTracks()[0].facingMode === "user"
+          ) {
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+          }
 
           // Draw the video onto the canvas
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
