@@ -80,8 +80,6 @@
 
       window.addEventListener("message", (event) => {
         if (event.data.type === "switch") {
-          console.log("Switching camera...");
-
           navigator.mediaDevices
             .getUserMedia({ video: { facingMode: "user" } })
             .then((stream) => {
@@ -97,22 +95,17 @@
                   },
                 })
                 .then((stream) => {
-                  console.log("Camera switched successfully!");
-
-                  // const iframe = iframeRef.current;
-                  // if (iframe) {
-                  //   iframe.contentWindow.postMessage(
-                  //     { type: "video", stream },
-                  //     "*"
-                  //   );
-                  // }
+                  const video = document.querySelector("video");
+                  if (video) {
+                    video.srcObject = stream;
+                  }
                 })
                 .catch((error) => {
-                  console.error("Error switching camera: ", error);
+                  console.error(error);
                 });
             })
             .catch((error) => {
-              console.error("Error accessing camera: ", error);
+              console.error(error);
             });
         }
         if (event.data.type === "select") {
