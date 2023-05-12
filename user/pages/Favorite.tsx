@@ -270,7 +270,7 @@ export default function Favorite() {
                 </Snackbar>
                 <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError}>
                     <Alert onClose={handleCloseAlertError} severity="error" sx={{ width: '100%' }}>
-                        Can't Remove Favorite!
+                        Can not Remove Favorite!
                     </Alert>
                 </Snackbar>
                 <Container maxWidth="xl" >
