@@ -479,31 +479,34 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
                                 Recomended
                             </Typography>
                         </Grid>
-                        {wigsData.filter((wig) => wig._id !== _id).slice(0, 4).map((item, i) =>
-                            <Grid key={i} item xs={6} sm={6} md={3} >
-                                <Link href={`./[id]`} as={`./${item._id}`} target='_parent'>
-                                    <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }} >
-                                        <CardActionArea>
-                                            <div className="content-overlay" />
-                                            <Image
-                                                className="content-image"
-                                                src={item.main_image}
-                                                alt="recommend_wig"
-                                                width={525}
-                                                height={700}
-                                            />
-                                            <CardContent className="content-details fadeIn-bottom">
-                                                <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
-                                                    {item.title}
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                    </Card>
-                                </Link>
-                            </Grid>
-                        )}
+                        {wigsData
+                            .filter((wig) => wig._id !== _id)
+                            .sort(() => Math.random() - 0.5) // Shuffle the array randomly
+                            .slice(0, 4) // Select the first 4 elements
+                            .map((item, i) =>
+                                <Grid key={i} item xs={6} sm={6} md={3}>
+                                    <Link href={`./[id]`} as={`./${item._id}`} target='_parent'>
+                                        <Card variant="outlined" className="content" sx={{ maxWidth: 'auto', }}>
+                                            <CardActionArea>
+                                                <div className="content-overlay" />
+                                                <Image
+                                                    className="content-image"
+                                                    src={item.main_image}
+                                                    alt="recommend_wig"
+                                                    width={525}
+                                                    height={700}
+                                                />
+                                                <CardContent className="content-details fadeIn-bottom">
+                                                    <Typography gutterBottom component="div" className="text-white font-bold text-md mb-2">
+                                                        {item.title}
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Link>
+                                </Grid>
+                            )}
                     </Grid>
-
                 </Container>
             </Paper>
             <Footer />

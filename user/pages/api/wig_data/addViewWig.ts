@@ -10,7 +10,7 @@ const addViewWig = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const wigId = new ObjectId(req.body.id as string); // Convert wigId to ObjectId
 
-    const result = await collection.updateOne({ _id: wigId }, { $inc: { view: 0.5 } });
+    const result = await collection.updateOne({ _id: wigId }, { $inc: { view: 1 } });
 
     if (result.matchedCount === 0) {
       throw new Error(`No wig found with id ${wigId}`);

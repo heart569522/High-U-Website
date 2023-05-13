@@ -25,7 +25,9 @@ import {
   Pagination,
   Checkbox,
   IconButton,
-  Drawer
+  Drawer,
+  Tooltip,
+  Chip
 
 } from '@mui/material'
 import Select from '@mui/material/Select';
@@ -33,6 +35,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link'
@@ -132,7 +135,7 @@ export default function Wig(props: Props) {
   const router = useRouter()
 
   const [page, setPage] = useState(1);
-  const pageSize = 9;
+  const pageSize = 12;
   const pageCount = Math.ceil(sortedWigData.length / pageSize);
 
   const [filters, setFilters] = useState<Filters>({
@@ -545,8 +548,21 @@ export default function Wig(props: Props) {
             {sortedWigData.length > 0 ? (
               sortedWigData.slice((page - 1) * pageSize, page * pageSize).map((item, i) => (
                 <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
-
                   <Card variant="outlined" sx={{ maxWidth: 320 }}>
+                    {/* <Box className="flex float-left">
+                      <div className="absolute">
+                        <IconButton className="z-10" onClick={() => handleToggleFavorite(item._id)}>
+                          {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon className="text-[#5f5f5f]" />}
+                        </IconButton>
+                      </div>
+                    </Box> */}
+                    <Box className="flex float-right">
+                      <div className="absolute">
+                        <IconButton className="z-10 right-10" onClick={() => handleToggleFavorite(item._id)}>
+                          {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon className="text-[#5f5f5f]" />}
+                        </IconButton>
+                      </div>
+                    </Box>
                     <Link href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
                       <CardActionArea>
                         <Image
@@ -566,16 +582,16 @@ export default function Wig(props: Props) {
                         </CardContent>
                       </CardActionArea>
                     </Link>
-                    <Box className="flex justify-between items-center px-2 py-1">
-                      <IconButton onClick={() => handleToggleFavorite(item._id)}>
-                        {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon />}
-                      </IconButton>
+                    <CardActionArea className="flex justify-between items-center px-2 py-1">
+                      <Stack direction="row" spacing={1} className='py-1'>
+                        <Chip icon={<RemoveRedEyeIcon />} label={item.view.toFixed(0)} />
+                      </Stack>
                       <Button className="bg-[#555555]">
                         <Typography variant="body2" className="font-bold tracking-widest text-white text-base max-sm:text-xs">
                           {item.price?.toLocaleString()}&nbsp;฿
                         </Typography>
                       </Button>
-                    </Box>
+                    </CardActionArea>
                   </Card>
                 </Grid>
               ))
