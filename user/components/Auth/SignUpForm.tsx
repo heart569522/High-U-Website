@@ -15,6 +15,8 @@ import {
     CircularProgress,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const theme = createTheme({
     typography: {
@@ -41,8 +43,12 @@ export default function SignUpForm() {
     const [lastname, setLastname] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const passwordRequirements = 'Password must be A-Z, a-z or 0-9 and minimum 6 characters';
     const [isFormValid, setIsFormValid] = useState(false);
 
     const [loading, setLoading] = useState(false);
@@ -56,16 +62,20 @@ export default function SignUpForm() {
         setState(event.target.value);
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         setPassword(value);
+        setIsPasswordValid(true);
 
         if (value !== confirmPassword) {
             setError("The passwords do not match.");
         } else {
             setError(null);
         }
-
     };
 
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +96,12 @@ export default function SignUpForm() {
     };
 
     const handleFormValidation = () => {
+        const passwordRegex = /^[a-zA-Z0-9]{6,}$/;
+        const isValidPassword = passwordRegex.test(password);
+
+        setIsPasswordValid(isValidPassword); // Update the validity state of the password
+
+        // Validate the entire form
         setIsFormValid(
             !!firstname.trim() &&
             !!lastname.trim() &&
@@ -93,8 +109,15 @@ export default function SignUpForm() {
             !!email.trim() &&
             !!password.trim() &&
             !!confirmPassword.trim() &&
-            password === confirmPassword
+            password === confirmPassword &&
+            isValidPassword
         );
+
+        if (!isValidPassword) {
+            // Password does not meet the requirements
+            // You can display an error message or take appropriate action
+            // console.log('Invalid password');
+        }
     };
 
     const handleReset = () => {
@@ -104,6 +127,7 @@ export default function SignUpForm() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        setIsPasswordValid(true);
         setError(null);
         setErrorMessage(null);
         setMessage(null);
@@ -272,13 +296,27 @@ export default function SignUpForm() {
                                             label="Password"
                                             value={password}
                                             id="password"
-                                            type="password"
+                                            type={showPassword ? 'text' : 'password'}
                                             autoComplete="current-password"
                                             onChange={handlePasswordChange}
                                             onBlur={handleFormValidation}
                                             variant="outlined"
                                             fullWidth
                                             onKeyPress={handleKeyPress}
+                                            inputProps={{
+                                                pattern: '[a-zA-Z0-9]{6,}',
+                                                title: passwordRequirements,
+                                            }}
+                                            helperText={passwordRequirements}
+                                            error={!isPasswordValid} // Set error prop based on password validity
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                                    </IconButton>
+                                                ),
+                                                style: { color: isPasswordValid ? 'green' : 'red' }, // Change color based on password validity
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

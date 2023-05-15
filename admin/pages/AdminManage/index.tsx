@@ -33,6 +33,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { ExportToCsv } from 'export-to-csv';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { GetSessionParams, getSession } from 'next-auth/react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 type Props = {
   admins: [Admin]
@@ -53,36 +55,37 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
   const session = await getSession(context);
 
   if (!session) {
-      return {
-          redirect: {
-              destination: '/',
-              permanent: false,
-          },
-      };
+    return {
+      redirect: {
+        destination: './',
+        permanent: false,
+      },
+    }
   }
 
   try {
-      const response = await fetch(`${process.env.API_URL}/api/admin/getAllAdmins`, {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-              // Authorization: `Bearer ${session.accessToken}`,
-          },
-      });
+    const response = await fetch(`${process.env.API_URL}/api/admin/getAllAdmins`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${session.accessToken}`,
+      },
+    });
 
-      if (response.ok) {
-          const data = await response.json();
-          return {
-              props: { admins: JSON.parse(JSON.stringify(data)) }
-          };
-      } else {
-          throw new Error('Failed to fetch data');
-      }
-  } catch (error) {
-      console.error(error);
+    if (response.ok) {
+      const data = await response.json();
+
       return {
-          props: { admins: [] },
+        props: { admins: JSON.parse(JSON.stringify(data)) }
       };
+    } else {
+      throw new Error('Failed to fetch data');
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      props: { admins: [] },
+    };
   }
 }
 
@@ -109,6 +112,7 @@ export default function AdminManage(props: Props) {
   const [tableData, setTableData] = useState<Admin[]>(props.admins);
   const [validationErrors, setValidationErrors] = useState<{ [cellId: string]: string; }>({});
   const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/default_images%2Fdefault-user-icon.jpg?alt=media&token=edd06ee7-020c-4436-80ae-2e175acc0584';
+  const router = useRouter();
 
   const [roles, setRoles] = useState([]);
   useEffect(() => {

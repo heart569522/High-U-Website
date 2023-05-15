@@ -69,12 +69,12 @@ export default function Profile() {
         setValue(newValue);
     };
 
-    const [adminData, setAdminUser] = useState<Admin | null>(null);
+    const [adminData, setAdminData] = useState<Admin | null>(null);
     useEffect(() => {
         const fetchAdminData = async () => {
             try {
                 const res = await axios.get(`${process.env.API_URL}/api/admin/getAdminData`);
-                setAdminUser(res.data);
+                setAdminData(res.data);
             } catch (error) {
                 console.error(error);
             }

@@ -341,11 +341,13 @@ export default function Favorite() {
                                             </Grid>
                                         ))
                                     ) : (
-                                        <Box className="mt-36">
-                                            <center>
-                                                <EmptyARImage />
-                                            </center>
-                                        </Box>
+                                        <Grid item xs={12}>
+                                            <Box className="mt-36">
+                                                <center>
+                                                    <EmptyARImage />
+                                                </center>
+                                            </Box>
+                                        </Grid>
                                     )}
                                     <Modal
                                         className="p-4 fixed top-0 left-0 w-screen h-screen bg-black/60 flex justify-center items-center"

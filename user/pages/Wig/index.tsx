@@ -36,6 +36,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link'
@@ -378,6 +380,10 @@ export default function Wig(props: Props) {
     setSortedWigData(filteredData);
   }, [filters, wigData]);
 
+
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
   const uniqueColors = Array.from(new Set(wigData.map((wig) => wig.color)));
   const uniqueTypes = Array.from(new Set(wigData.map((wig) => wig.type)));
 
@@ -457,7 +463,6 @@ export default function Wig(props: Props) {
       </ListItem>
     </Box>
   );
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -549,20 +554,16 @@ export default function Wig(props: Props) {
               sortedWigData.slice((page - 1) * pageSize, page * pageSize).map((item, i) => (
                 <Grid item xs={6} sm={4} md={3} key={i} className="flex items-center justify-center">
                   <Card variant="outlined" sx={{ maxWidth: 320 }}>
-                    {/* <Box className="flex float-left">
-                      <div className="absolute">
-                        <IconButton className="z-10" onClick={() => handleToggleFavorite(item._id)}>
-                          {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon className="text-[#5f5f5f]" />}
-                        </IconButton>
-                      </div>
-                    </Box> */}
-                    <Box className="flex float-right">
-                      <div className="absolute">
-                        <IconButton className="z-10 right-10" onClick={() => handleToggleFavorite(item._id)}>
-                          {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170]" /> : <FavoriteBorderIcon className="text-[#5f5f5f]" />}
-                        </IconButton>
-                      </div>
-                    </Box>
+                    {new Date(item.createdAt) >= oneWeekAgo && (
+                      <Box className="flex float-left">
+                        <Box className="absolute z-10 mt-[18px] ml-[12px] bg-white w-7 h-4" />
+                        <div className="absolute">
+                          <IconButton className="z-10" disableFocusRipple disableRipple>
+                            <FiberNewIcon className="text-[#ffbb3d]" fontSize='large' />
+                          </IconButton>
+                        </div>
+                      </Box>
+                    )}
                     <Link href={`./Wig/[id]`} as={`./Wig/${item._id}`}>
                       <CardActionArea>
                         <Image
@@ -582,16 +583,21 @@ export default function Wig(props: Props) {
                         </CardContent>
                       </CardActionArea>
                     </Link>
-                    <CardActionArea className="flex justify-between items-center px-2 py-1">
-                      <Stack direction="row" spacing={1} className='py-1'>
-                        <Chip icon={<RemoveRedEyeIcon />} label={item.view.toFixed(0)} />
-                      </Stack>
-                      <Button className="bg-[#555555]">
+                    <Box className="flex justify-between items-center px-2 py-1">
+                      <Box className="flex">
+                        <Stack direction="row" spacing={1} className='py-1'>
+                          <Chip icon={<RemoveRedEyeIcon />} label={item.view.toFixed(0)} />
+                        </Stack>
+                        <IconButton className="py-1" onClick={() => handleToggleFavorite(item._id)}>
+                          {isFavorite[item._id] ? <FavoriteIcon className="text-[#F87170] w-7 h-7" /> : <FavoriteBorderIcon className="text-[#555555] w-7 h-7" />}
+                        </IconButton>
+                      </Box>
+                      <Box className="bg-[#555555] p-[6px] rounded-md">
                         <Typography variant="body2" className="font-bold tracking-widest text-white text-base max-sm:text-xs">
                           {item.price?.toLocaleString()}&nbsp;฿
                         </Typography>
-                      </Button>
-                    </CardActionArea>
+                      </Box>
+                    </Box>
                   </Card>
                 </Grid>
               ))
