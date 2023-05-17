@@ -24,6 +24,8 @@ import { Avatar, Button, Divider, Drawer, Hidden, List, ListItem, ListItemButton
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import Image from 'next/image';
 import SearchBox from '../Other/SearchBox';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // Create Theme
 const theme = createTheme({
@@ -55,8 +57,33 @@ HideOnScroll.propTypes = {
 
 const drawerWidth = 240;
 
+interface User {
+  _id: string;
+  image: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  username: string;
+  password: string;
+}
+
+
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
+        setUser(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -255,7 +282,7 @@ export default function Navbar() {
               <Box className="flex absolute right-0 items-center">
                 {/* SEARCH MENU */}
                 <SearchBox />
-                {session?.user?
+                {session?.user ?
                   <>
                     <Box sx={{ paddingLeft: 1 }}>
                       <Tooltip title="Favorites">
@@ -269,10 +296,10 @@ export default function Navbar() {
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                           <Image
                             className="rounded-full object-cover w-10 h-10 transition hover:border-2 hover:transition focus:border-2"
-                            alt={session.user.name || ''}
-                            width={100}
-                            height={100}
-                            src={session.user.image || ''}
+                            alt={user?.username || ''}
+                            width={80}
+                            height={80}
+                            src={user?.image || ''}
                             priority
                           />
                         </IconButton>

@@ -7,8 +7,8 @@ import {
 } from '@mui/material';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
-import { useSession } from "next-auth/react"
 import Image from 'next/image';
+import axios from 'axios';
 
 const theme = createTheme({
     palette: {
@@ -27,14 +27,35 @@ const theme = createTheme({
 
 });
 
+interface User {
+    _id: string;
+    image: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    username: string;
+    password: string;
+}
+
 
 export default function UserHeader() {
-    const { data: session, status } = useSession();
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(status === 'loading');
-    }, [status]);
+        const fetchUserData = async () => {
+            try {
+                const res = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
+                setUser(res.data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
@@ -52,8 +73,8 @@ export default function UserHeader() {
                                 className="w-36 h-36 rounded-full object-cover"
                                 width={144}
                                 height={144}
-                                src={session?.user?.image || ''}
-                                alt={session?.user?.name || ''}
+                                src={user?.image || ''}
+                                alt={user?.username || ''}
                             />
                         )}
                     </Box>
@@ -69,7 +90,7 @@ export default function UserHeader() {
                                 variant="h4"
                                 className="text-[#F0CA83] font-bold px-6 pt-8 max-sm:text-[28px]"
                             >
-                                {session?.user?.name || ''}
+                                {user?.username || ''}
                             </Typography>
                         )}
                         {loading ? (

@@ -138,6 +138,13 @@ export default function TryAR(props: Props) {
     }
   }
 
+  function handleResetWig() {
+    const iframe = iframeRef.current;
+    if (iframe) {
+      iframe.contentWindow?.postMessage({ type: 'reset', }, '*');
+    }
+  }
+
   async function updateWigUse(id: string) {
     const response = await fetch(`${process.env.API_URL}/api/wig_data/useWigAR?id=${id}`, {
       method: 'PATCH',
@@ -158,13 +165,6 @@ export default function TryAR(props: Props) {
       iframe.contentWindow?.postMessage({ type: 'capture' }, '*');
     }
   };
-
-  // const handleSwitchCamera = () => {
-  //   const iframe = iframeRef.current;
-  //   if (iframe) {
-  //     iframe.contentWindow?.postMessage({ type: 'switch' }, '*');
-  //   }
-  // }
 
   const handleDownload = () => {
     if (image) {
@@ -282,18 +282,25 @@ export default function TryAR(props: Props) {
                     >
                       <CameraAltIcon fontSize="large" />
                     </IconButton>
-                    {/* <IconButton
-                      onClick={handleSwitchCamera}
-                      className="text-[#F0CA83] flex float-right m-auto transition hover:text-[#ffc14d]"
-                      size="large"
-                    >
-                      <CameraswitchIcon fontSize="large" />
-                    </IconButton> */}
                   </Grid>
                 </center>
               </Box>
             </Grid>
             <Grid item sm={12} md={6}>
+              <Grid item xs={3} sm={3} md={4} className="inline-flex">
+                <Card variant="outlined" className="content">
+                  <CardActionArea onClick={handleResetWig}>
+                    <div className="content-overlay" />
+                    <picture>
+                      <img
+                        className="object-cover h-56 w-56 max-xl:h-48 max-lg:h-40 max-md:h-48 max-sm:h-28"
+                        src="./reset_image.png"
+                        alt="reset_ar"
+                      />
+                    </picture>
+                  </CardActionArea>
+                </Card>
+              </Grid>
               {wigsWithValidArImage.map((item, i) =>
                 <Grid key={i} item xs={3} sm={3} md={4} className="inline-flex">
                   <Card variant="outlined" className="content">

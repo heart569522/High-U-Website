@@ -83,6 +83,10 @@
           const texture = new THREE.TextureLoader().load(event.data.image);
           arMaterial.map = texture;
         }
+        if (event.data.type === "reset") {
+          const texture = new THREE.TextureLoader().load("./ar_empty.png");
+          arMaterial.map = texture;
+        }
         if (event.data.type === "capture") {
           const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;

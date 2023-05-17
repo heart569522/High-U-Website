@@ -77,8 +77,6 @@ const theme = createTheme({
   },
 });
 
-let API_URL = process.env.API_URL;
-
 export default function Profile() {
   const [value, setValue] = useState('1');
   const handleMenuChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -91,7 +89,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/user_data/getUserData`);
+        const res = await axios.get(`${process.env.API_URL}/api/user_data/getUserData`);
         setUser(res.data);
       } catch (error) {
         console.error(error);
@@ -179,7 +177,7 @@ export default function Profile() {
             setUrl(imageUrl)
 
             // Update the member with the new image URL
-            let response = await fetch(`${API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
+            let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
               method: 'POST',
               headers: {
                 Accept: "application/json, text/plain, */*",
@@ -203,7 +201,7 @@ export default function Profile() {
         )
       } else {
         // Update the member without changing the image URL
-        let response = await fetch(`${API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
+        let response = await fetch(`${process.env.API_URL}/api/user_data/updateUserProfile?id=` + user?._id, {
           method: 'POST',
           headers: {
             Accept: "application/json, text/plain, */*",
@@ -278,7 +276,7 @@ export default function Profile() {
 
     try {
       // Call the API to update the user's password
-      const response = await fetch(`${API_URL}/api/user_data/updateUserPassword?id=` + user?._id, {
+      const response = await fetch(`${process.env.API_URL}/api/user_data/updateUserPassword?id=` + user?._id, {
         method: 'POST',
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -312,15 +310,15 @@ export default function Profile() {
       <Head><title>Profile | High U</title></Head>
       <Paper className="bg-[#252525] h-screen max-[450px]:h-max">
         <Navbar />
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={uploading}
+        >
+          <CircularProgress color="inherit" />
+          <Typography>&nbsp;Updating...</Typography>
+        </Backdrop>
         <Container maxWidth="xl" >
           <UserHeader />
-          <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={uploading}
-          >
-            <CircularProgress color="inherit" />
-            <Typography>&nbsp;Updating...</Typography>
-          </Backdrop>
           <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
             <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
               Update Profile Successfully!
