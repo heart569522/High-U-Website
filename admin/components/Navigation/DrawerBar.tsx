@@ -177,7 +177,7 @@ export default function DrawerBar() {
                   alt="admin_profile"
                   width={100}
                   height={100}
-                  src={adminData?.image || ''}
+                  src={adminData?.image || session?.user?.image || ''}
                   priority
                 />
               </IconButton>
