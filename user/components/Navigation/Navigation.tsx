@@ -299,8 +299,7 @@ export default function Navbar() {
                             alt={user?.username || ''}
                             width={80}
                             height={80}
-                            src={user?.image || ''}
-                            priority
+                            src={user?.image || session.user.image || ''}
                           />
                         </IconButton>
                       </Tooltip>
