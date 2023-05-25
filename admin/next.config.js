@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    API_URL: 'https://high-u-hairwig.vercel.app'
+    API_URL: 'https://high-u-admin.vercel.app'
     // API_URL: 'http://localhost:8000'
   },
   experimental: {
