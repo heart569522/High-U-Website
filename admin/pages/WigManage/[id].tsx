@@ -28,7 +28,7 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import withProtectedPage from "../../lib/withProtectedPage";
 
-const API_URL = "http://localhost:8000"
+const API_URL = "https://high-u-admin.vercel.app"
 
 const MAX_SUB_IMAGES = 6;
 const INITIAL_SUB_IMAGES_COUNT = 3;
