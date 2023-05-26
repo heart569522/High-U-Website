@@ -28,8 +28,6 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import withProtectedPage from "../../lib/withProtectedPage";
 
-const API_URL = "https://high-u-admin.vercel.app"
-
 const MAX_SUB_IMAGES = 6;
 const INITIAL_SUB_IMAGES_COUNT = 3;
 
@@ -86,7 +84,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
       id: params?.id || ""
     };
 
-    const response = await fetch(`${API_URL}/api/wig/getOneWig?id=` + request.id)
+    const response = await fetch("http://localhost:8000/api/wig/getOneWig?id=" + request.id)
 
     const responseFromServer: GetOneWigResponse = await response.json()
 
@@ -130,7 +128,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
 }
 
 export async function getStaticPaths() {
-  let wigs = await fetch(`${API_URL}/api/wig/getAllWigs`);
+  let wigs = await fetch("http://localhost:8000/api/wig/getAllWigs");
 
   let wigFromServer: [Wig] = await wigs.json();
 
@@ -633,7 +631,7 @@ function WigEdit({ wig: { _id, ar_image, main_image, sub_image, title, style, ty
       );
 
       // Add wig data to database
-      const response = await fetch(`${API_URL}/api/wig/updateWig?id=` + _id, {
+      const response = await fetch("http://localhost:8000/api/wig/updateWig?id=" + _id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
