@@ -85,7 +85,6 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
     };
 
     const response = await fetch(`${process.env.API_URL}/api/wig/getOneWig?id=` + request.id)
-
     const responseFromServer: GetOneWigResponse = await response.json()
 
     return {
@@ -129,7 +128,6 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
 
 export async function getStaticPaths() {
   let wigs = await fetch(`${process.env.API_URL}/api/wig/getAllWigs`);
-
   let wigFromServer: [Wig] = await wigs.json();
 
   return {
