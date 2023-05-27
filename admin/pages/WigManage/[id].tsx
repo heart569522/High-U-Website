@@ -84,7 +84,11 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
       id: params?.id || ""
     };
 
-    const response = await fetch(`${process.env.API_URL}/api/wig/getOneWig?id=` + request.id)
+    const response = await fetch(`${process.env.API_URL}/api/wig/getOneWig?id=${request.id}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     const responseFromServer: GetOneWigResponse = await response.json()
 
     return {
@@ -127,18 +131,29 @@ export async function getStaticProps({ params }: GetStaticPropsContext<PageParam
 }
 
 export async function getStaticPaths() {
-  let wigs = await fetch(`${process.env.API_URL}/api/wig/getAllWigs`);
-  let wigFromServer: [Wig] = await wigs.json();
+  try {
+    const response = await fetch(`${process.env.API_URL}/api/wig/getAllWigs`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const responseData = await response.text();
+    const wigFromServer: [Wig] = responseData.startsWith('[') ? JSON.parse(responseData) : [];
 
-  return {
-    paths: wigFromServer.map((wig) => {
-      return {
+    return {
+      paths: wigFromServer.map((wig) => ({
         params: {
           id: wig._id
         }
-      }
-    }),
-    fallback: false
+      })),
+      fallback: false
+    };
+  } catch (error: any) {
+    console.log("error", error.message);
+    return {
+      paths: [],
+      fallback: false
+    };
   }
 }
 
