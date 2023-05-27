@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-export const SignIn = React.memo(() => {
+export default function SignIn() {
     const router = useRouter()
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -129,6 +129,4 @@ export const SignIn = React.memo(() => {
 
     );
 }
-)
 
-SignIn.displayName = 'SignIn';

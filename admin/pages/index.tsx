@@ -2,7 +2,7 @@ import * as React from 'react';
 import Head from 'next/head';
 
 // IMPORT PAGE
-import { SignIn } from "./SignIn"
+import SignIn from "./SignIn"
 
 export default function index() {
 
