@@ -9,6 +9,7 @@ const getAllWigs = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const wigs = await db.collection("wig").find({}).toArray();
 
+        res.setHeader('Content-Type', 'application/json');
         res.status(200).json(wigs);
 
     } catch (e: any) {

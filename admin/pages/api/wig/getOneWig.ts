@@ -22,6 +22,7 @@ const getOneWig = async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
 
+        res.setHeader('Content-Type', 'application/json');
         res.status(200).json(wig);
 
     } catch (e: any) {
