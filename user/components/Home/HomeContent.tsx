@@ -66,10 +66,10 @@ export default function HomeContent() {
                 <Link href="/TryAR">
                   <Image
                     className="w-full relative p-3 object-center object-cover max-w-6xl transition-opacity hover:opacity-80 hover:duration-200"
-                    src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Ftry-ar-banner.png?alt=media&token=443bebd8-faa0-4cee-a6cf-ebed1dafa34d"
+                    src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Ftry-ar-banner.png?alt=media&token=05ec447e-2988-4dfb-9a52-74b49637f899"
                     alt="Banner 1"
                     width={1920}
-                    height={1357}
+                    height={1123}
                     priority
                   />
                 </Link>
