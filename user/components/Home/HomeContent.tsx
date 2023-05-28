@@ -59,7 +59,25 @@ export default function HomeContent() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ overflowX: 'hidden' }}>
-        <Box className="bg-[#303030] h-max py-10">
+        <Box className="bg-[#303030] h-max max-h-[600px]">
+          <Container maxWidth="xl">
+            <Grid container>
+              <Grid item xs={12} className="flex items-center justify-center" data-aos="fade-zoom-in">
+                <Link href="/TryAR">
+                  <Image
+                    className="w-full relative p-3 object-center object-cover max-w-6xl transition-opacity hover:opacity-80 hover:duration-200"
+                    src="https://firebasestorage.googleapis.com/v0/b/high-u.appspot.com/o/asset%2Fhome%2Ftry-ar-banner.png?alt=media&token=443bebd8-faa0-4cee-a6cf-ebed1dafa34d"
+                    alt="Banner 1"
+                    width={1920}
+                    height={1357}
+                    priority
+                  />
+                </Link>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+        <Box className="bg-[#787878] h-max py-10">
           <Container maxWidth="xl">
             <Grid container>
               <Grid item xs={12} sm={6} className="flex items-center justify-end max-sm:justify-center" data-aos="fade-right">
@@ -82,7 +100,7 @@ export default function HomeContent() {
             </Grid>
           </Container>
         </Box>
-        <Box className="bg-[#787878] h-max py-10">
+        <Box className="bg-[#303030] h-max py-10">
           <Container maxWidth="xl">
             <Grid container className="max-sm:flex-wrap-reverse">
               <Grid item xs={12} sm={6} className="flex items-center text-right max-sm:text-center" data-aos="fade-right">
