@@ -68,7 +68,7 @@ export const SignInForm = React.memo(() => {
             }) as SignInResponse;
 
             if (result.error) {
-                throw new Error('Login failed. Please check your credentials and try again.');
+                throw new Error('Login failed. Please check your Email or Password');
             } else {
                 router.push('/');
             }

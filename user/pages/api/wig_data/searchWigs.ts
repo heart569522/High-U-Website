@@ -16,7 +16,6 @@ const searchWigs = async (req: NextApiRequest, res: NextApiResponse) => {
         { style: regex },
         { type: regex },
         { color: regex },
-        { price: { $eq: parseInt(searchText) } }
       ]
     }).toArray();
 
