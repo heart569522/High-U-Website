@@ -180,6 +180,7 @@ export async function getStaticPaths() {
 export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image, title, style, type, color, size, price, desc, view, favorite, use } }: ContentPageProps) {
 
     const [wigsData, setWigsData] = useState<Wig[]>([]);
+
     const [isFavorite, setIsFavorite] = useState<FavoriteState>({});
     const { data: session } = useSession()
     const router = useRouter()
@@ -198,6 +199,11 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
 
         fetchWigsData();
     }, []);
+
+    const wigsWithValidArImage = wigsData.filter(wig => wig._id === _id && wig.ar_image !== null);
+    const hasWigsWithValidArImage = wigsWithValidArImage.length > 0;
+    console.log(hasWigsWithValidArImage);
+
 
     async function addViewToWig(wigId: string): Promise<void> {
         const response = await fetch(`${process.env.API_URL}/api/wig_data/addViewWig`, {
@@ -455,20 +461,44 @@ export default function WigDetail({ wig: { _id, ar_image, main_image, sub_image,
                                     </Box>
                                 </Grid>
                             </Grid>
-                            <Grid item className="mt-8 max-sm:text-center">
-                                <Button
-                                    variant="contained"
-                                    className={`w-[50%] p-3 ${isFavorite[_id] ? 'bg-red-400 hover:bg-red-500 ' : 'bg-gray-400 hover:bg-gray-500 text-gray-800'
-                                        }`}
-                                    onClick={() => handleToggleFavorite(_id)}
-                                >
-                                    {isFavorite[_id] ?
-                                        <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Your&nbsp;Favorite</Typography>
-                                        :
-                                        <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Add&nbsp;to&nbsp;Favorite</Typography>
-                                    }
-                                </Button>
-                                <Link href="/TryAR"><Button variant="contained" className="w-[50%] p-3 bg-[#F0CA83] tracking-wider hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]">Try&nbsp;AR</Button></Link>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6} md={6} className="mt-8 max-sm:text-center">
+                                    <Button
+                                        variant="contained"
+                                        fullWidth
+                                        className={`p-3 ${isFavorite[_id] ? 'bg-red-400 hover:bg-red-500 ' : 'bg-gray-400 hover:bg-gray-500 text-gray-800'
+                                            }`}
+                                        onClick={() => handleToggleFavorite(_id)}
+                                    >
+                                        {isFavorite[_id] ?
+                                            <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Your&nbsp;Favorite</Typography>
+                                            :
+                                            <Typography className='tracking-wider font-bold text-xl max-lg:text-lg max-sm:text-[16px] text-white'>Add&nbsp;to&nbsp;Favorite</Typography>
+                                        }
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={6} className="mt-8 max-sm:text-center">
+                                    {hasWigsWithValidArImage ? (
+                                        <Link href="/TryAR">
+                                            <Button
+                                                variant="contained"
+                                                fullWidth
+                                                className="p-3 tracking-wider bg-[#F0CA83] hover:bg-[#e9aa35] text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]"
+                                            >
+                                                Try&nbsp;AR
+                                            </Button>
+                                        </Link>
+                                    ) : (
+                                        <Button
+                                            variant="contained"
+                                            fullWidth
+                                            disableTouchRipple
+                                            className="p-3 tracking-wider bg-gray-400 hover:bg-gray-500 text-white font-bold text-xl max-lg:text-lg max-sm:text-[16px]"
+                                        >
+                                            No&nbsp;AR
+                                        </Button>
+                                    )}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

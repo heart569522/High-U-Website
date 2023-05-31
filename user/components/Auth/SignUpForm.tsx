@@ -50,6 +50,7 @@ export default function SignUpForm() {
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const passwordRequirements = 'Password must be A-Z, a-z or 0-9 and minimum 6 characters';
     const [isFormValid, setIsFormValid] = useState(false);
+    const [emailExists, setEmailExists] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
@@ -95,11 +96,37 @@ export default function SignUpForm() {
         }
     };
 
-    const handleFormValidation = () => {
+    const handleFormValidation = async () => {
         const passwordRegex = /^[a-zA-Z0-9]{6,}$/;
         const isValidPassword = passwordRegex.test(password);
 
         setIsPasswordValid(isValidPassword); // Update the validity state of the password
+
+        if (!isValidPassword) {
+            console.log('Invalid password');
+            return;
+        }
+
+        // Check if the email exists in the database
+        try {
+            const response = await fetch(`/api/user_data/checkEmailExist?email=${email}`);
+            const data = await response.json();
+
+            if (data.emailExists) {
+                setIsFormValid(false);
+                setEmailExists(true);
+                // console.log('Email already exists');
+                return;
+            }
+            setEmailExists(false);
+            // Proceed with sign-up
+            // ...
+        } catch (error) {
+            // Handle any errors that occur during the database query
+            console.error('Error checking email:', error);
+            // Display an error message or take appropriate action
+            return;
+        }
 
         // Validate the entire form
         setIsFormValid(
@@ -112,13 +139,8 @@ export default function SignUpForm() {
             password === confirmPassword &&
             isValidPassword
         );
-
-        if (!isValidPassword) {
-            // Password does not meet the requirements
-            // You can display an error message or take appropriate action
-            // console.log('Invalid password');
-        }
     };
+
 
     const handleReset = () => {
         setFirstname("");
@@ -132,6 +154,7 @@ export default function SignUpForm() {
         setErrorMessage(null);
         setMessage(null);
         setIsFormValid(false);
+        setEmailExists(false);
     };
 
     const checkPasswordsMatch = (): boolean => {
@@ -253,7 +276,6 @@ export default function SignUpForm() {
                                             id="lastname"
                                             label="Last Name"
                                             name="lastname"
-                                            autoComplete="family-name"
                                             onChange={handleChange(setLastname)}
                                             onBlur={handleFormValidation}
                                             onKeyPress={handleKeyPress}
@@ -269,7 +291,6 @@ export default function SignUpForm() {
                                             onBlur={handleFormValidation}
                                             required
                                             fullWidth
-                                            autoComplete="username"
                                             onKeyPress={handleKeyPress}
                                         />
                                     </Grid>
@@ -287,6 +308,11 @@ export default function SignUpForm() {
                                             onChange={handleChange(setEmail)}
                                             onBlur={handleFormValidation}
                                             onKeyPress={handleKeyPress}
+                                            error={emailExists}
+                                            helperText={emailExists ? 'Email already exists' : ''}
+                                            InputProps={{
+                                                style: { color: emailExists ? 'red' : '' },
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

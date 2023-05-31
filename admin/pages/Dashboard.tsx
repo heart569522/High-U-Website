@@ -4,9 +4,9 @@ import {
   Box,
   Typography,
   Toolbar,
-  Grid
+  Grid,
 } from '@mui/material'
-import { Flex, Toggle, ToggleItem } from '@tremor/react';
+import { Flex, Tab, TabList, Toggle, ToggleItem } from '@tremor/react';
 import { createTheme, ThemeProvider, } from '@mui/material/styles';
 import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
@@ -17,6 +17,7 @@ import TopFiveWigView_DonutChart from '@/components/Chart/TopFiveWigView_DonutCh
 import TopFiveWigView_List from '@/components/Chart/TopFiveWigView_List';
 import SummaryCard_Chart from '@/components/Chart/SummaryCard_Chart';
 import TopThreeFavWig from '@/components/Chart/TopThreeFavWig';
+import TopThreeUseAR from '@/components/Chart/TopThreeUseAR';
 import { GetSessionParams, getSession } from 'next-auth/react';
 
 const drawerWidth = 240;
@@ -59,6 +60,7 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
 
 function Dashboard() {
   const [selectedView, setSelectedView] = useState('chart');
+  const [selectTop3, setSelectTop3] = useState(true);
 
   return (
     <ThemeProvider theme={theme}>
@@ -116,10 +118,19 @@ function Dashboard() {
           </Grid>
           <Grid item xs={12}>
             <Box className="bg-white w-full h-full rounded-xl p-5">
-              <Typography className="text-[#303030] font-bold text-xl">
-                Top 3 Favorite Wigs
-              </Typography>
-              <TopThreeFavWig />
+              <TabList
+                defaultValue="1"
+                onValueChange={(value) => setSelectTop3(value === "1")}
+                color="slate"
+              >
+                <Tab color='slate' value="1" text="Top 3 Favorite Wigs" className="font-bold"/>
+                <Tab color='slate' value="2" text="Top 3 Use AR Wig" className="font-bold"/>
+              </TabList>
+              {selectTop3 === true ? (
+                <TopThreeFavWig />
+              ) : (
+                <TopThreeUseAR />
+              )}
             </Box>
           </Grid>
         </Grid>

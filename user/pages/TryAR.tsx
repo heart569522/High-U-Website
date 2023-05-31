@@ -29,6 +29,8 @@ import Image from 'next/image';
 import axios from 'axios';
 import { storage } from './api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const theme = createTheme({
   palette: {
@@ -79,6 +81,8 @@ export async function getServerSideProps() {
 }
 
 export default function TryAR(props: Props) {
+  const { data: session } = useSession();
+
   const [wigData, setWigData] = useState<Wig[]>(props.wigs);
   const wigsWithValidArImage = wigData.filter(wig => wig.ar_image !== null);
 
@@ -248,7 +252,7 @@ export default function TryAR(props: Props) {
       <Paper className="bg-[#252525] h-screen max-[899px]:h-full max-[628px]:h-screen">
         <Snackbar open={alertSuccess} autoHideDuration={5000} onClose={handleCloseAlertSuccess}>
           <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
-            Add to Favorite Success!
+            <Link href="/Favorite?tab=2" className="hover:underline">Add to Favorite Success!</Link>
           </Alert>
         </Snackbar>
         <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError}>
@@ -342,14 +346,16 @@ export default function TryAR(props: Props) {
                     />
                     : <h1>Error image captured!!!</h1>
                   }
-                  <Tooltip title="Favorite">
-                    <IconButton
-                      className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white"
-                      onClick={() => handleFavorite(member?._id)}
-                    >
-                      <FavoriteIcon />
-                    </IconButton>
-                  </Tooltip>
+                  {session?.user ?
+                    <Tooltip title="Favorite">
+                      <IconButton
+                        className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-red-400 hover:text-white"
+                        onClick={() => handleFavorite(member?._id)}
+                      >
+                        <FavoriteIcon />
+                      </IconButton>
+                    </Tooltip>
+                    : null}
                   <Tooltip title="Download">
                     <IconButton
                       className="mx-1 mt-2 bg-[#F0CA83] text-black font-bold duration-200 hover:bg-blue-500 hover:text-white"

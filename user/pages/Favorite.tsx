@@ -39,6 +39,7 @@ import Link from 'next/link';
 import EmptyFavorite from '@/components/Other/EmptyFavorite';
 import { storage } from './api/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage'
+import { useRouter } from 'next/router';
 
 const theme = createTheme({
     palette: {
@@ -77,10 +78,20 @@ type AR_Image = {
 }
 
 export default function Favorite() {
+    const router = useRouter();
+    const { query } = router;
+
     const [value, setValue] = React.useState('1');
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+
+    useEffect(() => {
+        const tab = Array.isArray(query.tab) ? query.tab[0] : query.tab;
+        setValue(tab || '1');
+    }, [query]);
+
+    const handleChange = (event: any, newValue: React.SetStateAction<string>) => {
         setValue(newValue);
     };
+
     const [favoriteWigs, setFavoriteWigs] = useState<FavoriteState>({});
     const [favoriteARImage, setFavoriteARImage] = useState<AR_Image[]>([]);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);

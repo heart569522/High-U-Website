@@ -52,7 +52,7 @@
       videoTexture.magFilter = THREE.LinearFilter;
 
       const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
-      const videoGeometry = new THREE.PlaneGeometry(2, 2.4);
+      const videoGeometry = new THREE.PlaneGeometry( 2, 2.4);
 
       const videoPlane = new THREE.Mesh(videoGeometry, videoMaterial);
       videoPlane.rotation.y = Math.PI;
@@ -74,7 +74,7 @@
         map: texture,
         transparent: true,
       });
-      const arGeometry = new THREE.PlaneGeometry(2, 2.4);
+      const arGeometry = new THREE.PlaneGeometry( 2, 2.4 );
       const arPlane = new THREE.Mesh(arGeometry, arMaterial);
       anchor.group.add(arPlane);
 
